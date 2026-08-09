@@ -2,7 +2,7 @@ import { exportNames } from '@llm-kit/test-utils';
 import { describe, expect, it } from 'vitest';
 import * as api from '../src/index.js';
 
-describe('llm-price public surface', () => {
+describe('usage-tab public surface', () => {
   it('exports the documented names', () => {
     expect(exportNames(api)).toEqual(
       [

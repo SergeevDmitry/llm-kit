@@ -26,7 +26,7 @@ export function createPriceOverride(input: CustomPriceInput): ModelDescriptor {
     ...(input.cacheWrite !== undefined ? { cacheWrite: input.cacheWrite } : {}),
     ...(input.reasoning !== undefined ? { reasoning: input.reasoning } : {}),
     ...(input.batchMultiplier !== undefined ? { batchMultiplier: input.batchMultiplier } : {}),
-    sourceUrl: input.sourceUrl ?? 'urn:llm-price:custom-override',
+    sourceUrl: input.sourceUrl ?? 'urn:usage-tab:custom-override',
     observedAt: input.observedAt ?? effectiveFrom,
     ...(input.notes !== undefined ? { notes: input.notes } : {}),
   };

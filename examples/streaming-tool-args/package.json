@@ -2,7 +2,7 @@
   "name": "example-streaming-tool-args",
   "version": "0.0.0",
   "private": true,
-  "description": "Cross-package example: streamed tool-call arguments repaired chunk-by-chunk with mend-json, then priced with llm-price once the stream completes.",
+  "description": "Cross-package example: streamed tool-call arguments repaired chunk-by-chunk with mend-json, then priced with usage-tab once the stream completes.",
   "type": "module",
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json",
@@ -10,6 +10,6 @@
   },
   "devDependencies": {
     "mend-json": "workspace:*",
-    "llm-price": "workspace:*"
+    "usage-tab": "workspace:*"
   }
 }

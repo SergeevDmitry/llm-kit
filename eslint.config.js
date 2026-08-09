@@ -122,7 +122,7 @@ export default tseslint.config(
     // The glob covers `internal/*/src` as well as `packages/*/src`, because
     // the private foundations are bundled *into* the published packages —
     // `@llm-kit/tokenizer` ships inside `token-chunk` and `chat-fit`,
-    // `@llm-kit/model-registry` inside `chat-fit` and `llm-price`. Source that
+    // `@llm-kit/model-registry` inside `chat-fit` and `usage-tab`. Source that
     // reaches a published tarball has to sit inside the rule that governs
     // published code; scoping this to `packages/` left three packages' bundled
     // source uncovered. `test-utils` and `build-config` are never bundled, so

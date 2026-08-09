@@ -2,7 +2,7 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    name: 'llm-price',
+    name: 'usage-tab',
     include: ['test/**/*.test.ts'],
     benchmark: {
       include: ['benchmarks/**/*.bench.ts'],

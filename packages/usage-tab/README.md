@@ -1,10 +1,10 @@
-# llm-price
+# usage-tab
 
 Turn provider usage objects into a reproducible cost breakdown, from committed pricing data — never a guess.
 
-[![npm](https://img.shields.io/npm/v/llm-price.svg)](https://www.npmjs.com/package/llm-price)
+[![npm](https://img.shields.io/npm/v/usage-tab.svg)](https://www.npmjs.com/package/usage-tab)
 [![CI](https://github.com/SergeevDmitry/llm-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/SergeevDmitry/llm-kit/actions/workflows/ci.yml)
-[![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](https://www.npmjs.com/package/llm-price?activeTab=dependencies)
+[![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](https://www.npmjs.com/package/usage-tab?activeTab=dependencies)
 
 ## The problem
 
@@ -18,7 +18,7 @@ exists to prevent.
 ## Before / after
 
 ```ts
-import { calculateCost, AmbiguousAliasError } from 'llm-price';
+import { calculateCost, AmbiguousAliasError } from 'usage-tab';
 
 const usage = { inputTokens: 1_000_000, outputTokens: 1_000_000 };
 
@@ -44,13 +44,13 @@ try {
 ## Install
 
 ```text
-npm install llm-price
+npm install usage-tab
 ```
 
 ## Minimal usage
 
 ```ts
-import { calculateCost } from 'llm-price';
+import { calculateCost } from 'usage-tab';
 
 const result = calculateCost({
   model: 'gpt-5',
@@ -64,7 +64,7 @@ result.input; // { tokens: 2800, rate: "1.25", costUsd: 0.0035, costUsdExact: "0
 result.warnings; // readonly PriceWarning[] — empty here, never silently dropped when non-empty
 ```
 
-> **These numbers are estimates, not invoices.** `llm-price` computes what a
+> **These numbers are estimates, not invoices.** `usage-tab` computes what a
 > request costs against pricing data this package committed and cited on a
 > specific date (see [Data freshness](#data-freshness-and-effective-dates)
 > below) — not what a provider actually billed you. For your real bill, use
@@ -168,7 +168,7 @@ ambiguous id, and an unrecognized provider string alike. When both are
 supplied, `request.provider` wins:
 
 ```ts
-import { calculateCost, UnknownModelError } from 'llm-price';
+import { calculateCost, UnknownModelError } from 'usage-tab';
 
 const usage = { inputTokens: 1_000_000, outputTokens: 1_000_000 };
 
@@ -206,7 +206,7 @@ Resolution order (never guesses; ambiguity always throws):
 6. throws `UnknownModelError` (`UNKNOWN_MODEL`)
 
 ```ts
-import { resolveModel } from 'llm-price';
+import { resolveModel } from 'usage-tab';
 
 const resolved = resolveModel('claude-haiku-4-5', { provider: 'anthropic' });
 resolved.descriptor.canonicalId; // "claude-haiku-4-5-20251001" — alias resolved to the dated snapshot id
@@ -219,7 +219,7 @@ Bundles a set of default overrides/fallback/registry once, for pricing many
 requests against the same negotiated rates without repeating `options`:
 
 ```ts
-import { createPriceCalculator, createPriceOverride } from 'llm-price';
+import { createPriceCalculator, createPriceOverride } from 'usage-tab';
 
 const calculator = createPriceCalculator({
   overrides: [
@@ -320,7 +320,7 @@ would otherwise surface as an uncoded `TypeError` instead of `InvalidUsageError`
 ### Provider usage examples
 
 ```ts
-import { calculateCost, normalizeOpenAIUsage } from 'llm-price';
+import { calculateCost, normalizeOpenAIUsage } from 'usage-tab';
 
 // Exactly what `chat.completions.create(...).usage` (or the Responses API's
 // `response.usage`) returns — this adapter accepts either shape.
@@ -336,7 +336,7 @@ calculateCost({ model: 'gpt-5', provider: 'openai', usage }).totalUsdExact;
 ```
 
 ```ts
-import { normalizeAnthropicUsage } from 'llm-price';
+import { normalizeAnthropicUsage } from 'usage-tab';
 
 // Anthropic reports cache tokens *additively*, not as a subset of
 // input_tokens — this adapter sums them so `LlmUsage.inputTokens` means the
@@ -351,7 +351,7 @@ usage.inputTokens; // 1000 (700 + 200 + 100)
 ```
 
 ```ts
-import { normalizeGoogleUsage } from 'llm-price';
+import { normalizeGoogleUsage } from 'usage-tab';
 
 // Gemini's usageMetadata: thoughtsTokenCount is reported *additively* to
 // candidatesTokenCount, not as a subset — this adapter adds it into
@@ -366,7 +366,7 @@ usage.outputTokens; // 450 (400 + 50)
 ```
 
 ```ts
-import { normalizeOpenAICompatibleUsage } from 'llm-price';
+import { normalizeOpenAICompatibleUsage } from 'usage-tab';
 
 // Groq, Together AI, and similar OpenAI-compatible chat-completions APIs —
 // leniently accepts a flat `cached_tokens` or DeepSeek-style
@@ -382,7 +382,7 @@ A gateway or proxy that stringifies a numeric field is a malformed known
 field, not an absent one — it throws rather than being priced at zero:
 
 ```ts
-import { InvalidUsageError, normalizeAnthropicUsage } from 'llm-price';
+import { InvalidUsageError, normalizeAnthropicUsage } from 'usage-tab';
 
 try {
   normalizeAnthropicUsage({
@@ -416,7 +416,7 @@ calculation; it is `Number(totalUsdExact)`, so it is always the closest
 double to the true exact value, not a compounded rounding error:
 
 ```ts
-import { calculateCost } from 'llm-price';
+import { calculateCost } from 'usage-tab';
 
 const result = calculateCost({
   model: 'claude-sonnet-5',
@@ -437,7 +437,7 @@ date — `claude-sonnet-5`'s real introductory rate is the mandated golden
 fixture for this behavior:
 
 ```ts
-import { calculateCost } from 'llm-price';
+import { calculateCost } from 'usage-tab';
 
 const usage = { inputTokens: 1_000_000, outputTokens: 1_000_000 };
 
@@ -452,7 +452,7 @@ calculateCost({ model: 'claude-sonnet-5', provider: 'anthropic', usage, at: '202
 
 Pricing data is committed, not fetched — there is no runtime network call,
 ever. That means it can go stale between releases: a provider can change a
-price the day after `llm-price` ships, and calculations will use the old
+price the day after `usage-tab` ships, and calculations will use the old
 price until the next release. This is a deliberate trade-off: a
 silently-updating price is worse than a stale, visible, reproducible one. A
 data-only correction always ships as a real release — check `registryVersion`
@@ -465,7 +465,7 @@ Negotiated or enterprise rates take precedence over the registry
 (resolution's highest-precedence step):
 
 ```ts
-import { calculateCost, createPriceOverride } from 'llm-price';
+import { calculateCost, createPriceOverride } from 'usage-tab';
 
 const negotiated = createPriceOverride({
   canonicalId: 'gpt-5',

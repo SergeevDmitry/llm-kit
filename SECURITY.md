@@ -18,7 +18,7 @@ publicly.
 Every package in this repository:
 
 - **makes no network calls.** Nothing here contacts a provider, a telemetry
-  endpoint, or an update server. `llm-price` ships its pricing data as committed
+  endpoint, or an update server. `usage-tab` ships its pricing data as committed
   code precisely so it never has to fetch anything. `chat-fit` summarizes
   through a callback you supply. `llm-backoff` retries a function _you_ pass it.
 - **collects no telemetry** and writes no analytics.
@@ -46,7 +46,7 @@ statement of the policy.
 It covers `internal/*/src` as well as `packages/*/src`, because the private
 foundations are bundled **into** the published packages — `@llm-kit/tokenizer`
 ships inside `token-chunk` and `chat-fit`, `@llm-kit/model-registry` inside
-`chat-fit` and `llm-price`. Source that reaches a tarball is governed by the
+`chat-fit` and `usage-tab`. Source that reaches a tarball is governed by the
 rule that governs published code. And because the guarantee is ultimately about
 the artifact rather than the source, `validate:artifacts` independently scans
 every packed bundle for the same globals, so a build step could not introduce

@@ -74,21 +74,21 @@ importers:
       chat-fit:
         specifier: workspace:*
         version: link:../../packages/chat-fit
-      llm-price:
-        specifier: workspace:*
-        version: link:../../packages/llm-price
       token-chunk:
         specifier: workspace:*
         version: link:../../packages/token-chunk
+      usage-tab:
+        specifier: workspace:*
+        version: link:../../packages/usage-tab
 
   examples/streaming-tool-args:
     devDependencies:
-      llm-price:
-        specifier: workspace:*
-        version: link:../../packages/llm-price
       mend-json:
         specifier: workspace:*
         version: link:../../packages/mend-json
+      usage-tab:
+        specifier: workspace:*
+        version: link:../../packages/usage-tab
 
   internal/build-config: {}
 
@@ -131,18 +131,6 @@ importers:
         specifier: workspace:*
         version: link:../../internal/test-utils
 
-  packages/llm-price:
-    devDependencies:
-      '@llm-kit/build-config':
-        specifier: workspace:*
-        version: link:../../internal/build-config
-      '@llm-kit/model-registry':
-        specifier: workspace:*
-        version: link:../../internal/model-registry
-      '@llm-kit/test-utils':
-        specifier: workspace:*
-        version: link:../../internal/test-utils
-
   packages/mend-json:
     devDependencies:
       '@llm-kit/build-config':
@@ -163,6 +151,18 @@ importers:
       '@llm-kit/tokenizer':
         specifier: workspace:*
         version: link:../../internal/tokenizer
+
+  packages/usage-tab:
+    devDependencies:
+      '@llm-kit/build-config':
+        specifier: workspace:*
+        version: link:../../internal/build-config
+      '@llm-kit/model-registry':
+        specifier: workspace:*
+        version: link:../../internal/model-registry
+      '@llm-kit/test-utils':
+        specifier: workspace:*
+        version: link:../../internal/test-utils
 
   packages/vec-cache:
     dependencies:

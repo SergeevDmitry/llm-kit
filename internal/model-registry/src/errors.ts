@@ -100,7 +100,7 @@ export class AmbiguousAliasError extends Error {
  * {@link AmbiguousPricingPeriodError} can name which model's override is
  * broken. `selectPricingPeriod` itself only ever sees a bare
  * `PricingPeriod[]` — it has no descriptor to read this from — so a caller
- * that has one (e.g. `llm-price`'s `selectPeriodOrThrow`, which already
+ * that has one (e.g. `usage-tab`'s `selectPeriodOrThrow`, which already
  * holds the full `ModelDescriptor`) passes it through explicitly. Both
  * fields are optional and independent: omitting one still produces a
  * sentence-shaped message, and omitting the whole argument reproduces the
@@ -118,7 +118,7 @@ export interface AmbiguousPricingPeriodIdentity {
  * rejects overlapping periods (and two periods with the same `effectiveFrom`
  * necessarily overlap), so this cannot happen for the generated registry;
  * it is reachable only through a caller-supplied `ModelDescriptor` (e.g.
- * `llm-price`'s `options.overrides`) that never passed that validator.
+ * `usage-tab`'s `options.overrides`) that never passed that validator.
  * Ambiguity here is treated the same as an ambiguous alias: this is a money
  * path, and a silent pick between two same-dated prices is exactly the
  * failure mode this package refuses to allow anywhere.

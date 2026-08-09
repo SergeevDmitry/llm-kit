@@ -4,7 +4,7 @@
  * negotiated-rate override.
  *
  * Run with:
- *   pnpm exec tsx packages/llm-price/examples/basic-usage.ts
+ *   pnpm exec tsx packages/usage-tab/examples/basic-usage.ts
  */
 import {
   AmbiguousAliasError,

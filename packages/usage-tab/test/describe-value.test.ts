@@ -156,7 +156,7 @@ describe('property: normalizeRequestUsage throws only InvalidUsageError for arbi
         }
         expect(error).toBeInstanceOf(InvalidUsageError);
       }),
-      fuzzConfig(0x6c6c7072, 300), // 0x6c6c7072 = 'llpr' — llm-price
+      fuzzConfig(0x6c6c7072, 300), // 0x6c6c7072 = 'llpr' — usage-tab
     );
   });
 });

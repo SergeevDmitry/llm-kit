@@ -31,7 +31,7 @@ function toTimestamp(value: Date | string): number {
  * picking one by array order. Well-formed data never produces this:
  * `validateModelDescriptor` rejects overlapping periods, and two periods
  * with the same `effectiveFrom` necessarily overlap, so the only way to
- * reach this path is a caller-supplied `ModelDescriptor` (e.g. `llm-price`'s
+ * reach this path is a caller-supplied `ModelDescriptor` (e.g. `usage-tab`'s
  * `options.overrides`) that was never run through that validator. Ambiguity
  * is surfaced explicitly, never guessed — the same stance this registry
  * already takes for an ambiguous alias (`AmbiguousAliasError`).
@@ -48,7 +48,7 @@ function toTimestamp(value: Date | string): number {
  * `identity` is optional and purely cosmetic: this function only ever sees a
  * bare `periods` array, never a full `ModelDescriptor`, so it cannot name
  * the model itself in a thrown {@link AmbiguousPricingPeriodError}. A caller
- * that has the descriptor (`llm-price`'s `selectPeriodOrThrow`, for
+ * that has the descriptor (`usage-tab`'s `selectPeriodOrThrow`, for
  * instance) can pass `{ canonicalId, provider }` so the error is actionable
  * across many overrides, not just "some period tied." Omitting it reproduces
  * the exact pre-existing message and error shape — nothing about the

@@ -12,7 +12,7 @@ import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-const ALL = ['mend-json', 'token-chunk', 'chat-fit', 'llm-price', 'llm-backoff', 'vec-cache'];
+const ALL = ['mend-json', 'token-chunk', 'chat-fit', 'usage-tab', 'llm-backoff', 'vec-cache'];
 
 /**
  * Packages whose install must run lifecycle scripts. Only `vec-cache` needs

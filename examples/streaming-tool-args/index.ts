@@ -1,6 +1,6 @@
 /**
  * Cross-package example: streamed tool-call arguments rendered as a valid
- * partial value on every chunk with mend-json, then priced with llm-price
+ * partial value on every chunk with mend-json, then priced with usage-tab
  * once the stream completes.
  *
  * This mirrors what a chat UI does while an LLM is still generating a tool
@@ -16,7 +16,7 @@
  * stand in for a real provider SDK stream and response.
  */
 import { createJsonMender } from 'mend-json';
-import { calculateCost, normalizeOpenAIUsage } from 'llm-price';
+import { calculateCost, normalizeOpenAIUsage } from 'usage-tab';
 
 interface FlightSearchArgs {
   origin: string;
@@ -97,8 +97,8 @@ function main(): void {
   console.log('complete:   ', final.complete);
   console.log('diagnostics:', final.diagnostics.length, 'repair action(s) recorded along the way');
 
-  // --- llm-price: what did the response that produced this call cost? ---
-  console.log('\n=== llm-price: cost of the response that produced this call ===\n');
+  // --- usage-tab: what did the response that produced this call cost? ---
+  console.log('\n=== usage-tab: cost of the response that produced this call ===\n');
 
   // A real provider SDK returns a `usage` block alongside the streamed
   // content; this is a fixed stand-in for that block, not derived from the

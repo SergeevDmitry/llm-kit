@@ -42,7 +42,7 @@ export const PUBLIC_PACKAGES: Readonly<Record<string, PublicPackageRules>> = {
     allowedFoundations: ['@llm-kit/tokenizer', '@llm-kit/model-registry'],
     allowedRuntimeDependencies: [],
   },
-  'llm-price': {
+  'usage-tab': {
     runtime: 'universal',
     allowedFoundations: ['@llm-kit/model-registry'],
     allowedRuntimeDependencies: [],

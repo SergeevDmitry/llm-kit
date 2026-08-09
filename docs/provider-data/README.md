@@ -69,15 +69,15 @@ JavaScript `number` on its authoritative path.
    can never silently generate from bad data) and writes
    `internal/model-registry/src/generated/registry.ts`.
 4. **Run the golden cost fixtures** — `pnpm --filter @llm-kit/model-registry run test`
-   at minimum; once `llm-price` consumes this data, its own golden fixtures
-   too (`pnpm --filter llm-price run test`).
+   at minimum; once `usage-tab` consumes this data, its own golden fixtures
+   too (`pnpm --filter usage-tab run test`).
 5. **Review the data diff separately from any engine code.** A provider-data
    change and a `src/*.ts` change are different commits and, ideally, different
    pull requests — this is a repository working agreement, not just a
    suggestion, because a reviewer checking a price against a source URL should
    not also be reviewing resolution logic in the same diff.
 6. **Add a changeset** noting the price change (owned by the consuming public
-   package, e.g. `llm-price`, once it exists — `@llm-kit/model-registry` itself
+   package, e.g. `usage-tab`, once it exists — `@llm-kit/model-registry` itself
    is never published, so it has no changeset of its own).
 7. **Publish a release even when only data changes.** A stale committed price
    is a silent correctness bug; there is no "data-only, skip the release" path
@@ -316,7 +316,7 @@ across provider files — always noted in both files' `notes`:
 By the resolver's design, a lookup without a provider
 qualifier for any of these names is ambiguous by design and must fail
 `UNKNOWN_MODEL`/ambiguity resolution rather than silently pick one —
-`llm-price` users who look up e.g. `"gpt-oss-120b"` without specifying
+`usage-tab` users who look up e.g. `"gpt-oss-120b"` without specifying
 `provider: 'groq'` or `provider: 'together'` will hit this.
 
 ## What is deliberately omitted, and why

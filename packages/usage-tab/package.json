@@ -1,5 +1,5 @@
 {
-  "name": "llm-price",
+  "name": "usage-tab",
   "version": "0.1.0",
   "description": "Deterministic LLM cost calculation from provider usage objects using versioned pricing data.",
   "keywords": [
@@ -19,11 +19,11 @@
     "name": "Dmitrii Sergeev",
     "url": "https://github.com/SergeevDmitry"
   },
-  "homepage": "https://github.com/SergeevDmitry/llm-kit/tree/master/packages/llm-price#readme",
+  "homepage": "https://github.com/SergeevDmitry/llm-kit/tree/master/packages/usage-tab#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SergeevDmitry/llm-kit.git",
-    "directory": "packages/llm-price"
+    "directory": "packages/usage-tab"
   },
   "bugs": {
     "url": "https://github.com/SergeevDmitry/llm-kit/issues"

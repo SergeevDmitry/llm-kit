@@ -1,13 +1,13 @@
 # Example: streaming tool-call arguments and their cost
 
 **Streamed tool-call arguments → `mend-json` → a cost report from
-`llm-price` once the stream completes.**
+`usage-tab` once the stream completes.**
 
 Demonstrates what a chat UI does while an LLM is still generating a tool
 call: the raw JSON text arrives in small, irregular pieces that rarely land
 on a token boundary, but `mend-json` renders a valid, `JSON.parse`-able
 partial value after every single piece. Once the stream finishes, the
-provider's response usage is priced with `llm-price`, so a caller can show
+provider's response usage is priced with `usage-tab`, so a caller can show
 "what did that tool call cost" right next to the arguments it produced.
 
 ## Run it
@@ -32,4 +32,4 @@ stand-in for a real provider response — not derived from the stream itself.
   the input turned out to be well-formed, complete JSON by the last chunk.
 - The cost report at the end breaks out ordinary input, cached input, and
   output tokens with their per-million rates, plus both the numeric and the
-  fixed-point-exact total (`llm-price`'s authoritative value).
+  fixed-point-exact total (`usage-tab`'s authoritative value).

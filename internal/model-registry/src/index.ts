@@ -2,7 +2,7 @@
  * @llm-kit/model-registry — private workspace foundation.
  *
  * Normalized model identity, aliases, and pricing periods, used by
- * `llm-price` and optionally by `chat-fit`'s context-window helpers.
+ * `usage-tab` and optionally by `chat-fit`'s context-window helpers.
  * Private and source-only: never published, bundled into consumers at build
  * time.
  */

@@ -7,7 +7,7 @@
  * both token-chunk (`chunkText`) and chat-fit (`fitChat`). Both packages'
  * reports then attribute their token counts to that tokenizer's own id
  * instead of the bundled default, `approx-v1`. The same tokenizer's `count`
- * is then used to price a custom, non-registry model through llm-price's
+ * is then used to price a custom, non-registry model through usage-tab's
  * override mechanism — so the whole pipeline, from chunking through
  * budgeting through pricing, is configured against one tokenizer choice
  * instead of three independent guesses.
@@ -26,7 +26,7 @@ import {
   APPROX_TOKENIZER_ID as CHAT_FIT_DEFAULT_ID,
   type ChatMessage,
 } from 'chat-fit';
-import { calculateCost, createPriceOverride } from 'llm-price';
+import { calculateCost, createPriceOverride } from 'usage-tab';
 
 /**
  * Builds a deterministic, reversible word-boundary tokenizer: each distinct
@@ -115,8 +115,8 @@ function main(): void {
       `injected tokenCount: ${String(exactFit.tokenCount)}`,
   );
 
-  // --- 3. llm-price: price a custom model using the same exact counts ---
-  console.log('\n=== llm-price ===\n');
+  // --- 3. usage-tab: price a custom model using the same exact counts ---
+  console.log('\n=== usage-tab ===\n');
   const prompt = 'The payments queue depth just crossed one thousand.';
   const response = 'Depth is 1240 — paging the on-call engineer now.';
 
@@ -149,7 +149,7 @@ function main(): void {
     `token-chunk attributed its count to "${exactChunks[0]?.tokenizerId ?? '(none)'}", ` +
       `chat-fit attributed its count to "${exactFit.report.counterId}" — ` +
       'both reference the one injected tokenizer, not the default "approx-v1", ' +
-      'and that same tokenizer measured the usage llm-price priced.',
+      'and that same tokenizer measured the usage usage-tab priced.',
   );
 }
 

@@ -1,7 +1,7 @@
 /**
  * Registry schema — model identity and pricing periods.
  *
- * This is the contract `llm-price` consumes directly, and that `chat-fit`
+ * This is the contract `usage-tab` consumes directly, and that `chat-fit`
  * optionally consumes for context-window helpers. Changing a field here is
  * a breaking change for both packages.
  */
@@ -55,7 +55,7 @@ export interface RegistrySource {
  * A priced interval for one model. Rates are decimal STRINGS end to end — a
  * price must never pass through a JavaScript `number` on its authoritative
  * path: money must never be calculated with binary floating point.
- * Consumers (e.g. `llm-price`) parse them into fixed-point integers
+ * Consumers (e.g. `usage-tab`) parse them into fixed-point integers
  * themselves; this package never does arithmetic on them.
  *
  * A period is active for `effectiveFrom <= at < effectiveTo` — `effectiveTo`
@@ -86,7 +86,7 @@ export interface PricingPeriod {
    * schema has no dimension for the tier itself — only a flag that one
    * exists — because the extra dimensions differ per provider (prompt size,
    * deployment region, context length, service tier) and are not uniform
-   * enough to model generically. Consumers (`llm-price`) surface a warning
+   * enough to model generically. Consumers (`usage-tab`) surface a warning
    * whenever a calculation uses a period with this flag set, since real usage
    * under a different tier costs more than the calculation reports — never
    * omit this on a period whose provider file documents a higher unrecorded

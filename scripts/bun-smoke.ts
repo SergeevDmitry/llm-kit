@@ -49,7 +49,7 @@ const EXERCISES: Record<string, (api: Record<string, unknown>) => Promise<void> 
     );
     if (out.messages.length === 0) throw new Error('fitChat returned nothing');
   },
-  'llm-price': (api) => {
+  'usage-tab': (api) => {
     const calc = api.calculateCost as (r: object) => { totalUsdExact: string };
     const out = calc({
       model: 'claude-opus-5',

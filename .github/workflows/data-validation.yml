@@ -6,13 +6,13 @@ on:
     paths:
       - 'docs/provider-data/**'
       - 'internal/model-registry/**'
-      - 'packages/llm-price/**'
+      - 'packages/usage-tab/**'
       - 'scripts/generate-model-registry.ts'
   pull_request:
     paths:
       - 'docs/provider-data/**'
       - 'internal/model-registry/**'
-      - 'packages/llm-price/**'
+      - 'packages/usage-tab/**'
       - 'scripts/generate-model-registry.ts'
   workflow_dispatch:
 
@@ -38,7 +38,7 @@ jobs:
         run: pnpm exec tsx scripts/verify-pricing-data.ts
 
       - name: Regenerate registry and fail on diff
-        run: pnpm --filter llm-price run verify:registry
+        run: pnpm --filter usage-tab run verify:registry
 
       - name: Golden cost fixtures
-        run: pnpm --filter llm-price run test
+        run: pnpm --filter usage-tab run test

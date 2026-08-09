@@ -1,5 +1,5 @@
 /**
- * llm-price — public entry point.
+ * usage-tab — public entry point.
  *
  * Turns normalized (or provider-raw, via an adapter) LLM usage into a
  * reproducible cost breakdown against versioned, dated, committed pricing

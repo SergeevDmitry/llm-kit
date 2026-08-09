@@ -347,7 +347,7 @@ describe('validateProviderSourceFile', () => {
 // `issues.push(...someArray)` blows the engine's call-argument stack (~125k
 // on Node 24) once `someArray`'s length depends on caller-supplied input.
 // `validateModelDescriptor` is exported and reachable on caller-supplied
-// override descriptors (`llm-price`'s `options.overrides` is passed straight
+// override descriptors (`usage-tab`'s `options.overrides` is passed straight
 // through), so its input size is not under this package's control. These pin
 // the fixed loop-based accumulation at a scale well past the point a spread
 // would have thrown `RangeError`.

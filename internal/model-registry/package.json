@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Normalized model metadata and pricing periods used by llm-price. Bundled into public packages, never published.",
+  "description": "Normalized model metadata and pricing periods used by usage-tab. Bundled into public packages, never published.",
   "exports": {
     ".": "./src/index.ts"
   },

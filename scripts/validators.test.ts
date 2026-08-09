@@ -106,7 +106,7 @@ describe('validate-package-boundaries', () => {
   it('rejects a public-to-public import', () => {
     plant(
       'packages/token-chunk/src/__validator_probe.ts',
-      `export { calculateCost } from 'llm-price';\n`,
+      `export { calculateCost } from 'usage-tab';\n`,
     );
     const { status, output } = runValidator('validate-package-boundaries.ts');
     expect(output).toMatch(/imports public package/);

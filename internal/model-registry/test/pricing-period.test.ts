@@ -105,7 +105,7 @@ describe('selectPricingPeriod — edge cases', () => {
 // keep winning). `validateModelDescriptor` rejects overlapping periods for
 // the generated registry — and two periods sharing `effectiveFrom`
 // necessarily overlap — so this is unreachable there; it is reachable only
-// through a caller-supplied `ModelDescriptor` (e.g. `llm-price`'s
+// through a caller-supplied `ModelDescriptor` (e.g. `usage-tab`'s
 // `options.overrides`) that never passed that validator.
 describe('selectPricingPeriod — ambiguous tie on effectiveFrom', () => {
   it('throws AmbiguousPricingPeriodError when two qualifying periods share the same effectiveFrom', () => {

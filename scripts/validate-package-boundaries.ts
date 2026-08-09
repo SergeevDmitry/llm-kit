@@ -207,7 +207,7 @@ for (const foundation of ['tokenizer', 'model-registry']) {
 
       // Rule 7 again, for source that reaches a tarball. `@llm-kit/tokenizer`
       // ships inside `token-chunk` and `chat-fit`, `@llm-kit/model-registry`
-      // inside `chat-fit` and `llm-price` — so a Node built-in here breaks the
+      // inside `chat-fit` and `usage-tab` — so a Node built-in here breaks the
       // browser build of three universal packages. SECURITY.md already states
       // the principle ("source that reaches a tarball is governed by the rule
       // that governs published code") and this is it being applied.
@@ -248,7 +248,7 @@ for (const foundation of ['tokenizer', 'model-registry']) {
       // its source is inlined into every consumer, and `internal/build-config`
       // sets `external: []`, so a third-party import here is *bundled into*
       // `dist/` rather than left as an import. It would therefore ship inside
-      // `token-chunk`, `chat-fit` and `llm-price` with nothing in their
+      // `token-chunk`, `chat-fit` and `usage-tab` with nothing in their
       // `dependencies`, invisible to `pnpm audit --prod`, with no license
       // attribution, and contradicting SECURITY.md's "ships five of six with
       // zero runtime dependencies" — while every release gate stayed green.

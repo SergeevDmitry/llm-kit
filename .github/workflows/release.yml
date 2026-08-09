@@ -2,9 +2,12 @@ name: Release
 
 # Third-party actions are pinned to full commit SHAs, not tags. A tag — and a
 # `v1`-style major tag especially — is a mutable pointer its maintainer can
-# repoint at any time, and this workflow hands `NPM_TOKEN` and an OIDC identity
-# to whatever it resolves to. Two of the three references this file used to
-# carry were live examples of the problem:
+# repoint at any time, and this workflow hands an OIDC identity that can
+# publish to npm to whatever it resolves to. Pinning matters *more* under
+# trusted publishing, not less: there is no token to revoke, so the only thing
+# standing between a repointed action and a malicious publish is the SHA.
+# Two of the three references this file used to carry were live examples of
+# the problem:
 #
 #   * `changesets/action@v1` resolved to a *branch* (refs/heads/v1), not a tag,
 #     so any push to that branch changed what ran here.
@@ -95,11 +98,22 @@ jobs:
 
       - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
 
+      # Node 22, not 20, because trusted publishing needs Node >= 22.14.0.
+      # `registry-url` is required either way: it writes the ~/.npmrc that npm
+      # reads, and OIDC still publishes through that registry entry.
       - uses: actions/setup-node@v7
         with:
-          node-version: '20'
+          node-version: '22'
           cache: pnpm
           registry-url: 'https://registry.npmjs.org'
+
+      # Trusted publishing needs npm >= 11.5.1 to perform the OIDC exchange,
+      # and Node 22 still bundles npm 10.x, so the upgrade is required
+      # regardless of the Node version above.
+      - name: Upgrade npm for trusted publishing
+        run: |
+          npm install -g npm@latest
+          npm --version
 
       - run: pnpm install --frozen-lockfile
 
@@ -115,8 +129,21 @@ jobs:
           commit: 'chore: version packages'
           title: 'chore: version packages'
         env:
+          # `GITHUB_TOKEN` is for the release PR and tags, not for npm.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # No `NODE_AUTH_TOKEN`, deliberately. Every package has a trusted
+          # publisher pointing at this workflow, so npm exchanges the job's
+          # OIDC identity (the `id-token: write` permission above) for a
+          # short-lived, workflow-scoped credential at publish time. There is
+          # no long-lived write token in this repository to leak or rotate.
+          #
+          # Do not "fix" a publish failure by reintroducing a token here. If
+          # the OIDC exchange fails, the cause is one of: a trusted publisher
+          # whose workflow filename no longer matches this file, a missing
+          # `id-token: write`, or npm older than 11.5.1 — all repaired at
+          # source. A token added here would only work if the packages still
+          # allow token publishing, which they should not.
+          #
           # Provenance is also enabled in .npmrc. Both layers agree
           # deliberately — see the comment there.
           NPM_CONFIG_PROVENANCE: 'true'

@@ -15,7 +15,7 @@ tests, and a README you can read in a minute.
 | [`mend-json`](packages/mend-json)     | Turns a truncated JSON stream into a valid partial value, on every chunk                          | **0**        |
 | [`token-chunk`](packages/token-chunk) | Chunks text and Markdown to a token budget along semantic boundaries, keeping heading breadcrumbs | **0**        |
 | [`chat-fit`](packages/chat-fit)       | Trims chat history to a budget without ever splitting a tool call from its result                 | **0**        |
-| [`llm-price`](packages/llm-price)     | Turns provider usage objects into a reproducible cost breakdown from committed pricing data       | **0**        |
+| [`usage-tab`](packages/usage-tab)     | Turns provider usage objects into a reproducible cost breakdown from committed pricing data       | **0**        |
 | [`llm-backoff`](packages/llm-backoff) | Retries that read the provider's rate-limit headers instead of guessing                           | **0**        |
 | [`vec-cache`](packages/vec-cache)     | SQLite embedding cache with partial batch hits, in-batch dedup and model-scoped keys              | 1            |
 
@@ -29,11 +29,11 @@ A few of the problems are sharper than they first look.
 **Pricing the same model differently depending on who sells it.** Azure resells
 OpenAI's models — and not always at OpenAI's price. `gpt-5.6-luna` is
 `$0.20/$1.20` per million tokens on OpenAI and `$1.00/$6.00` on Azure. Anyone
-assuming parity under-reports their bill by 80%. `llm-price` keys prices by
+assuming parity under-reports their bill by 80%. `usage-tab` keys prices by
 `(provider, model)` and **refuses to guess** when a model name is ambiguous:
 
 ```ts
-import { calculateCost } from 'llm-price';
+import { calculateCost } from 'usage-tab';
 
 const usage = { inputTokens: 1_000_000, outputTokens: 1_000_000 };
 
@@ -65,7 +65,7 @@ data.
 
 Node.js 20 or newer.
 
-`mend-json`, `token-chunk`, `chat-fit`, `llm-price` and `llm-backoff` also run
+`mend-json`, `token-chunk`, `chat-fit`, `usage-tab` and `llm-backoff` also run
 in browsers, edge runtimes, and Bun. `vec-cache` is Node-only, and **does not
 currently work under Bun** — `better-sqlite3` is not yet supported there.
 Every runtime claim is backed by a CI job that exercises the package rather
@@ -76,9 +76,9 @@ Every package ships ESM and CommonJS with declarations for both.
 ## Status
 
 Pre-release. All six packages build, test, pack, and install cleanly into a
-fresh project; none is published to npm yet.
+fresh project.
 
-- 2,424 tests, with property and fuzz suites over the parser, chunker, message
+- 2,421 tests, with property and fuzz suites over the parser, chunker, message
   grouping and batch reconstruction
 - 123 models across 10 providers in the pricing registry, every price fetched
   from the provider's own page or API and carrying a source URL and an observed
@@ -93,7 +93,7 @@ Runnable, offline, no API keys — see [`examples/`](examples/):
 | --------------------- | --------------------------------------------------------------------- |
 | `rag-pipeline`        | Markdown → `token-chunk` → mock embeddings → `vec-cache` partial hits |
 | `chat-budgeting`      | Long conversation → `chat-fit` → mock call wrapped in `llm-backoff`   |
-| `streaming-tool-args` | Streamed tool arguments → `mend-json` → cost report from `llm-price`  |
+| `streaming-tool-args` | Streamed tool arguments → `mend-json` → cost report from `usage-tab`  |
 | `shared-tokenizer`    | One injected tokenizer and price override shared across packages      |
 
 ## Development
