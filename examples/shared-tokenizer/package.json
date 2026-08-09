@@ -1,0 +1,16 @@
+{
+  "name": "example-shared-tokenizer",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Cross-package example: one injected exact-tokenizer adapter shared by token-chunk and chat-fit, plus a custom price override for llm-price.",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "start": "tsx index.ts"
+  },
+  "devDependencies": {
+    "token-chunk": "workspace:*",
+    "chat-fit": "workspace:*",
+    "llm-price": "workspace:*"
+  }
+}

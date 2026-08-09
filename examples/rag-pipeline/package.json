@@ -1,0 +1,15 @@
+{
+  "name": "example-rag-pipeline",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Cross-package example: Markdown -> token-chunk -> a mock embedding function -> vec-cache, showing a concrete partial cache-hit win.",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "start": "tsx index.ts"
+  },
+  "devDependencies": {
+    "token-chunk": "workspace:*",
+    "vec-cache": "workspace:*"
+  }
+}

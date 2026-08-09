@@ -1,0 +1,19 @@
+{
+  "name": "@llm-kit/build-config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Development-only build and packaging conventions shared by every public llm-kit package. Never published.",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    }
+  },
+  "types": "./index.d.ts",
+  "files": [],
+  "scripts": {
+    "typecheck": "echo \"@llm-kit/build-config is plain JS with hand-written types\"",
+    "test": "echo \"no tests\""
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "example-chat-budgeting",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Cross-package example: a long tool-using conversation trimmed by chat-fit, then sent through a mock provider call wrapped in llm-backoff.",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "start": "tsx index.ts"
+  },
+  "devDependencies": {
+    "chat-fit": "workspace:*",
+    "llm-backoff": "workspace:*"
+  }
+}

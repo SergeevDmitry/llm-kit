@@ -1,0 +1,11 @@
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+*.tgz
+.tmp/
+.scratch/
+.cache/
+bench-results/
+*.log
+.DS_Store

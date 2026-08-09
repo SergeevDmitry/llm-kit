@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "types": ["node"],
+    // `better-sqlite3` ships a CommonJS `export =` default. This is the only
+    // package with a runtime dependency, so the interop flag stays
+    // scoped to this package's own tsconfig rather than the shared base.
+    "esModuleInterop": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts",
+    "benchmarks/**/*.ts",
+    "examples/**/*.ts",
+    "*.config.ts"
+  ]
+}

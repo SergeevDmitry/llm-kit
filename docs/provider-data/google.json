@@ -1,0 +1,206 @@
+{
+  "provider": "google",
+  "models": [
+    {
+      "canonicalId": "gemini-3.6-flash",
+      "provider": "google",
+      "aliases": [],
+      "family": "gemini-3.6",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.50",
+          "output": "7.50",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Standard (paid) tier rate. The page also lists Flex and Priority tiers, which this schema does not model as separate fields: Flex is priced the same as Batch ($0.75/$3.75); Priority is $2.70/$13.50 (1.8x standard).",
+            "Google's page shows \"Last Updated: July 30, 2026 UTC\" but does not state when this specific rate took effect; effectiveFrom is set conservatively to 2026-01-01.",
+            "cachedInput (context caching) is omitted: the page states a general \"$0.15 per 1M cached input tokens\" figure covering multiple models but does not confirm it is this specific model's rate, plus a separate per-hour storage fee this schema does not model. Recording an unconfirmed number would be worse than omitting it.",
+            "batchMultiplier of 0.5 was verified directly from this model's own Batch row ($0.75/$3.75 vs standard $1.50/$7.50)."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://ai.google.dev/gemini-api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gemini-3.5-flash",
+      "provider": "google",
+      "aliases": [],
+      "family": "gemini-3.5",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.50",
+          "output": "9.00",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Standard (paid) tier rate. Priority tier is $2.70/$16.20 (1.8x standard); not modeled as a separate field.",
+            "effectiveFrom set conservatively to 2026-01-01; page shows a \"Last Updated: July 30, 2026\" stamp but not a rate-specific effective date.",
+            "cachedInput omitted: not confirmed per-model (see gemini-3.6-flash notes for the same caveat).",
+            "batchMultiplier of 0.5 verified directly from this model's own Batch row ($0.75/$4.50 vs standard $1.50/$9.00)."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://ai.google.dev/gemini-api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gemini-3.5-flash-lite",
+      "provider": "google",
+      "aliases": [],
+      "family": "gemini-3.5",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.30",
+          "output": "2.50",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Standard (paid) tier rate. Priority tier is $0.54/$4.50 (1.8x standard); not modeled as a separate field.",
+            "effectiveFrom set conservatively to 2026-01-01; exact rate-effective date not published.",
+            "cachedInput omitted: not confirmed per-model.",
+            "batchMultiplier of 0.5 verified directly from this model's own Batch row ($0.15/$1.25 vs standard $0.30/$2.50)."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://ai.google.dev/gemini-api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gemini-2.5-flash",
+      "provider": "google",
+      "aliases": [],
+      "family": "gemini-2.5",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.30",
+          "output": "2.50",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Standard (paid) tier rate. Priority tier is $0.54/$4.50 (1.8x standard); not modeled as a separate field.",
+            "effectiveFrom set conservatively to 2026-01-01; exact rate-effective date not published.",
+            "cachedInput omitted: not confirmed per-model.",
+            "batchMultiplier of 0.5 verified directly from this model's own Batch row ($0.15/$1.25 vs standard $0.30/$2.50)."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://ai.google.dev/gemini-api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gemini-2.5-flash-lite",
+      "provider": "google",
+      "aliases": [],
+      "family": "gemini-2.5",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.10",
+          "output": "0.40",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Standard (paid) tier rate.",
+            "effectiveFrom set conservatively to 2026-01-01; exact rate-effective date not published.",
+            "cachedInput omitted: not confirmed per-model.",
+            "batchMultiplier of 0.5 verified directly from this model's own Batch row ($0.05/$0.20 vs standard $0.10/$0.40)."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://ai.google.dev/gemini-api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gemini-3.1-pro-preview",
+      "provider": "google",
+      "aliases": [],
+      "family": "gemini-3.1",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "2.00",
+          "output": "12.00",
+          "cheapestTier": true,
+          "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "This is the standard-tier rate for prompts <= 200k tokens. For prompts > 200k tokens the page publishes a higher rate ($4.00 input / $18.00 output per 1M tokens) — this schema has no context-length-tiered pricing field, so only the <=200k (lower) tier is recorded here. Do not use this entry for long-context (>200k) requests.",
+            "cachedInput and batchMultiplier are omitted: not confirmed for this Pro-tier model (unlike the Flash-tier models above, no explicit per-model Batch row was found for this model).",
+            "effectiveFrom set conservatively to 2026-01-01; exact rate-effective date not published. \"-preview\" in the model name suggests this may be short-lived/subject to change.",
+            "canonicalId uses the exact model name Google publishes on the pricing page (\"Gemini 3.1 Pro Preview\")."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://ai.google.dev/gemini-api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gemini-2.5-pro",
+      "provider": "google",
+      "aliases": [],
+      "family": "gemini-2.5",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.25",
+          "output": "10.00",
+          "cheapestTier": true,
+          "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "This is the standard-tier rate for prompts <= 200k tokens. For prompts > 200k tokens the page publishes a higher rate ($2.50 input / $15.00 output per 1M tokens) — this schema has no context-length-tiered pricing field, so only the <=200k (lower) tier is recorded here. Do not use this entry for long-context (>200k) requests.",
+            "cachedInput and batchMultiplier are omitted: not confirmed for this Pro-tier model (the page states Batch/Flex give a general 50% reduction on input/output pricing, but no explicit per-model Batch row for this model was independently verified).",
+            "effectiveFrom set conservatively to 2026-01-01; exact rate-effective date not published."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://ai.google.dev/gemini-api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    }
+  ],
+  "omitted": [
+    "Free-tier pricing (\"free of charge\" for input/output on certain models, with the tradeoff that content may be used to improve Google's products) is not modeled — this registry only records the paid/standard API tier.",
+    "Google's Flex and Priority service tiers (distinct from Batch) are not modeled as separate fields — noted per-model instead, since this schema only has a single batchMultiplier field.",
+    "Context caching (cachedInput) is omitted for every model: the pricing page gives a general ~$0.15/1M cached-token figure covering multiple models plus a separate per-hour storage fee, but does not clearly break this out per individual model, so no cachedInput number is recorded rather than guessing.",
+    "Only Flash-tier (3.6, 3.5, 3.5-lite, 2.5, 2.5-lite) and Pro-tier (3.1-preview, 2.5) models with an explicit per-token price were included. Any Gemini model not shown on https://ai.google.dev/gemini-api/docs/pricing as fetched (e.g. older 1.x/2.0 generations, embedding models, image/video generation models) is left out."
+  ]
+}

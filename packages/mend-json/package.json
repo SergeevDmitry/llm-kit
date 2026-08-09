@@ -1,0 +1,70 @@
+{
+  "name": "mend-json",
+  "version": "0.1.0",
+  "description": "Repair truncated JSON from an LLM stream into a valid partial value on every chunk.",
+  "keywords": [
+    "json",
+    "streaming",
+    "partial-json",
+    "incomplete-json",
+    "llm",
+    "openai",
+    "anthropic",
+    "tool-calls",
+    "parser",
+    "repair"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Dmitrii Sergeev",
+    "url": "https://github.com/SergeevDmitry"
+  },
+  "homepage": "https://github.com/SergeevDmitry/llm-kit/tree/master/packages/mend-json#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SergeevDmitry/llm-kit.git",
+    "directory": "packages/mend-json"
+  },
+  "bugs": {
+    "url": "https://github.com/SergeevDmitry/llm-kit/issues"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": {
+        "import": "./dist/index.d.ts",
+        "require": "./dist/index.d.cts"
+      },
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "bench": "vitest bench --run"
+  },
+  "devDependencies": {
+    "@llm-kit/build-config": "workspace:*",
+    "@llm-kit/test-utils": "workspace:*"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "@llm-kit/test-utils",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared testing utilities for llm-kit. Development-only: never imported from package source, never bundled, never published.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "fast-check": "^4.3.0"
+  }
+}

@@ -1,0 +1,217 @@
+{
+  "provider": "aws-bedrock",
+  "models": [
+    {
+      "canonicalId": "claude-3.5-sonnet",
+      "provider": "aws-bedrock",
+      "aliases": [],
+      "family": "anthropic-claude",
+      "pricing": [
+        {
+          "effectiveFrom": "2025-12-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "6.00",
+          "output": "30.00",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "AWS Bedrock's own rate card for this Anthropic model, explicitly labeled \"Effective 1 Dec 2025\" on the pricing page — a real, confirmed effective date, not the conservative default used elsewhere in this file.",
+            "Batch: $3.00/$15.00 (confirmed 0.5x standard) as observed on the same page.",
+            "This is Bedrock's own price for an older Claude generation (3.5 Sonnet), not the current claude-sonnet-5 model in anthropic.json — no comparable first-party entry exists in this registry for the same model, so no direct parity claim is possible or intended. Bedrock and Azure resell other vendors' models under their own rate cards, so a first-party price is never a safe proxy for theirs."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://aws.amazon.com/bedrock/pricing/",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "claude-3.5-sonnet-v2",
+      "provider": "aws-bedrock",
+      "aliases": [],
+      "family": "anthropic-claude",
+      "pricing": [
+        {
+          "effectiveFrom": "2025-12-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "6.00",
+          "output": "30.00",
+          "cachedInput": "0.60",
+          "cacheWrite": "7.50",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "AWS Bedrock's own rate card, explicitly labeled \"Effective 1 Dec 2025\" on the pricing page.",
+            "Batch: $3.00/$15.00 (confirmed 0.5x standard) as observed on the same page.",
+            "Bedrock's own price for an older Claude generation; not comparable to any first-party entry currently in anthropic.json (which covers 4.x/5.x models only)."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://aws.amazon.com/bedrock/pricing/",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "amazon-nova-micro",
+      "provider": "aws-bedrock",
+      "aliases": [],
+      "family": "amazon-nova",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.30",
+          "output": "1.20",
+          "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "AWS's own first-party model (Amazon publishes both Bedrock and Nova), so \"aws-bedrock\" is effectively first-party pricing here, unlike the resold third-party models in this file.",
+            "No explicit effective date published for this specific rate (unlike the Claude 3.5 Sonnet rows above, which do carry a stated Dec 2025 date); effectiveFrom is set conservatively to 2026-01-01.",
+            "Bedrock's pricing page also distinguishes \"Global cross-region\" vs \"in-region\" inference pricing for Nova; this rate was not confirmed to be specifically the in-region (vs cross-region) figure — treat as the headline on-demand rate observed."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://aws.amazon.com/bedrock/pricing/",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "amazon-nova-lite",
+      "provider": "aws-bedrock",
+      "aliases": [],
+      "family": "amazon-nova",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.60",
+          "output": "2.40",
+          "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "No explicit effective date published for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "Same cross-region/in-region caveat as amazon-nova-micro."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://aws.amazon.com/bedrock/pricing/",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "amazon-nova-pro",
+      "provider": "aws-bedrock",
+      "aliases": [],
+      "family": "amazon-nova",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.20",
+          "output": "4.80",
+          "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "No explicit effective date published for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "Same cross-region/in-region caveat as amazon-nova-micro."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://aws.amazon.com/bedrock/pricing/",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gemma-4-31b",
+      "provider": "aws-bedrock",
+      "aliases": [],
+      "family": "google-gemma",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.14",
+          "output": "0.40",
+          "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "No explicit effective date published for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "Cross-provider alias/canonicalId collision (allowed, not an error): Together AI also lists \"Gemma 4 31B\" (together.json: gemma-4-31b) at a different, higher rate ($0.39/$0.97 as observed) — same underlying Google open-weight model, independently priced by each reseller; do not assume parity."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://aws.amazon.com/bedrock/pricing/",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "mistral-large-3",
+      "provider": "aws-bedrock",
+      "aliases": [],
+      "family": "mistral",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.50",
+          "output": "1.50",
+          "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "No explicit effective date published for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "Cross-provider alias/canonicalId collision (allowed, not an error): Mistral's own first-party pricing (mistral.json: mistral-large-3) shows the identical $0.50/$1.50 figure as independently observed — coincidental agreement between the two independently fetched sources, not assumed; both were confirmed directly."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://aws.amazon.com/bedrock/pricing/",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "nemotron-nano-2",
+      "provider": "aws-bedrock",
+      "aliases": [],
+      "family": "nvidia-nemotron",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.06",
+          "output": "0.23",
+          "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "No explicit effective date published for this rate; effectiveFrom is set conservatively to 2026-01-01."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://aws.amazon.com/bedrock/pricing/",
+        "observedAt": "2026-08-05"
+      }
+    }
+  ],
+  "omitted": [
+    "AWS Bedrock's catalogue spans many more model families (Meta Llama, additional Anthropic Claude generations, DeepSeek, Cohere, AI21, Writer, and Amazon's own Titan line) than are represented here; this is a representative sample of the families that produced a clear, unambiguous price during fetching, not an exhaustive list. Meta Llama 2 (13B/70B) pricing was found on the page but deliberately excluded: Llama 2 is a superseded generation and its inclusion risked implying it is Bedrock's current Llama offering, which was not confirmed.",
+    "Amazon Nova Premier's price was not found in the fetched content (the page excerpt was truncated before reaching it); Nova Micro/Lite/Pro are included, Nova Premier is not.",
+    "Regional and deployment-mode pricing variation (Global cross-region vs. in-region inference, Provisioned Throughput) is not modeled by this schema; entries record the on-demand rate as observed without confirming which region/routing tier it applies to.",
+    "Every model in this file is AWS Bedrock's own resale rate, independently sourced from https://aws.amazon.com/bedrock/pricing/ and never copied from another provider's file, per the ownership boundary in docs/provider-data/README.md (\"do not assume parity with the first-party provider\")."
+  ]
+}

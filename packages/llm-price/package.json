@@ -1,0 +1,73 @@
+{
+  "name": "llm-price",
+  "version": "0.1.0",
+  "description": "Deterministic LLM cost calculation from provider usage objects using versioned pricing data.",
+  "keywords": [
+    "llm",
+    "pricing",
+    "cost",
+    "tokens",
+    "openai",
+    "anthropic",
+    "gemini",
+    "usage",
+    "billing",
+    "fixed-point"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Dmitrii Sergeev",
+    "url": "https://github.com/SergeevDmitry"
+  },
+  "homepage": "https://github.com/SergeevDmitry/llm-kit/tree/master/packages/llm-price#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SergeevDmitry/llm-kit.git",
+    "directory": "packages/llm-price"
+  },
+  "bugs": {
+    "url": "https://github.com/SergeevDmitry/llm-kit/issues"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": {
+        "import": "./dist/index.d.ts",
+        "require": "./dist/index.d.cts"
+      },
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "bench": "vitest bench --run",
+    "generate:registry": "tsx ../../scripts/generate-model-registry.ts",
+    "verify:registry": "tsx ../../scripts/generate-model-registry.ts --check"
+  },
+  "devDependencies": {
+    "@llm-kit/build-config": "workspace:*",
+    "@llm-kit/model-registry": "workspace:*",
+    "@llm-kit/test-utils": "workspace:*"
+  }
+}

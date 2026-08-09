@@ -1,0 +1,265 @@
+{
+  "provider": "anthropic",
+  "models": [
+    {
+      "canonicalId": "claude-fable-5",
+      "provider": "anthropic",
+      "aliases": [],
+      "family": "fable",
+      "contextWindow": 1000000,
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "10.00",
+          "output": "50.00",
+          "cachedInput": "1.00",
+          "cacheWrite": "12.50",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://platform.claude.com/docs/en/about-claude/models/overview",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Anthropic did not publish an explicit effective date for this rate as observed; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "cacheWrite reflects the 5-minute cache TTL (1.25x input). The 1-hour TTL write multiplier is 2x input and is not separately modeled by this schema (a single cacheWrite field)."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://platform.claude.com/docs/en/about-claude/models/overview",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "claude-opus-5",
+      "provider": "anthropic",
+      "aliases": [],
+      "family": "opus",
+      "contextWindow": 1000000,
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "5.00",
+          "output": "25.00",
+          "cachedInput": "0.50",
+          "cacheWrite": "6.25",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://platform.claude.com/docs/en/about-claude/models/overview",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Anthropic did not publish an explicit effective date for this rate as observed; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "cacheWrite reflects the 5-minute cache TTL (1.25x input). The 1-hour TTL write multiplier is 2x input and is not separately modeled by this schema (a single cacheWrite field)."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://platform.claude.com/docs/en/about-claude/models/overview",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "claude-opus-4-8",
+      "provider": "anthropic",
+      "aliases": [],
+      "family": "opus",
+      "contextWindow": 1000000,
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "5.00",
+          "output": "25.00",
+          "cachedInput": "0.50",
+          "cacheWrite": "6.25",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://platform.claude.com/docs/en/about-claude/models/overview",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Anthropic did not publish an explicit effective date for this rate as observed; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "cacheWrite reflects the 5-minute cache TTL (1.25x input). The 1-hour TTL write multiplier is 2x input and is not separately modeled by this schema (a single cacheWrite field)."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://platform.claude.com/docs/en/about-claude/models/overview",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "claude-opus-4-7",
+      "provider": "anthropic",
+      "aliases": [],
+      "family": "opus",
+      "contextWindow": 1000000,
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "5.00",
+          "output": "25.00",
+          "cachedInput": "0.50",
+          "cacheWrite": "6.25",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://platform.claude.com/docs/en/about-claude/models/overview",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Anthropic did not publish an explicit effective date for this rate as observed; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "cacheWrite reflects the 5-minute cache TTL (1.25x input). The 1-hour TTL write multiplier is 2x input and is not separately modeled by this schema (a single cacheWrite field)."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://platform.claude.com/docs/en/about-claude/models/overview",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "claude-opus-4-6",
+      "provider": "anthropic",
+      "aliases": [],
+      "family": "opus",
+      "contextWindow": 1000000,
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "5.00",
+          "output": "25.00",
+          "cachedInput": "0.50",
+          "cacheWrite": "6.25",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://platform.claude.com/docs/en/about-claude/models/overview",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Anthropic did not publish an explicit effective date for this rate as observed; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "cacheWrite reflects the 5-minute cache TTL (1.25x input). The 1-hour TTL write multiplier is 2x input and is not separately modeled by this schema (a single cacheWrite field)."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://platform.claude.com/docs/en/about-claude/models/overview",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "claude-sonnet-5",
+      "provider": "anthropic",
+      "aliases": [],
+      "family": "sonnet",
+      "contextWindow": 1000000,
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "effectiveTo": "2026-09-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "2.00",
+          "output": "10.00",
+          "cachedInput": "0.20",
+          "cacheWrite": "2.50",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://platform.claude.com/docs/en/about-claude/models/overview",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Introductory rate, confirmed active through 2026-08-31. This is the golden fixture for effective-date selection (see test/pricing-period.test.ts): a lookup dated 2026-08-15 must select this period.",
+            "effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true introductory-rate start date; only the 2026-08-31 end date was observed.",
+            "cacheWrite reflects the 5-minute cache TTL (1.25x input). The 1-hour TTL write multiplier is 2x input and is not separately modeled by this schema (a single cacheWrite field)."
+          ]
+        },
+        {
+          "effectiveFrom": "2026-09-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "3.00",
+          "output": "15.00",
+          "cachedInput": "0.30",
+          "cacheWrite": "3.75",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://platform.claude.com/docs/en/about-claude/models/overview",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Standard rate, effective 2026-09-01 immediately after the introductory-rate window (through 2026-08-31) ends. A lookup dated 2026-09-15 must select this period.",
+            "cacheWrite reflects the 5-minute cache TTL (1.25x input). The 1-hour TTL write multiplier is 2x input and is not separately modeled by this schema (a single cacheWrite field)."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://platform.claude.com/docs/en/about-claude/models/overview",
+        "observedAt": "2026-08-05",
+        "notes": [
+          "Two pricing periods on purpose: an introductory rate ($2.00/$10.00) through 2026-08-31, then the standard rate ($3.00/$15.00) from 2026-09-01."
+        ]
+      }
+    },
+    {
+      "canonicalId": "claude-sonnet-4-6",
+      "provider": "anthropic",
+      "aliases": [],
+      "family": "sonnet",
+      "contextWindow": 1000000,
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "3.00",
+          "output": "15.00",
+          "cachedInput": "0.30",
+          "cacheWrite": "3.75",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://platform.claude.com/docs/en/about-claude/models/overview",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Anthropic did not publish an explicit effective date for this rate as observed; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "cacheWrite reflects the 5-minute cache TTL (1.25x input). The 1-hour TTL write multiplier is 2x input and is not separately modeled by this schema (a single cacheWrite field)."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://platform.claude.com/docs/en/about-claude/models/overview",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "claude-haiku-4-5-20251001",
+      "provider": "anthropic",
+      "aliases": ["claude-haiku-4-5"],
+      "family": "haiku",
+      "contextWindow": 200000,
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.00",
+          "output": "5.00",
+          "cachedInput": "0.10",
+          "cacheWrite": "1.25",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://platform.claude.com/docs/en/about-claude/models/overview",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Anthropic did not publish an explicit effective date for this rate as observed; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "cacheWrite reflects the 5-minute cache TTL (1.25x input). The 1-hour TTL write multiplier is 2x input and is not separately modeled by this schema (a single cacheWrite field)."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://platform.claude.com/docs/en/about-claude/models/overview",
+        "observedAt": "2026-08-05",
+        "notes": [
+          "canonicalId is the full dated snapshot id; \"claude-haiku-4-5\" is the short alias Anthropic documents alongside it — a genuine alias/canonical-ID resolution case."
+        ]
+      }
+    }
+  ],
+  "omitted": [
+    "Older Claude model generations (3.x and earlier) are not included: their pricing was not confirmed against current Anthropic documentation.",
+    "Anthropic's 1-hour cache-TTL write multiplier (2x input) is not modeled as a separate field — only the 5-minute TTL rate (1.25x input) is recorded in cacheWrite, noted on every period. Adding a second cache-write field for the 1-hour TTL is a schema change for a future revision, not a Phase 1 gap."
+  ]
+}

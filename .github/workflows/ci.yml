@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# Read-only: this workflow verifies, it never writes to the repository.
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  verify:
+    name: lint, typecheck, test, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Pinned to a commit SHA — see the comment at the top of release.yml.
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install (frozen lockfile)
+        run: pnpm install --frozen-lockfile
+
+      # One step, deliberately. Enumerating the gate's members here has drifted
+      # from `pnpm run ci` before, so `ci` is the single definition and this
+      # workflow runs exactly it, and they cannot disagree again.
+      #
+      # The Bun smoke test is the one advertised claim `ci` cannot cover (Bun
+      # is not installable from a pnpm script); it runs as its own job in
+      # release.yml, which the publish job `needs:`.
+      - name: Run the release gate
+        run: pnpm run ci

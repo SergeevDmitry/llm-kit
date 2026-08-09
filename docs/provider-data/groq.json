@@ -1,0 +1,139 @@
+{
+  "provider": "groq",
+  "models": [
+    {
+      "canonicalId": "llama-3.1-8b-instant",
+      "provider": "groq",
+      "aliases": ["llama-3.1-8b"],
+      "family": "llama-3.1",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.05",
+          "output": "0.08",
+          "sourceUrl": "https://console.groq.com/docs/models",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Groq's docs page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "No prompt-caching or Batch API discount is documented for Groq in the fetched page, so cachedInput and batchMultiplier are omitted rather than assumed."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://console.groq.com/docs/models",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "llama-3.3-70b-versatile",
+      "provider": "groq",
+      "aliases": ["llama-3.3-70b"],
+      "family": "llama-3.3",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.59",
+          "output": "0.79",
+          "sourceUrl": "https://console.groq.com/docs/models",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Groq's docs page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "No prompt-caching or Batch API discount is documented for Groq in the fetched page, so cachedInput and batchMultiplier are omitted rather than assumed.",
+            "This is Groq's own hosted rate for the same open-weight model Together AI also hosts (see together.json's llama-3.3-70b at a different, higher price) and AWS Bedrock resells — each host prices it independently; do not assume parity."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://console.groq.com/docs/models",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-oss-120b",
+      "provider": "groq",
+      "aliases": [],
+      "family": "gpt-oss",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.15",
+          "output": "0.60",
+          "sourceUrl": "https://console.groq.com/docs/models",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Groq's docs page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "No prompt-caching or Batch API discount is documented for Groq in the fetched page.",
+            "OpenAI's open-weight gpt-oss-120b model, hosted independently by Groq under Groq's own rate card (also hosted by Together AI, at the same $0.15/$0.60 rate as observed — coincidental agreement, not assumed parity)."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://console.groq.com/docs/models",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-oss-20b",
+      "provider": "groq",
+      "aliases": [],
+      "family": "gpt-oss",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.075",
+          "output": "0.30",
+          "sourceUrl": "https://console.groq.com/docs/models",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Groq's docs page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "No prompt-caching or Batch API discount is documented for Groq in the fetched page.",
+            "Also hosted by Together AI at a different rate ($0.05/$0.20 as observed) — each host prices it independently; do not assume parity."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://console.groq.com/docs/models",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "qwen3.6-27b",
+      "provider": "groq",
+      "aliases": [],
+      "family": "qwen",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.60",
+          "output": "3.00",
+          "sourceUrl": "https://console.groq.com/docs/models",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Listed under Groq's \"Preview\" models section, not \"Production\" — preview models on Groq are explicitly subject to change or removal without notice. Included because a real price was published, but treat this one as less stable than the production-tier entries in this file.",
+            "Groq's docs page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://console.groq.com/docs/models",
+        "observedAt": "2026-08-05"
+      }
+    }
+  ],
+  "omitted": [
+    "Audio models (Whisper, Whisper Large V3 Turbo, Canopy Labs Orpheus TTS variants) are priced per-hour-of-audio or per-1M-characters on Groq's page, not per-million-tokens — this schema's PricingPeriod is text-token-oriented, so these are left out rather than misrepresented under the wrong unit.",
+    "Llama Prompt Guard 2 (22M/86M) are safety-classifier models, not general chat/completion models, and were left out as out of scope for representative coverage.",
+    "\"Compound\" and \"Compound Mini\" (Groq's agentic systems) and \"MiniMax M2.7\" showed no price (\"—\" or \"Contact Sales\") on the fetched page and are left out per the never-guess rule.",
+    "This is a representative subset of Groq's Production + one Preview model, not exhaustive; confirm against https://console.groq.com/docs/models for the current full list before adding more."
+  ]
+}

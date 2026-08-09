@@ -1,0 +1,353 @@
+{
+  "provider": "mistral",
+  "models": [
+    {
+      "canonicalId": "mistral-medium-3.5",
+      "provider": "mistral",
+      "aliases": [],
+      "family": "mistral-medium",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.50",
+          "output": "7.50",
+          "sourceUrl": "https://mistral.ai/pricing/api",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "No cachedInput or batchMultiplier is documented on the fetched page for this model; omitted rather than assumed."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://mistral.ai/pricing/api",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "mistral-small-4",
+      "provider": "mistral",
+      "aliases": [],
+      "family": "mistral-small",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.15",
+          "output": "0.60",
+          "sourceUrl": "https://mistral.ai/pricing/api",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://mistral.ai/pricing/api",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "mistral-large-3",
+      "provider": "mistral",
+      "aliases": [],
+      "family": "mistral-large",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.50",
+          "output": "1.50",
+          "sourceUrl": "https://mistral.ai/pricing/api",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "This is Mistral's own first-party rate. AWS Bedrock also resells \"Mistral Large 3\" under its own rate card at the same $0.50/$1.50 figure as independently observed on Bedrock's pricing page — coincidental agreement between the two sources, not assumed; see aws-bedrock.json."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://mistral.ai/pricing/api",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "devstral-2",
+      "provider": "mistral",
+      "aliases": [],
+      "family": "devstral",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.40",
+          "output": "2.00",
+          "sourceUrl": "https://mistral.ai/pricing/api",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://mistral.ai/pricing/api",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "devstral-small-2",
+      "provider": "mistral",
+      "aliases": [],
+      "family": "devstral",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.10",
+          "output": "0.30",
+          "sourceUrl": "https://mistral.ai/pricing/api",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://mistral.ai/pricing/api",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "codestral",
+      "provider": "mistral",
+      "aliases": [],
+      "family": "codestral",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.30",
+          "output": "0.90",
+          "sourceUrl": "https://mistral.ai/pricing/api",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://mistral.ai/pricing/api",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "magistral-medium",
+      "provider": "mistral",
+      "aliases": [],
+      "family": "magistral",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "2.00",
+          "output": "5.00",
+          "sourceUrl": "https://mistral.ai/pricing/api",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "Listed as a reasoning model on the pricing page; no separate \"reasoning\" surcharge is published, so the reasoning field is omitted."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://mistral.ai/pricing/api",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "magistral-small",
+      "provider": "mistral",
+      "aliases": [],
+      "family": "magistral",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.50",
+          "output": "1.50",
+          "sourceUrl": "https://mistral.ai/pricing/api",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://mistral.ai/pricing/api",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "ministral-3-3b",
+      "provider": "mistral",
+      "aliases": [],
+      "family": "ministral-3",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.10",
+          "output": "0.10",
+          "sourceUrl": "https://mistral.ai/pricing/api",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://mistral.ai/pricing/api",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "ministral-3-8b",
+      "provider": "mistral",
+      "aliases": [],
+      "family": "ministral-3",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.15",
+          "output": "0.15",
+          "sourceUrl": "https://mistral.ai/pricing/api",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://mistral.ai/pricing/api",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "ministral-3-14b",
+      "provider": "mistral",
+      "aliases": [],
+      "family": "ministral-3",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.20",
+          "output": "0.20",
+          "sourceUrl": "https://mistral.ai/pricing/api",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "AWS Bedrock resells a \"Ministral 14B 3.0\" at the same $0.20/$0.20 figure as independently observed on Bedrock's pricing page — likely the same model, coincidental agreement not assumed; Bedrock's variant was not added to aws-bedrock.json in this pass since the version suffix (\"3.0\") was not cross-checked against this \"ministral-3-14b\" naming."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://mistral.ai/pricing/api",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "mistral-nemo",
+      "provider": "mistral",
+      "aliases": [],
+      "family": "mistral-nemo",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.15",
+          "output": "0.15",
+          "sourceUrl": "https://mistral.ai/pricing/api",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "An older model generation still listed with a live price on the current pricing page as fetched; included because it is confidently sourced, not because it is a current flagship."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://mistral.ai/pricing/api",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "mixtral-8x7b",
+      "provider": "mistral",
+      "aliases": [],
+      "family": "mixtral",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.70",
+          "output": "0.70",
+          "sourceUrl": "https://mistral.ai/pricing/api",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "An older model generation still listed with a live price on the current pricing page as fetched."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://mistral.ai/pricing/api",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "mixtral-8x22b",
+      "provider": "mistral",
+      "aliases": [],
+      "family": "mixtral",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "2.00",
+          "output": "6.00",
+          "sourceUrl": "https://mistral.ai/pricing/api",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "An older model generation still listed with a live price on the current pricing page as fetched."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://mistral.ai/pricing/api",
+        "observedAt": "2026-08-05"
+      }
+    }
+  ],
+  "omitted": [
+    "Embedding models (Mistral Embed, Codestral Embed) are excluded: the schema's PricingPeriod requires an output rate and these are input-only embedding endpoints.",
+    "OCR (per-1,000-pages) and Voxtral audio models (per-1,000-characters for TTS, per-minute for transcription) are excluded: priced in units this per-million-tokens schema does not model.",
+    "Only models with an explicit per-million-tokens input/output price on https://mistral.ai/pricing/api as fetched are included; the top-level https://mistral.ai/pricing overview page and https://mistral.ai/products/la-plateforme page do not render a usable table via automated fetch and were not used as the source of record."
+  ]
+}

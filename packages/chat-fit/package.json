@@ -1,0 +1,71 @@
+{
+  "name": "chat-fit",
+  "version": "0.1.0",
+  "description": "Trim chat history to a token budget without splitting tool calls from their results.",
+  "keywords": [
+    "chat",
+    "context-window",
+    "tokens",
+    "llm",
+    "openai",
+    "anthropic",
+    "tool-calls",
+    "history",
+    "truncation",
+    "summarization"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Dmitrii Sergeev",
+    "url": "https://github.com/SergeevDmitry"
+  },
+  "homepage": "https://github.com/SergeevDmitry/llm-kit/tree/master/packages/chat-fit#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SergeevDmitry/llm-kit.git",
+    "directory": "packages/chat-fit"
+  },
+  "bugs": {
+    "url": "https://github.com/SergeevDmitry/llm-kit/issues"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": {
+        "import": "./dist/index.d.ts",
+        "require": "./dist/index.d.cts"
+      },
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "bench": "vitest bench --run"
+  },
+  "devDependencies": {
+    "@llm-kit/build-config": "workspace:*",
+    "@llm-kit/test-utils": "workspace:*",
+    "@llm-kit/tokenizer": "workspace:*"
+  }
+}

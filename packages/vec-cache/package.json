@@ -1,0 +1,82 @@
+{
+  "name": "vec-cache",
+  "version": "0.1.0",
+  "description": "SQLite-backed embedding cache with partial batch hits, in-batch deduplication and model-scoped keys.",
+  "keywords": [
+    "embeddings",
+    "cache",
+    "sqlite",
+    "rag",
+    "vector",
+    "batch",
+    "deduplication",
+    "openai",
+    "llm",
+    "disk-cache"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Dmitrii Sergeev",
+    "url": "https://github.com/SergeevDmitry"
+  },
+  "homepage": "https://github.com/SergeevDmitry/llm-kit/tree/master/packages/vec-cache#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SergeevDmitry/llm-kit.git",
+    "directory": "packages/vec-cache"
+  },
+  "bugs": {
+    "url": "https://github.com/SergeevDmitry/llm-kit/issues"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": {
+        "import": "./dist/index.d.ts",
+        "require": "./dist/index.d.cts"
+      },
+      "node": {
+        "import": "./dist/index.js",
+        "require": "./dist/index.cjs"
+      },
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "bench": "vitest bench --run"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.4.1"
+  },
+  "devDependencies": {
+    "@llm-kit/build-config": "workspace:*",
+    "@llm-kit/test-utils": "workspace:*",
+    "@types/better-sqlite3": "^7.6.13"
+  }
+}

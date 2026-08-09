@@ -1,0 +1,10 @@
+packages:
+  - 'packages/*'
+  - 'internal/*'
+  - 'examples/*'
+
+# Native modules that are allowed to run install scripts.
+# `vec-cache` is the only package with a required runtime dependency.
+onlyBuiltDependencies:
+  - better-sqlite3
+  - esbuild

@@ -1,0 +1,260 @@
+{
+  "provider": "together",
+  "models": [
+    {
+      "canonicalId": "deepseek-v4-pro",
+      "provider": "together",
+      "aliases": [],
+      "family": "deepseek",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.74",
+          "output": "3.48",
+          "cachedInput": "0.20",
+          "sourceUrl": "https://www.together.ai/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Together's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://www.together.ai/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "kimi-k3",
+      "provider": "together",
+      "aliases": [],
+      "family": "kimi",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "3.00",
+          "output": "15.00",
+          "cachedInput": "0.30",
+          "sourceUrl": "https://www.together.ai/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Together's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://www.together.ai/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "qwen3.7-max",
+      "provider": "together",
+      "aliases": [],
+      "family": "qwen",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.25",
+          "output": "3.75",
+          "cachedInput": "0.13",
+          "sourceUrl": "https://www.together.ai/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Together's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://www.together.ai/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "glm-5.2",
+      "provider": "together",
+      "aliases": [],
+      "family": "glm",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.40",
+          "output": "4.40",
+          "cachedInput": "0.26",
+          "sourceUrl": "https://www.together.ai/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Together's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://www.together.ai/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "llama-3.3-70b",
+      "provider": "together",
+      "aliases": [],
+      "family": "llama-3.3",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.04",
+          "output": "1.04",
+          "sourceUrl": "https://www.together.ai/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Together's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "Also hosted by Groq (groq.json: llama-3.3-70b-versatile, $0.59/$0.79) and resold by AWS Bedrock — each host prices this same open-weight model independently; do not assume parity across providers."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://www.together.ai/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-oss-120b",
+      "provider": "together",
+      "aliases": [],
+      "family": "gpt-oss",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.15",
+          "output": "0.60",
+          "sourceUrl": "https://www.together.ai/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Together's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "Cross-provider alias/canonicalId collision (allowed, not an error): Groq also publishes a model with canonicalId \"gpt-oss-120b\" (groq.json), independently priced at the same $0.15/$0.60 figure as observed. The identical string \"gpt-oss-120b\" is used as the canonicalId on both providers because that is the actual model name each provider publishes; resolving \"gpt-oss-120b\" without a provider qualifier is ambiguous across providers by design and the resolver requires a provider qualifier to disambiguate it."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://www.together.ai/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-oss-20b",
+      "provider": "together",
+      "aliases": [],
+      "family": "gpt-oss",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.05",
+          "output": "0.20",
+          "sourceUrl": "https://www.together.ai/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Together's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "Cross-provider alias/canonicalId collision (allowed, not an error): Groq also publishes \"gpt-oss-20b\" (groq.json) at a different rate ($0.075/$0.30 as observed) — same model name, independently priced by each host; do not assume parity."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://www.together.ai/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "minimax-m3",
+      "provider": "together",
+      "aliases": [],
+      "family": "minimax",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.30",
+          "output": "1.20",
+          "cachedInput": "0.06",
+          "sourceUrl": "https://www.together.ai/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Together's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://www.together.ai/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gemma-4-31b",
+      "provider": "together",
+      "aliases": [],
+      "family": "gemma",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.39",
+          "output": "0.97",
+          "sourceUrl": "https://www.together.ai/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Together's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "Cross-provider alias/canonicalId collision (allowed, not an error): AWS Bedrock also lists \"Gemma 4 31B\" (aws-bedrock.json: gemma-4-31b) at a different, lower rate ($0.14/$0.40 as observed on Bedrock) — same underlying Google open-weight model, independently priced by each reseller; do not assume parity."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://www.together.ai/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "qwen3.5-397b-a17b",
+      "provider": "together",
+      "aliases": [],
+      "family": "qwen",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.60",
+          "output": "3.60",
+          "cachedInput": "0.35",
+          "sourceUrl": "https://www.together.ai/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Together's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://www.together.ai/pricing",
+        "observedAt": "2026-08-05"
+      }
+    }
+  ],
+  "omitted": [
+    "Together AI's catalogue as fetched from https://www.together.ai/pricing lists roughly 30 chat/language models; only a representative set of 10 spanning major model families (DeepSeek, Moonshot/Kimi, Alibaba/Qwen, Zhipu/GLM, Meta/Llama, OpenAI open-weight gpt-oss, MiniMax, Google/Gemma) is included here, per this repository's preference for accuracy over exhaustive breadth. Confirm against the live page before adding more.",
+    "Models shown with a $0.00 or otherwise incomplete price on the fetched page (e.g. \"PrismML Ternary Bonsai 27B\") are excluded rather than recorded with a placeholder.",
+    "Embedding, image, audio, and reranking models on Together's catalogue are out of scope for this per-million-tokens text-completion schema and were not reviewed."
+  ]
+}

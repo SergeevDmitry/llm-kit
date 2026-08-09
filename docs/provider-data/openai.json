@@ -1,0 +1,760 @@
+{
+  "provider": "openai",
+  "models": [
+    {
+      "canonicalId": "gpt-5.6-sol",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-5.6",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "5.00",
+          "output": "30.00",
+          "cachedInput": "0.50",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date (this model's naming implies a later release, but a conservative too-early effectiveFrom only ever makes a historical lookup succeed when it should return \"no period found\", never the reverse).",
+            "batchMultiplier reflects OpenAI's general Batch API policy (\"a 50% discount to Standard pricing rates across all models\") as stated on the pricing page; not independently confirmed per-model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-5.6-terra",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-5.6",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "2.00",
+          "output": "12.00",
+          "cachedInput": "0.20",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-5.6-luna",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-5.6",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.20",
+          "output": "1.20",
+          "cachedInput": "0.02",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-5.5",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-5.5",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "5.00",
+          "output": "30.00",
+          "cachedInput": "0.50",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-5.5-pro",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-5.5",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "30.00",
+          "output": "180.00",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "No cached-input rate is published for gpt-5.5-pro (shown as \"—\" on the pricing page); cachedInput is intentionally omitted rather than guessed.",
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier is intentionally omitted for this pro-tier model: the pricing page's blanket \"50% off Batch\" statement was not independently confirmed to apply to the -pro tier, unlike the base tiers."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-5.4",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-5.4",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "2.50",
+          "output": "15.00",
+          "cachedInput": "0.25",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-5.4-mini",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-5.4",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.75",
+          "output": "4.50",
+          "cachedInput": "0.075",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-5.4-nano",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-5.4",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.20",
+          "output": "1.25",
+          "cachedInput": "0.02",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-5.4-pro",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-5.4",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "30.00",
+          "output": "180.00",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "No cached-input rate is published for gpt-5.4-pro (shown as \"—\"); cachedInput is intentionally omitted rather than guessed.",
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier is intentionally omitted for this pro-tier model; not independently confirmed to apply."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-5.2",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-5.2",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.75",
+          "output": "14.00",
+          "cachedInput": "0.175",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-5.2-pro",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-5.2",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "21.00",
+          "output": "168.00",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "No cached-input rate is published for gpt-5.2-pro (shown as \"—\"); cachedInput is intentionally omitted rather than guessed.",
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier is intentionally omitted for this pro-tier model; not independently confirmed to apply."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-5.1",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-5.1",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.25",
+          "output": "10.00",
+          "cachedInput": "0.125",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-5",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-5",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.25",
+          "output": "10.00",
+          "cachedInput": "0.125",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model.",
+            "Lead-supplied verified table (observed 2026-08-05) matches this rate exactly; independently re-confirmed against https://developers.openai.com/api/docs/pricing on the same date."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-5-mini",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-5",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.25",
+          "output": "2.00",
+          "cachedInput": "0.025",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-5-nano",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-5",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.05",
+          "output": "0.40",
+          "cachedInput": "0.005",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-5-pro",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-5",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "15.00",
+          "output": "120.00",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "No cached-input rate is published for gpt-5-pro (shown as \"—\"); cachedInput is intentionally omitted rather than guessed.",
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier is intentionally omitted for this pro-tier model; not independently confirmed to apply."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-4.1",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-4.1",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "2.00",
+          "output": "8.00",
+          "cachedInput": "0.50",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-4.1-mini",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-4.1",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.40",
+          "output": "1.60",
+          "cachedInput": "0.10",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-4.1-nano",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-4.1",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.10",
+          "output": "0.40",
+          "cachedInput": "0.025",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-4o",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-4o",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "2.50",
+          "output": "10.00",
+          "cachedInput": "1.25",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-4o-mini",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-4o",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.15",
+          "output": "0.60",
+          "cachedInput": "0.075",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "o3",
+      "provider": "openai",
+      "aliases": [],
+      "family": "o-series",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "2.00",
+          "output": "8.00",
+          "cachedInput": "0.50",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "o3-pro",
+      "provider": "openai",
+      "aliases": [],
+      "family": "o-series",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "20.00",
+          "output": "80.00",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "No cached-input rate is published for o3-pro (shown as \"—\"); cachedInput is intentionally omitted rather than guessed.",
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier is intentionally omitted for this pro-tier model; not independently confirmed to apply."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "o4-mini",
+      "provider": "openai",
+      "aliases": [],
+      "family": "o-series",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.10",
+          "output": "4.40",
+          "cachedInput": "0.275",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "o3-mini",
+      "provider": "openai",
+      "aliases": [],
+      "family": "o-series",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.10",
+          "output": "4.40",
+          "cachedInput": "0.55",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "o1",
+      "provider": "openai",
+      "aliases": [],
+      "family": "o-series",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "15.00",
+          "output": "60.00",
+          "cachedInput": "7.50",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "o1-pro",
+      "provider": "openai",
+      "aliases": [],
+      "family": "o-series",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "150.00",
+          "output": "600.00",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Found on https://developers.openai.com/api/docs/pricing during a second confirmation pass.",
+            "No cached-input rate is published for o1-pro (shown as \"—\"); cachedInput is intentionally omitted rather than guessed.",
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
+            "batchMultiplier is intentionally omitted for this pro-tier model; not independently confirmed to apply."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "gpt-3.5-turbo",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-3.5",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.50",
+          "output": "1.50",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "Found on https://developers.openai.com/api/docs/pricing during a second confirmation pass.",
+            "No cached-input rate is published for gpt-3.5-turbo on the current pricing page; cachedInput is intentionally omitted rather than guessed.",
+            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-08-05"
+      }
+    }
+  ],
+  "omitted": [
+    "This snapshot covers the models listed on https://developers.openai.com/api/docs/pricing as of 2026-08-05 (fetched twice and confirmed to match). Any OpenAI model not on that page (older generations, fine-tuning surcharges, embeddings, image/audio/moderation endpoints) is not included — those are priced per-unit or per-token in ways this per-million-tokens text schema does not model, or simply were not on the fetched page.",
+    "Exact effective dates were not published for any rate; every period uses a conservative effectiveFrom of 2026-01-01, per this repository's established convention (see Anthropic's file and docs/provider-data/README.md)."
+  ]
+}

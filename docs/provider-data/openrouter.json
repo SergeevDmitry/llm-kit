@@ -1,0 +1,114 @@
+{
+  "provider": "openrouter",
+  "models": [
+    {
+      "canonicalId": "openai/gpt-5",
+      "provider": "openrouter",
+      "aliases": [],
+      "family": "openai-proxy",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.25",
+          "output": "10.00",
+          "sourceUrl": "https://openrouter.ai/openai/gpt-5",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenRouter's per-model page does not publish an effective date; effectiveFrom is set conservatively to 2026-01-01.",
+            "Matches OpenAI's own first-party rate for gpt-5 ($1.25/$10.00, see openai.json) exactly as observed — no markup detected for this model.",
+            "canonicalId uses OpenRouter's own slug format (\"openai/gpt-5\"), deliberately distinct from OpenAI's first-party canonicalId \"gpt-5\" (openai.json) — this avoids a canonicalId collision while still allowing a cross-provider alias collision if a caller looks up the bare id \"gpt-5\" without a provider qualifier; no bare \"gpt-5\" alias was added to this entry to keep that surface area minimal."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://openrouter.ai/openai/gpt-5",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "anthropic/claude-sonnet-5",
+      "provider": "openrouter",
+      "aliases": [],
+      "family": "anthropic-proxy",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "2.00",
+          "output": "10.00",
+          "sourceUrl": "https://openrouter.ai/anthropic/claude-sonnet-5",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "UNCERTAIN — flagged explicitly: this rate ($2.00/$10.00) matches Anthropic's own INTRODUCTORY rate for claude-sonnet-5, which anthropic.json records as expiring 2026-08-31 and being replaced by a $3.00/$15.00 standard rate from 2026-09-01 (see anthropic.json). It is not clear from the OpenRouter page alone whether OpenRouter (a) has simply not yet updated its listing to the post-introductory rate, (b) is genuinely offering a different long-term rate than Anthropic's own API, or (c) this reflects a caching/rounding artifact in the page. Recorded as fetched and observed on 2026-08-05, but a follow-up reviewer should re-check this specific model close to and after 2026-09-01.",
+            "OpenRouter's per-model page does not publish an effective date; effectiveFrom is set conservatively to 2026-01-01.",
+            "canonicalId uses OpenRouter's own slug format, deliberately distinct from Anthropic's first-party canonicalId \"claude-sonnet-5\" (anthropic.json) to avoid a canonicalId collision; this is a legitimate cross-provider situation, not an error."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://openrouter.ai/anthropic/claude-sonnet-5",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "google/gemini-3.1-pro-preview",
+      "provider": "openrouter",
+      "aliases": [],
+      "family": "google-proxy",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "2.00",
+          "output": "12.00",
+          "cheapestTier": true,
+          "sourceUrl": "https://openrouter.ai/google/gemini-3.1-pro-preview",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenRouter's per-model page does not publish an effective date; effectiveFrom is set conservatively to 2026-01-01.",
+            "Matches Google's own first-party <=200k-token-tier rate for gemini-3.1-pro-preview ($2.00/$12.00, see google.json) exactly as observed. Google's >200k-token tier ($4.00/$18.00) is not represented here (or, evidently, distinguished by OpenRouter's listing either) — same context-length-tiering limitation as google.json.",
+            "canonicalId uses OpenRouter's own slug format, deliberately distinct from Google's first-party canonicalId \"gemini-3.1-pro-preview\" (google.json)."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://openrouter.ai/google/gemini-3.1-pro-preview",
+        "observedAt": "2026-08-05"
+      }
+    },
+    {
+      "canonicalId": "meta-llama/llama-3.3-70b-instruct",
+      "provider": "openrouter",
+      "aliases": [],
+      "family": "meta-proxy",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.10",
+          "output": "0.32",
+          "sourceUrl": "https://openrouter.ai/meta-llama/llama-3.3-70b-instruct",
+          "observedAt": "2026-08-05",
+          "notes": [
+            "OpenRouter's per-model page does not publish an effective date; effectiveFrom is set conservatively to 2026-01-01.",
+            "Meta does not sell first-party API access to Llama, so there is no first-party \"llama-3.3-70b\" entry in this registry to compare against; Groq (groq.json: llama-3.3-70b-versatile, $0.59/$0.79) and Together AI (together.json: llama-3.3-70b, $1.04/$1.04) each host the same open-weight model at their own, different rates. OpenRouter's rate here is the lowest of the three observed, plausibly because OpenRouter itself proxies to one of several underlying hosts and shows a blended/lowest-cost route; not independently confirmed which underlying host this routes to."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://openrouter.ai/meta-llama/llama-3.3-70b-instruct",
+        "observedAt": "2026-08-05"
+      }
+    }
+  ],
+  "omitted": [
+    "OpenRouter proxies several hundred models from dozens of upstream providers; exhaustive coverage is explicitly out of scope for this registry, which aims at a well-chosen representative set instead. This snapshot includes 4 well-known first-party models (one each proxying OpenAI, Anthropic, and Google, plus one open-weight Meta model) fetched from their individual OpenRouter model pages (https://openrouter.ai/<slug>), which rendered reliably; the aggregate listing pages (https://openrouter.ai/models, https://openrouter.ai/models?order=top-weekly) and the bulk JSON API (https://openrouter.ai/api/v1/models) did not render usable per-model pricing consistently via automated fetch during this pass and were not used as the source of record for any entry above.",
+    "No cachedInput or batchMultiplier is recorded for any OpenRouter entry: OpenRouter's per-model pages describe an aggregate \"60-80% cheaper after prompt caching\" claim, not a specific per-model cached-token rate, so nothing was recorded rather than guessing a number from that range.",
+    "The anthropic/claude-sonnet-5 entry above carries an explicit uncertainty flag in its notes — its observed rate matches Anthropic's own introductory (soon-to-expire) rate rather than the post-2026-09-01 standard rate; re-verify after that date."
+  ]
+}
