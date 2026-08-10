@@ -1,6 +1,6 @@
 {
   "name": "chat-fit",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Trim chat history to a token budget without splitting tool calls from their results.",
   "keywords": [
     "chat",
