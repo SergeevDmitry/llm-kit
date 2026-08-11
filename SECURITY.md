@@ -24,8 +24,8 @@ Every package in this repository:
 - **collects no telemetry** and writes no analytics.
 - **generates no code at runtime** — no `eval`, no `Function(…)` in either its
   call or `new` form, no string-argument timers.
-- **ships five of six with zero runtime dependencies.** `vec-cache` has exactly
-  one, `better-sqlite3`, because it persists to disk.
+- **declares no runtime dependencies**, with a single exception: `vec-cache` has
+  exactly one, `better-sqlite3`, because it persists to disk.
 
 CI enforces the first, third and fourth of those mechanically, so they cannot
 regress quietly:

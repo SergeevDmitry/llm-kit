@@ -1,7 +1,7 @@
 # Contributing
 
-Thanks for taking a look. This repository holds six independently published npm
-packages that share one toolchain and one quality bar.
+Thanks for taking a look. This repository holds a set of independently published
+npm packages that share one toolchain and one quality bar.
 
 ## Getting set up
 

@@ -1,6 +1,6 @@
 # llm-kit
 
-Six small, focused npm packages for the unglamorous parts of building on LLMs —
+Small, focused npm packages for the unglamorous parts of building on LLMs —
 the streaming JSON that arrives half-written, the chunk that blows the token
 budget, the tool call that gets separated from its result, the retry that sleeps
 for the wrong amount of time.
@@ -75,7 +75,7 @@ Every package ships ESM and CommonJS with declarations for both.
 
 ## Status
 
-Pre-release. All six packages build, test, pack, and install cleanly into a
+Pre-release. Every package builds, tests, packs, and installs cleanly into a
 fresh project.
 
 - 2,421 tests, with property and fuzz suites over the parser, chunker, message
