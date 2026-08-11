@@ -136,7 +136,20 @@ function decideLeaf(
     }
 
     case 'in-literal': {
-      if (policy === 'best-effort' && state.literalKind !== undefined) {
+      // A scanned character that contradicted the literal (`tRue`, `tru5`)
+      // freezes the scanner via `fail()`, which sets `errorPos` to the
+      // *contradicting* character's own offset — strictly less than `pos`,
+      // which `advanceChar` already advanced past it. That is provably
+      // different from the two cases where completion is still legitimate:
+      // plain truncation (no more input yet; `errorPos` stays `undefined`)
+      // and the `MAX_BUFFER_BYTES_EXCEEDED` pre-scan freeze (nothing was
+      // scanned, so `errorPos === pos`, not `<`). Only the contradicted case
+      // must be excluded: completing a literal the input already disproved
+      // would invent a value this package never sanctions — best-effort
+      // exists for "`tru` can only ever become `true`", not for "the input
+      // said otherwise but this is close enough".
+      const contradicted = state.errorPos !== undefined && state.errorPos < state.pos;
+      if (policy === 'best-effort' && state.literalKind !== undefined && !contradicted) {
         // `role` is only ever `'in-literal'` while `literalMatched <
         // literalKind.length` — the scanner completes the value (and leaves
         // this role) the instant the match finishes — so `remainder` here is
@@ -156,7 +169,9 @@ function decideLeaf(
         extra: '',
         diagnostic: {
           code: 'scalar-omitted',
-          message: 'an incomplete literal was omitted (incompleteScalarPolicy: "omit")',
+          message: contradicted
+            ? 'a literal that contradicted every known JSON literal was omitted (not a valid partial match, regardless of incompleteScalarPolicy)'
+            : 'an incomplete literal was omitted (incompleteScalarPolicy: "omit")',
         },
       };
     }

@@ -104,6 +104,30 @@ describe('invalid completed JSON that followed valid partial snapshots', () => {
     expect(r.value).toEqual({});
   });
 
+  it.each([
+    ['a wrong-case letter', 'tRue'],
+    ['a wrong trailing character', 'tru5'],
+    ['a wrong trailing character on "false"', 'fals3'],
+    ['a wrong trailing character on "null"', 'nulx'],
+  ])(
+    '%s does not get completed to its nearest literal under "best-effort" (nothing is invented)',
+    (_label, badLiteral) => {
+      const withBest = mendJson(`{"a":${badLiteral}}`, { incompleteScalarPolicy: 'best-effort' });
+      const withOmit = mendJson(`{"a":${badLiteral}}`, { incompleteScalarPolicy: 'omit' });
+      // A contradicted literal must be omitted exactly like under "omit" —
+      // "best-effort" only completes a literal truncation never disproved.
+      expect(withBest.value).toEqual(withOmit.value);
+      expect(withBest.value).toEqual({});
+      expect(withBest.diagnostics.map((d) => d.code)).not.toContain('scalar-completed');
+    },
+  );
+
+  it('a genuinely truncated (not contradicted) literal still completes under "best-effort"', () => {
+    const r = mendJson('{"a":tru', { incompleteScalarPolicy: 'best-effort' });
+    expect(r.value).toEqual({ a: true });
+    expect(r.diagnostics.map((d) => d.code)).toContain('scalar-completed');
+  });
+
   it('a leading zero followed by another digit ("01") is invalid, not truncated', () => {
     const r = mendJson('{"a":01}');
     expect(r.complete).toBe(false);
