@@ -2,11 +2,13 @@
  * mend-json — repair truncated JSON from an LLM stream into a valid partial
  * value on every chunk.
  *
- * Public surface: {@link createJsonMender} (stateful, chunk-at-a-time) and
- * {@link mendJson} (one-shot). See the README for guarantees, non-guarantees,
- * and the reasoning behind the repair policy.
+ * Public surface: {@link createJsonMender} (stateful, chunk-at-a-time),
+ * {@link mendJson} (one-shot), and {@link mendStream} (async-iteration
+ * adapter). See the README for guarantees, non-guarantees, and the
+ * reasoning behind the repair policy.
  */
 export { createJsonMender } from './create-json-mender.js';
+export { mendStream } from './mend-stream.js';
 export {
   JsonMendDuplicateKeyError,
   JsonMendLimitError,
@@ -21,6 +23,7 @@ export type {
   JsonMendResult,
   JsonMender,
   JsonMenderOptions,
+  MendStreamOptions,
 } from './types.js';
 
 import { createJsonMender } from './create-json-mender.js';

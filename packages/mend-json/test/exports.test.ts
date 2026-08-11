@@ -14,12 +14,14 @@ describe('mend-json public surface', () => {
       'JsonMendOptionsError',
       'createJsonMender',
       'mendJson',
+      'mendStream',
     ]);
   });
 
-  it('createJsonMender and mendJson are callable functions', () => {
+  it('createJsonMender, mendJson, and mendStream are callable functions', () => {
     expect(typeof api.createJsonMender).toBe('function');
     expect(typeof api.mendJson).toBe('function');
+    expect(typeof api.mendStream).toBe('function');
   });
 
   it('createJsonMender() returns push/snapshot/finish/reset', () => {

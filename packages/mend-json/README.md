@@ -144,6 +144,81 @@ result.value; // { items: [1, 2, 3] }
 result.complete; // false — the array and object are still open
 ```
 
+### `mendStream<T>(source, options?): AsyncGenerator<JsonMendResult<T>, JsonMendResult<T>>`
+
+The async-iteration adapter, for a `fetch` response body, a Node `Readable`,
+or an SDK's streaming-delta iterator — anything `AsyncIterable<string |
+Uint8Array>`. Equivalent to the `for await` loop around `createJsonMender`
+you'd otherwise write by hand.
+
+```ts
+import { mendStream } from 'mend-json';
+
+async function* fakeProviderStream() {
+  yield '{"city":"Berlin",';
+  yield '"temp":18.4}';
+}
+
+for await (const snapshot of mendStream(fakeProviderStream())) {
+  console.log(snapshot.value, snapshot.complete);
+}
+// { city: 'Berlin' } false
+// { city: 'Berlin' } false
+// { city: 'Berlin', temp: 18.4 } true
+// { city: 'Berlin', temp: 18.4 } true   <- finish(), yielded once more
+```
+
+The last item is always the `finish()` snapshot, yielded again even when it
+is identical to the last chunk's — `for await...of` silently discards a
+generator's *return* value, so a consumer that only reads yielded items
+would otherwise never see the distinction `finish()` can make (a root number
+that only becomes safely closable once no more input is coming, for
+instance). Driving the generator manually gets the same value both ways:
+
+```ts
+import { mendStream } from 'mend-json';
+
+async function* fakeProviderStream() {
+  yield '{"city":"Berlin",';
+  yield '"temp":18.4}';
+}
+
+const gen = mendStream(fakeProviderStream());
+let last: Awaited<ReturnType<typeof gen.next>> | undefined;
+for (let step = await gen.next(); !step.done; step = await gen.next()) {
+  last = step;
+}
+// The generator's own return value is this same finish() snapshot.
+```
+
+Pass an `AbortSignal` to stop early:
+
+```ts
+import { mendStream } from 'mend-json';
+
+async function* fakeProviderStream() {
+  yield '{"city":"Berlin",';
+  yield '"temp":18.4}';
+}
+
+const controller = new AbortController();
+try {
+  for await (const snapshot of mendStream(fakeProviderStream(), {
+    signal: controller.signal,
+  })) {
+    if (snapshot.validPrefixLength > 1_000_000) controller.abort();
+  }
+} catch (error) {
+  // The signal's own abort reason, unchanged when it's an Error — never a
+  // mend-json-specific error type.
+}
+```
+
+`signal` is checked before consuming `source` and again after every chunk it
+yields — it does not interrupt a source that is already mid-wait for its
+next chunk. If the source itself reacts to the same signal (a `fetch` body,
+for instance), aborting it there interrupts that wait too.
+
 ### `JsonMendResult<T>`
 
 ```ts no-check

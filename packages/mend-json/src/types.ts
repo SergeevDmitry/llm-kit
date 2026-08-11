@@ -119,6 +119,27 @@ export interface JsonMendResult<T = unknown> {
   readonly diagnostics: readonly JsonMendDiagnostic[];
 }
 
+/** Options for {@link mendStream}: every {@link JsonMenderOptions}, plus cancellation. */
+export interface MendStreamOptions extends JsonMenderOptions {
+  /**
+   * Checked before consuming the source and again after each chunk it
+   * yields. An already-aborted signal (or one that fires between chunks)
+   * makes `mendStream` throw the signal's abort reason, unchanged when it is
+   * an `Error`, or a `DOMException` named `"AbortError"` otherwise (the same
+   * normalization `llm-backoff` uses, for a consistent abort shape across
+   * this repo's packages) — never a `mend-json`-specific error type.
+   *
+   * This does not interrupt a source that is already mid-wait for its next
+   * chunk (e.g. blocked on a slow network read with nothing arriving) —
+   * only the two checkpoints above run. If the source itself reacts to
+   * `signal` (a `fetch` response body given the same `AbortSignal`, for
+   * instance), aborting it there interrupts that wait too; `mendStream`'s
+   * own check is what still catches a source that never reacts to the
+   * signal at all.
+   */
+  readonly signal?: AbortSignal;
+}
+
 export interface JsonMender<T = unknown> {
   /**
    * Feeds one more chunk of input (text, or raw UTF-8 bytes) and returns the
