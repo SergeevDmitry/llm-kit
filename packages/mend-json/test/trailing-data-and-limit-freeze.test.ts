@@ -465,6 +465,69 @@ describe('the "complete: true vs. false" ruling for a resource-limit freeze', ()
   });
 });
 
+describe('push() after a freeze is a true no-op, not just a throw-free call', () => {
+  // A frozen mender's documented contract (README's "Errors" section) is
+  // that *every* `push()` after the throw does nothing at all: no error, no
+  // further diagnostics, `validPrefixLength` never moves again. Before this
+  // fix, `push()` still ran `checkBufferBytes`/`totalBytes +=`/`buffer +=`
+  // even while frozen — accepted chunks kept growing `buffer` past
+  // `state.pos`, which silently flipped an already-reported `complete: true`
+  // to `false` with an EMPTY `diagnostics` array (the same undiagnosed
+  // transition the previous describe block's ruling exists to forbid), and a
+  // chunk that itself crossed `maxBufferBytes` could throw a *second*,
+  // unexpected `JsonMendLimitError` from an instance the caller was told was
+  // already permanently frozen.
+  it('a push accepted after a cap freeze on an already-complete value does not flip complete to false', () => {
+    const mender = createJsonMender({ maxBufferBytes: 10 });
+    mender.push('{"a":1}');
+    expect(() => mender.push('xxxx')).toThrow(JsonMendLimitError);
+    const frozen = mender.snapshot();
+    expect(frozen.complete).toBe(true);
+
+    // This chunk fits comfortably under maxBufferBytes on its own — under
+    // the bug, it was silently accepted and appended to `buffer`.
+    const after = mender.push('ab');
+    expect(after).toEqual(frozen);
+    expect(after.complete).toBe(true);
+    expect(after.diagnostics).toEqual([]);
+    expect(mender.snapshot()).toEqual(frozen);
+  });
+
+  it('a push after a duplicate-key freeze that would itself cross maxBufferBytes does not throw a second error', () => {
+    const mender = createJsonMender({ duplicateKeyPolicy: 'error', maxBufferBytes: 20 });
+    expect(() => mender.push('{"a":1,"a":2')).toThrow(JsonMendDuplicateKeyError);
+    const frozen = mender.snapshot();
+
+    // Under the bug, this push's own bytes push totalBytes past
+    // maxBufferBytes, throwing a fresh MAX_BUFFER_BYTES_EXCEEDED from an
+    // instance already frozen by an unrelated error.
+    expect(() => mender.push('xxxxxxxxxxxxxxxxxxxxxxxxxx')).not.toThrow();
+    expect(mender.snapshot()).toEqual(frozen);
+  });
+
+  it('finish() after a freeze does not flush a pending partial byte sequence into the frozen buffer', () => {
+    const mender = createJsonMender({ maxBufferBytes: 12 });
+    const encoder = new TextEncoder();
+    const emoji = encoder.encode('\u{1F600}'); // 4-byte UTF-8 sequence
+    const prefix = encoder.encode('{"a":"'); // 6 bytes
+    const combined = new Uint8Array(prefix.length + 2);
+    combined.set(prefix, 0);
+    combined.set(emoji.slice(0, 2), prefix.length); // split emoji mid-sequence; leaves 2 bytes pending
+    mender.push(combined); // 8 bytes so far, lastChunkWasBytes stays true
+
+    // Freezes via checkBufferBytes — a path that never calls
+    // flushPendingBytes — while a partial byte sequence is still buffered
+    // inside the UTF-8 decoder from the previous push.
+    expect(() => mender.push('xxxxx')).toThrow(JsonMendLimitError);
+    const frozen = mender.snapshot();
+
+    // Under the bug, finish() would still flush the stray pending bytes
+    // (resolving to U+FFFD) into `buffer`, growing it past `state.pos`.
+    const fin = mender.finish();
+    expect(fin).toEqual(frozen);
+  });
+});
+
 describe('property: prefix + appendedSuffix always parses, and a committed complete value is never later undefined', () => {
   const SEED = 0x68696732;
   const RUNS = 300;

@@ -197,7 +197,15 @@ export function createJsonMender<T = unknown>(options?: JsonMenderOptions): Json
    * next, exactly where they belong.
    */
   function flushPendingBytes(): void {
-    if (!lastChunkWasBytes) return;
+    // Same reasoning as `push()`'s frozen-no-op guard above: once the
+    // scanner is frozen, `buffer` must never grow again, even by the
+    // resolved-partial-sequence text this function exists to append. A
+    // byte chunk can leave `lastChunkWasBytes` set and then a *later* push
+    // freeze the scanner for an unrelated reason (a syntax error in
+    // subsequently decoded text, or a buffer-bytes cap trip) — `finish()`
+    // would otherwise still flush the now-moot pending sequence into an
+    // already-frozen buffer.
+    if (!lastChunkWasBytes || state.errored) return;
     lastChunkWasBytes = false;
     const flushed = utf8Decoder.finish();
     if (flushed.length > 0) {
@@ -206,6 +214,18 @@ export function createJsonMender<T = unknown>(options?: JsonMenderOptions): Json
   }
 
   function push(chunk: string | Uint8Array): JsonMendResult<T> {
+    // A frozen mender's `push()` is documented as a true no-op: no error, no
+    // further diagnostics, `validPrefixLength` never moves again. Returning
+    // before any byte accounting or buffer append is what makes that true —
+    // falling through to `checkBufferBytes`/`totalBytes +=`/`buffer +=` below
+    // would keep growing `buffer` past `state.pos` on every further push,
+    // which silently flips an already-reported `complete: true` to `false`
+    // with an empty `diagnostics` array (`repair-suffix.ts`'s `complete`
+    // reads `sliceEnd === buffer.length`) and can even throw a *fresh*
+    // `MAX_BUFFER_BYTES_EXCEEDED` from an instance the caller was told was
+    // already permanently frozen.
+    if (state.errored) return snapshot();
+
     const chunkBytes = typeof chunk === 'string' ? utf8ByteLength(chunk) : chunk.byteLength;
     try {
       checkBufferBytes(totalBytes + chunkBytes, resolved.maxBufferBytes);
