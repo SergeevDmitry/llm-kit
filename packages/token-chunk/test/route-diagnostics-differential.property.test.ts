@@ -81,6 +81,7 @@ function makeChunk(
     tokenizerId: 'differential-test',
     source: { charStart, charEnd },
     headings: [],
+    kinds: ['paragraph'],
     overlap: { tokensFromPrevious: 0 },
     ...(preexisting !== undefined ? { diagnostics: preexisting } : {}),
   };

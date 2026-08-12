@@ -109,6 +109,7 @@ import type {
   TextChunk,
   ChunkOverlap,
   ChunkDiagnostic,
+  BlockKind,
   Tokenizer,
 } from 'token-chunk';
 
@@ -146,10 +147,32 @@ interface Chunk extends TextChunk {
   tokenizerId: string; // options.tokenizer?.id ?? APPROX_TOKENIZER_ID — travels with the chunk, not just the call
   source: { charStart: number; charEnd: number }; // offsets into the ORIGINAL input
   headings: readonly Heading[]; // ancestry active at the start of this chunk
+  kinds: readonly BlockKind[]; // structural kinds packed into this chunk — see below
   overlap: ChunkOverlap; // { tokensFromPrevious: number; sourceCharStart?: number }
   diagnostics?: readonly ChunkDiagnostic[]; // non-fatal notes; see "Edge cases and limitations"
 }
+
+// type BlockKind =
+//   'heading' | 'paragraph' | 'code-fence' | 'list-item' | 'table' | 'blockquote';
 ```
+
+`chunk.kinds` lists every structural kind packed into that chunk, each
+appearing once, in the order it first occurs in `chunk.text`. Plain text
+(`format: 'text'`) is always `['paragraph']`. Use it to skip embedding code
+fences, render tables differently, or otherwise route a chunk by content
+type without re-sniffing `chunk.text`:
+
+```ts
+import { chunkMarkdown } from 'token-chunk';
+
+const chunks = chunkMarkdown('# Notes\n\n```ts\nconst x = 1;\n```\n', { maxTokens: 200 });
+const codeChunks = chunks.filter((chunk) => chunk.kinds.includes('code-fence'));
+```
+
+A block split across chunks (an oversized code fence or table, for instance)
+reports its kind on every chunk it spans — `kinds` describes what content is
+*present*, not whether a block is whole in this particular chunk. `kinds` is
+never empty, including for the documented over-budget exception.
 
 `Tokenizer` (re-exported from the private `@llm-kit/tokenizer` foundation,
 bundled into this package — you never install it separately):

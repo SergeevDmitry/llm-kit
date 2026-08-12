@@ -1,11 +1,15 @@
 /**
  * Public types. `Tokenizer` is re-exported verbatim from
  * `@llm-kit/tokenizer` (see that package's `types.ts`) — a shape change
- * there is a breaking change here too.
+ * there is a breaking change here too. `BlockKind` is re-exported the same
+ * way from `document/types.ts`, its natural home alongside the internal
+ * parsing types it classifies — a shape change there is a breaking change
+ * here too, for the same reason.
  */
 import type { Tokenizer } from '@llm-kit/tokenizer';
+import type { BlockKind } from './document/types.js';
 
-export type { Tokenizer };
+export type { Tokenizer, BlockKind };
 
 /** Which finer boundary the splitter is allowed to fall back to when a unit is oversized. */
 export type HardBoundary = 'sentence' | 'word' | 'token';
@@ -125,6 +129,16 @@ export interface TextChunk {
   readonly source: { readonly charStart: number; readonly charEnd: number };
   /** Heading ancestry active at the start of this chunk. Empty for plain text or content before any heading. */
   readonly headings: readonly HeadingRef[];
+  /**
+   * Structural kinds of the parsed blocks packed into this chunk, each
+   * appearing once, in the order they first occur in `text`. A block split
+   * across chunks (an oversized code fence or table, for instance)
+   * contributes its kind to every chunk it spans — this reports what's
+   * present, not whether a block is whole here. Never empty: every chunk
+   * always packs at least one unit, even the documented over-budget
+   * exception.
+   */
+  readonly kinds: readonly BlockKind[];
   readonly overlap: ChunkOverlap;
   readonly diagnostics?: readonly ChunkDiagnostic[];
 }

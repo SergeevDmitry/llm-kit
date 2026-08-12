@@ -29,6 +29,7 @@ export type {
   ChunkOverlap,
   ChunkDiagnostic,
   ChunkDiagnosticCode,
+  BlockKind,
   Tokenizer,
   TokenChunkErrorCode,
 } from './types.js';

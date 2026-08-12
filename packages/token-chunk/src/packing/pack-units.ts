@@ -119,6 +119,10 @@ export function packLeafUnits(
     const sourceCharStart = toOriginalOffset(realStart);
     const sourceCharEnd = toOriginalOffset(realEnd);
 
+    // Order of first occurrence, deduplicated — `Set` iterates insertion
+    // order, and `usedUnits` is already in document order.
+    const kinds = [...new Set(usedUnits.map((unit) => unit.kind))];
+
     chunks.push({
       id: createChunkId({
         index,
@@ -132,6 +136,7 @@ export function packLeafUnits(
       tokenizerId: resolved.tokenizer.id,
       source: { charStart: sourceCharStart, charEnd: sourceCharEnd },
       headings,
+      kinds,
       overlap: assembled.usedOverlap
         ? {
             tokensFromPrevious: overlapResult.tokens,
