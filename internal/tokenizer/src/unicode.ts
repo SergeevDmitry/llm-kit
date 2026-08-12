@@ -56,9 +56,16 @@ export function graphemeClusters(text: string): string[] {
   return Array.from(text);
 }
 
-/** Rough script/content classification for one grapheme cluster, used to weight the token estimate. */
+/**
+ * Rough script/content classification for one grapheme cluster, used to
+ * weight the token estimate. `'cyrillic'` is split out from the broader
+ * `'other-alphabetic'` bucket because it measures safely at that bucket's
+ * historical per-character weight against real BPE tokenization while most
+ * of the rest of the bucket does not — see `approximate-tokenizer.ts`'s
+ * module doc comment.
+ */
 export type ScriptClass =
-  'latin' | 'other-alphabetic' | 'cjk' | 'emoji' | 'digit' | 'whitespace' | 'other';
+  'latin' | 'cyrillic' | 'other-alphabetic' | 'cjk' | 'emoji' | 'digit' | 'whitespace' | 'other';
 
 // Unicode property escapes (ES2018+, supported by every runtime this
 // package targets) — precise script/category membership without a bundled
@@ -71,6 +78,7 @@ const HIRAGANA_SCRIPT = /\p{Script=Hiragana}/u;
 const KATAKANA_SCRIPT = /\p{Script=Katakana}/u;
 const HANGUL_SCRIPT = /\p{Script=Hangul}/u;
 const LATIN_SCRIPT = /\p{Script=Latin}/u;
+const CYRILLIC_SCRIPT = /\p{Script=Cyrillic}/u;
 const ALPHABETIC = /\p{L}/u;
 const DIGIT = /\p{Nd}/u;
 const WHITESPACE = /\p{White_Space}/u;
@@ -125,10 +133,27 @@ export function classifyGrapheme(cluster: string): ScriptClass {
   if (LATIN_SCRIPT.test(first)) {
     return 'latin';
   }
+  if (CYRILLIC_SCRIPT.test(first)) {
+    return 'cyrillic';
+  }
   if (ALPHABETIC.test(first)) {
     return 'other-alphabetic';
   }
   return 'other';
+}
+
+/**
+ * Number of Unicode code points in a grapheme cluster (as produced by
+ * {@link graphemeClusters}) — distinct from its UTF-16 length (`.length`,
+ * which counts surrogate-pair halves separately) and from its byte length.
+ * A base character plus combining marks, or a fully NFC-composed character,
+ * is 1 code point; an NFD-decomposed sequence (e.g. a Hangul syllable split
+ * into its jamo) is more than 1. Used to weight a CJK cluster conservatively
+ * when it is unusually large for a single character — see
+ * `approximate-tokenizer.ts`'s module doc comment.
+ */
+export function codePointCount(cluster: string): number {
+  return Array.from(cluster).length;
 }
 
 /** UTF-8 byte length of `text`, used to weight multi-byte clusters (emoji, CJK) conservatively. */

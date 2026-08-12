@@ -107,8 +107,8 @@ describe('classifyGrapheme', () => {
     ['ひ', 'cjk'], // hiragana
     ['カ', 'cjk'], // katakana
     ['한', 'cjk'], // hangul
-    ['д', 'other-alphabetic'], // cyrillic
-    ['П', 'other-alphabetic'],
+    ['д', 'cyrillic'],
+    ['П', 'cyrillic'],
     ['α', 'other-alphabetic'], // greek
     ['🚀', 'emoji'],
     ['✅', 'emoji'],
