@@ -37,21 +37,38 @@ export function splitTable(
   }
 
   let cursor = headerLine.length + 1 + separatorLine.length + 1;
-  const bodySpans = bodyLines.map((line) => {
-    const start = unit.start + cursor;
+  const bodySpans = bodyLines.map((line, index) => {
+    const relStart = cursor;
+    const isLastRow = index === bodyLines.length - 1;
     cursor += line.length + 1;
-    return { text: line, start };
+    // `relEnd` is this row's real end offset within `unit.text`: `cursor`
+    // after advancing past it (which includes this row's own trailing
+    // newline, since more table content follows every non-last row in the
+    // source) — except for the last row, where `cursor` may overshoot by
+    // one (the source may have no trailing newline at all, if the table
+    // sits at the end of the input) and use the literal end of `unit.text`
+    // instead, which also recovers any trailing blank lines `closeGaps`
+    // folded into this unit.
+    const relEnd = isLastRow ? unit.text.length : cursor;
+    return { text: line, start: unit.start + relStart, relStart, relEnd };
   });
 
   const pieces: LeafUnit[] = [];
-  let rowsInPiece: { text: string; start: number }[] = [];
+  let rowsInPiece: { text: string; start: number; relStart: number; relEnd: number }[] = [];
   let budgetForRows = hardBudget - headerTokens;
 
   const flush = (): void => {
     if (rowsInPiece.length === 0) return;
     const isFirstPiece = pieces.length === 0;
-    const text = rowsInPiece.map((row) => `${row.text}\n`).join('');
-    const start = rowsInPiece[0]?.start ?? unit.start;
+    const firstRow = rowsInPiece[0];
+    const lastRow = rowsInPiece[rowsInPiece.length - 1];
+    if (firstRow === undefined || lastRow === undefined) return;
+    // A literal slice of the source, not a re-join of row texts with a
+    // synthesized `\n` after every one — that fabricated a trailing newline
+    // that does not exist in the source whenever a table sits at the end of
+    // the input, pushing `end` one character past `unit.text.length`.
+    const text = unit.text.slice(firstRow.relStart, lastRow.relEnd);
+    const start = firstRow.start;
     pieces.push({
       kind: 'table',
       text: isFirstPiece ? `${headerBlock}${text}` : text,

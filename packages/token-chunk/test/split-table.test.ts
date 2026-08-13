@@ -1,7 +1,55 @@
 import { describe, expect, it } from 'vitest';
 import { chunkMarkdown } from '../src/index.js';
+import { normalizeLineEndings } from '../src/document/normalize.js';
 
 describe('split-table edge cases', () => {
+  it('a table at the end of the input (no trailing newline) reconstructs exactly, without a fabricated trailing newline', () => {
+    // Every existing fixture in this file ends with `\n` after the table;
+    // this one deliberately does not, matching a table that is the last
+    // thing in the document — the shape that exposed `splitTable`
+    // re-joining `${row.text}\n` for every row instead of slicing the
+    // source, which pushed `source.charEnd` one character past
+    // `input.length` and included a `\n` the input never had.
+    const doc = '| h1 | h2 |\n| --- | --- |\n| a | b |';
+    const chunks = chunkMarkdown(doc, { maxTokens: 1000 });
+    expect(chunks.length).toBe(1);
+    const chunk = chunks[0];
+    expect(chunk?.source.charEnd).toBe(doc.length);
+    expect(chunk?.text).toBe(doc);
+    expect(chunk?.text).not.toMatch(/\n$/);
+  });
+
+  it('the same no-trailing-newline table forced to split across chunks still ends exactly at input.length', () => {
+    const doc =
+      '| id | name |\n| --- | --- |\n| 1 | alpha |\n| 2 | beta |\n| 3 | gamma |\n| 4 | delta |';
+    expect(doc).not.toMatch(/\n$/);
+    const chunks = chunkMarkdown(doc, { maxTokens: 15 });
+    expect(chunks.length).toBeGreaterThan(1);
+    const last = chunks[chunks.length - 1];
+    expect(last?.source.charEnd).toBe(doc.length);
+    expect(chunks.map((c) => c.text).join('')).toBe(doc);
+    for (const chunk of chunks) {
+      const slice = normalizeLineEndings(
+        doc.slice(chunk.source.charStart, chunk.source.charEnd),
+      ).text;
+      expect(chunk.text).toBe(slice);
+    }
+  });
+
+  it('the same shape with CRLF line endings also ends exactly at input.length', () => {
+    const doc = '| h1 | h2 |\r\n| --- | --- |\r\n| a | b |';
+    const chunks = chunkMarkdown(doc, { maxTokens: 1000 });
+    expect(chunks.length).toBe(1);
+    expect(chunks[0]?.source.charEnd).toBe(doc.length);
+  });
+
+  it('trailing blank lines folded into the table unit are no longer silently dropped from the final piece', () => {
+    const doc = '| h1 | h2 |\n| --- | --- |\n| a | b |\n| c | d |\n\n\n';
+    const chunks = chunkMarkdown(doc, { maxTokens: 15 });
+    const last = chunks[chunks.length - 1];
+    expect(last?.source.charEnd).toBe(doc.length);
+    expect(chunks.map((c) => c.text).join('')).toBe(doc);
+  });
   it('falls back to a plain line split for a header-only table (no body rows) that is oversized', () => {
     const doc =
       '| a-very-long-column-header-name | another-long-header | yet-another |\n| --- | --- | --- |\n';
