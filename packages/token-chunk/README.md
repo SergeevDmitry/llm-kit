@@ -162,16 +162,16 @@ appearing once, in the order it first occurs in `chunk.text`. Plain text
 fences, render tables differently, or otherwise route a chunk by content
 type without re-sniffing `chunk.text`:
 
-```ts
+````ts
 import { chunkMarkdown } from 'token-chunk';
 
 const chunks = chunkMarkdown('# Notes\n\n```ts\nconst x = 1;\n```\n', { maxTokens: 200 });
 const codeChunks = chunks.filter((chunk) => chunk.kinds.includes('code-fence'));
-```
+````
 
 A block split across chunks (an oversized code fence or table, for instance)
 reports its kind on every chunk it spans — `kinds` describes what content is
-*present*, not whether a block is whole in this particular chunk. `kinds` is
+_present_, not whether a block is whole in this particular chunk. `kinds` is
 never empty, including for the documented over-budget exception.
 
 `Tokenizer` (re-exported from the private `@llm-kit/tokenizer` foundation,

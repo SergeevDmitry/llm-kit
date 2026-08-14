@@ -54,7 +54,8 @@ describe('TextChunk.kinds', () => {
   });
 
   it('an oversized block split across chunks reports its kind on every chunk it spans', () => {
-    const fence = '```\n' + Array.from({ length: 20 }, (_, i) => `line ${String(i)}`).join('\n') + '\n```';
+    const fence =
+      '```\n' + Array.from({ length: 20 }, (_, i) => `line ${String(i)}`).join('\n') + '\n```';
     const chunks = chunkMarkdown(fence, { maxTokens: 10 });
     expect(chunks.length).toBeGreaterThan(1);
     for (const chunk of chunks) {
@@ -64,9 +65,10 @@ describe('TextChunk.kinds', () => {
 
   it('an oversized table split across rows reports "table" on every chunk it spans, including the repeated header', () => {
     const header = '| col1 | col2 |\n| --- | --- |\n';
-    const rows = Array.from({ length: 15 }, (_, i) => `| row${String(i)}a | row${String(i)}b |`).join(
-      '\n',
-    );
+    const rows = Array.from(
+      { length: 15 },
+      (_, i) => `| row${String(i)}a | row${String(i)}b |`,
+    ).join('\n');
     const chunks = chunkMarkdown(header + rows, { maxTokens: 15 });
     expect(chunks.length).toBeGreaterThan(1);
     for (const chunk of chunks) {

@@ -170,7 +170,7 @@ for await (const snapshot of mendStream(fakeProviderStream())) {
 
 The last item is always the `finish()` snapshot, yielded again even when it
 is identical to the last chunk's — `for await...of` silently discards a
-generator's *return* value, so a consumer that only reads yielded items
+generator's _return_ value, so a consumer that only reads yielded items
 would otherwise never see the distinction `finish()` can make (a root number
 that only becomes safely closable once no more input is coming, for
 instance). Driving the generator manually gets the same value both ways:
