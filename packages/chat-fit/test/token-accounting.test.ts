@@ -4,7 +4,12 @@ import {
   createDefaultMessageTokenCounter,
   describeContentFallbacks,
 } from '../src/token-accounting.js';
-import { openAiAssistantWithToolCalls } from './fixtures/messages.js';
+import {
+  anthropicAssistantWithToolUse,
+  anthropicToolResult,
+  assistantWithToolCalls,
+  openAiAssistantWithToolCalls,
+} from './fixtures/messages.js';
 
 describe('createDefaultMessageTokenCounter', () => {
   const counter = createDefaultMessageTokenCounter(approximateTokenizer);
@@ -319,5 +324,54 @@ describe('describeContentFallbacks', () => {
       approximateTokenizer,
     );
     expect(flagged).toEqual([]);
+  });
+});
+
+// `tool_use` blocks live inside Anthropic `content` and are already charged
+// once by the `structure.toolCalls` loop; counting them again via the
+// content-array walk was a ~3x double charge (Fix 1). `tool_result` blocks
+// were separately mis-flagged as an unrecognized shape even though the
+// README documents them as read directly.
+describe('Anthropic tool_use / tool_result blocks (Fix 1)', () => {
+  const counter = createDefaultMessageTokenCounter(approximateTokenizer);
+  const bigArgs = { city: 'x'.repeat(500) };
+
+  it('counts the same logical tool call within a small band across ChatMessage/OpenAI/Anthropic shapes', () => {
+    const spec = [{ id: 'c1', name: 'get_weather', arguments: bigArgs }];
+    const counts = [
+      counter.countMessage(assistantWithToolCalls('let me check', spec)),
+      counter.countMessage(openAiAssistantWithToolCalls('let me check', spec)),
+      counter.countMessage(anthropicAssistantWithToolUse('let me check', spec)),
+    ];
+    // Before the fix, the Anthropic shape landed at ~3x the others (the
+    // `tool_use` block charged once by content, once by the tool-call loop).
+    expect(Math.max(...counts)).toBeLessThan(Math.min(...counts) * 1.5);
+  });
+
+  it('a well-formed Anthropic tool exchange produces zero content-fallback warnings', () => {
+    const messages = [
+      anthropicAssistantWithToolUse('let me check', [
+        { id: 'toolu_1', name: 'get_weather', arguments: { city: 'Boston' } },
+      ]),
+      anthropicToolResult([{ toolUseId: 'toolu_1', content: '61F and sunny' }]),
+    ];
+    expect(describeContentFallbacks(messages, approximateTokenizer)).toEqual([]);
+  });
+
+  it("counts a tool_result block's inner content instead of the flat unknown-shape estimate", () => {
+    const small = counter.countMessage(anthropicToolResult([{ toolUseId: 't1', content: 'ok' }]));
+    const big = counter.countMessage(
+      anthropicToolResult([{ toolUseId: 't1', content: 'x'.repeat(2000) }]),
+    );
+    expect(big).toBeGreaterThan(small + 200);
+  });
+
+  it("propagates a fallback from a tool_result block's own unrecognized inner content", () => {
+    const message = {
+      role: 'user',
+      content: [{ type: 'tool_result', tool_use_id: 't1', content: { odd: 'shape' } }],
+    };
+    const flagged = describeContentFallbacks([message], approximateTokenizer);
+    expect(flagged).toHaveLength(1);
   });
 });

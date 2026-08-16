@@ -64,6 +64,7 @@ import {
   MESSAGE_OVERHEAD_TOKENS,
   NAME_OVERHEAD_TOKENS,
   TOOL_CALL_OVERHEAD_TOKENS,
+  type MessageContentAccounting,
   type MessageTokenCounter,
   type Tokenizer,
 } from '@llm-kit/tokenizer';
@@ -72,6 +73,63 @@ import { readMessageStructure } from './adapters/generic.js';
 function messageContent(message: unknown): unknown {
   if (typeof message !== 'object' || message === null) return undefined;
   return (message as { content?: unknown }).content;
+}
+
+/** Framing overhead for an Anthropic `tool_result` block, mirroring `TOOL_CALL_OVERHEAD_TOKENS`'s role for `tool_use`. */
+const TOOL_RESULT_OVERHEAD_TOKENS = 3;
+
+function blockType(part: unknown): unknown {
+  return typeof part === 'object' && part !== null ? (part as { type?: unknown }).type : undefined;
+}
+
+/**
+ * Content-array accounting that knows about two Anthropic block types
+ * `@llm-kit/tokenizer`'s `describeMessageContent` doesn't: `tool_use` blocks
+ * are skipped here (the `structure.toolCalls` loop in `countMessage` already
+ * charges name + input for every tool call, across all three recognized
+ * shapes — counting the same block again via the unknown-shape fallback was
+ * a ~3x double charge), and `tool_result` blocks are counted directly (their
+ * own `content` plus a small framing overhead) instead of falling back to
+ * the unknown-shape estimate, so a well-formed Anthropic tool exchange
+ * doesn't flood `report.warnings` with false "unrecognized part" claims.
+ * Anything else — plain strings, `{type:'text'}` parts, non-array content,
+ * genuinely unrecognized block types — defers to `describeMessageContent`
+ * unchanged.
+ */
+function describeContentForCounting(
+  content: unknown,
+  tokenizer: Tokenizer,
+): MessageContentAccounting {
+  if (!Array.isArray(content)) {
+    return describeMessageContent(content, tokenizer);
+  }
+  let tokens = 0;
+  let usedFallback = false;
+  const reasons: string[] = [];
+  for (const part of content) {
+    if (blockType(part) === 'tool_use') continue;
+    if (blockType(part) === 'tool_result') {
+      tokens += TOOL_RESULT_OVERHEAD_TOKENS;
+      const resultContent = (part as { content?: unknown }).content;
+      if (resultContent !== undefined) {
+        const inner = describeContentForCounting(resultContent, tokenizer);
+        tokens += inner.tokens;
+        if (inner.usedFallback) {
+          usedFallback = true;
+          if (inner.reason !== undefined) reasons.push(inner.reason);
+        }
+      }
+      continue;
+    }
+    const partResult = describeMessageContent([part], tokenizer);
+    tokens += partResult.tokens;
+    if (partResult.usedFallback) {
+      usedFallback = true;
+      if (partResult.reason !== undefined) reasons.push(partResult.reason);
+    }
+  }
+  if (!usedFallback) return { tokens, usedFallback: false };
+  return { tokens, usedFallback: true, reason: reasons.join('; ') };
 }
 
 /**
@@ -192,7 +250,7 @@ export function describeContentFallbacks<Message>(
   const flagged: { index: number; reason: string }[] = [];
   messages.forEach((message, index) => {
     const reasons: string[] = [];
-    const accounting = describeMessageContent(messageContent(message), tokenizer);
+    const accounting = describeContentForCounting(messageContent(message), tokenizer);
     if (accounting.usedFallback) {
       reasons.push(accounting.reason ?? 'content used the unknown-shape fallback');
     }
@@ -296,7 +354,7 @@ export function createDefaultMessageTokenCounter<Message>(
   const countMessage = (message: Message): number => {
     const structure = readMessageStructure(message);
     let tokens = MESSAGE_OVERHEAD_TOKENS;
-    const contentAccounting = describeMessageContent(messageContent(message), tokenizer);
+    const contentAccounting = describeContentForCounting(messageContent(message), tokenizer);
     tokens += contentAccounting.tokens;
     if (structure.name !== undefined) {
       tokens += NAME_OVERHEAD_TOKENS;
