@@ -375,3 +375,60 @@ describe('Anthropic tool_use / tool_result blocks (Fix 1)', () => {
     expect(flagged).toHaveLength(1);
   });
 });
+
+// The structural readers (`extractChatMessageLikeToolCalls`,
+// `extractOpenAiToolCalls`) only ever consume an *array*-valued
+// `toolCalls`/`tool_calls`; an object-valued one — what a common OpenAI
+// streaming-delta accumulator produces (`{0: {...}, 1: {...}}`) — is read
+// by neither, so it must not be exempted from the unrecognized-field
+// fallback either (Fix 2), or real, billable payload silently counts as
+// zero tokens.
+describe('object-valued tool_calls / tool_call_id (Fix 2)', () => {
+  const counter = createDefaultMessageTokenCounter(approximateTokenizer);
+
+  it('an object-valued tool_calls is charged, not silently zero, and warns naming the key', () => {
+    const withoutPayload = counter.countMessage({ role: 'assistant', content: null } as never);
+    const message = {
+      role: 'assistant',
+      content: null,
+      tool_calls: {
+        0: {
+          id: 'call_1',
+          type: 'function',
+          function: { name: 'f', arguments: JSON.stringify({ blob: 'x'.repeat(2000) }) },
+        },
+      },
+    };
+    const withPayload = counter.countMessage(message as never);
+    expect(withPayload - withoutPayload).toBeGreaterThan(500);
+
+    const flagged = describeContentFallbacks([message], approximateTokenizer);
+    expect(flagged).toHaveLength(1);
+    expect(flagged[0]?.reason).toContain('tool_calls');
+  });
+
+  it('an array-valued tool_calls is still never double-charged as an unrecognized field', () => {
+    const message = openAiAssistantWithToolCalls('x', [
+      { id: 'c', name: 'f', arguments: { a: 1 } },
+    ]);
+    const flagged = describeContentFallbacks([message], approximateTokenizer);
+    expect(flagged.some((f) => f.reason.includes('tool_calls'))).toBe(false);
+  });
+
+  it('an object-valued tool_call_id is charged and warned, not silently exempted like a string id', () => {
+    const message = {
+      role: 'tool',
+      content: 'result',
+      tool_call_id: { odd: 'shape' },
+    };
+    const flagged = describeContentFallbacks([message], approximateTokenizer);
+    expect(flagged).toHaveLength(1);
+    expect(flagged[0]?.reason).toContain('tool_call_id');
+  });
+
+  it('a normal string-valued tool_call_id is still never treated as an unrecognized field', () => {
+    const message = { role: 'tool', tool_call_id: 'call_1', content: 'result' };
+    const flagged = describeContentFallbacks([message], approximateTokenizer);
+    expect(flagged).toEqual([]);
+  });
+});

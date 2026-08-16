@@ -133,48 +133,73 @@ function describeContentForCounting(
 }
 
 /**
- * Every top-level message key this module actually reads elsewhere:
- * `role`/`name` (`readMessageStructure`), `content` (`messageContent`, which
- * also covers the Anthropic `tool_use`/`tool_result` blocks that live
- * *inside* `content` — those never surface as a separate top-level key),
- * `toolCalls`/`toolCallId` (the `ChatMessageLike` shape), and
- * `tool_calls`/`tool_call_id` (OpenAI). Getting this set right matters in
- * both directions: a key listed here but not actually consumed by
- * `readMessageStructure`/`messageContent` is a silent undercount; a key
- * consumed but missing from this set is a double count (the tool-call
- * payload would be charged once by `countMessage`'s `structure.toolCalls`
- * loop and again here as an "unrecognized" field). Verified against
- * `adapters/generic.ts`, `adapters/openai.ts` and `adapters/anthropic.ts` —
- * those three files are the only readers of a message's structure, and this
- * set is exactly their key list.
+ * Keys this module consumes regardless of their value's shape: `role`/`name`
+ * (`readMessageStructure`), `content` (`messageContent`), and `metadata`
+ * (never counted at all — see below). Every other key this module reads is
+ * only actually consumed when its value has a specific shape, and must not
+ * be exempted unconditionally — see {@link isConsumedValue}.
  *
- * `metadata` is here too, but for a different reason: it is not read by any
- * structure reader, but it *is* a field this package itself declares, on
- * `ChatMessage` (`types.ts`), as a place
- * for the caller's own bookkeeping (a trace id, an internal timestamp, …) —
- * chat-fit's contract, not an unknown shape it has to guess at. The
- * conservative-unknown-fallback rule exists for fields this package does
- * *not* know the semantics of; `metadata` is the one field where it does,
- * because it wrote that semantics itself. Counting it anyway would silently
- * cost budget for data the provider never receives, which is a real cost
- * with no corresponding safety benefit (the failure the conservative rule
- * guards against — an undercounted request the provider rejects — cannot
- * happen here, because `metadata` is never sent to a provider by
- * definition). A caller who repurposes `metadata` to carry real,
- * provider-bound content is using the field against its documented
- * contract and should supply their own `messageTokenCounter` — see the
- * README's "How the default counter handles fields it doesn't recognize".
+ * `metadata` is here for a different reason than the rest: it is not read
+ * by any structure reader, but it *is* a field this package itself
+ * declares, on `ChatMessage` (`types.ts`), as a place for the caller's own
+ * bookkeeping (a trace id, an internal timestamp, …) — chat-fit's contract,
+ * not an unknown shape it has to guess at. The conservative-unknown-fallback
+ * rule exists for fields this package does *not* know the semantics of;
+ * `metadata` is the one field where it does, because it wrote that
+ * semantics itself. Counting it anyway would silently cost budget for data
+ * the provider never receives, which is a real cost with no corresponding
+ * safety benefit (the failure the conservative rule guards against — an
+ * undercounted request the provider rejects — cannot happen here, because
+ * `metadata` is never sent to a provider by definition). A caller who
+ * repurposes `metadata` to carry real, provider-bound content is using the
+ * field against its documented contract and should supply their own
+ * `messageTokenCounter` — see the README's "How the default counter handles
+ * fields it doesn't recognize".
  */
-const CONSUMED_KEYS = new Set<string>([
-  'role',
-  'name',
-  'content',
-  'toolCalls',
-  'toolCallId',
-  'tool_calls',
-  'tool_call_id',
-  'metadata',
-]);
+const UNCONDITIONALLY_CONSUMED_KEYS = new Set<string>(['role', 'name', 'content', 'metadata']);
+
+/**
+ * Keys this module reads a tool-call list from, but only when the value is
+ * an array — the one shape `extractChatMessageLikeToolCalls`
+ * (`adapters/generic.ts`) and `extractOpenAiToolCalls` (`adapters/openai.ts`)
+ * actually accept; both bail out (returning `[]`) on anything else. An
+ * object-valued `tool_calls` — what a common OpenAI streaming-delta
+ * accumulator produces (`{0: {...}, 1: {...}}`) — is therefore read by
+ * neither extractor and must not be exempted here either, or it silently
+ * counts as zero tokens for real, billable payload.
+ */
+const ARRAY_SHAPED_KEYS = new Set<string>(['toolCalls', 'tool_calls']);
+
+/**
+ * Keys this module reads a tool-result id from, but only when the value is
+ * a string — the one shape `extractChatMessageLikeToolResultId`/
+ * `extractOpenAiToolResultId` actually accept. Listed for symmetry with
+ * {@link ARRAY_SHAPED_KEYS}: a non-string value here is already excluded by
+ * `isStructuralValue` below unless it is itself structural (an array or
+ * plain object), in which case it must fall through to the same fallback+
+ * warning treatment as any other unrecognized structural field.
+ */
+const STRING_SHAPED_KEYS = new Set<string>(['toolCallId', 'tool_call_id']);
+
+/**
+ * True when `key`'s value is exempt from the unrecognized-field fallback —
+ * either unconditionally, or because it matches the one shape a structural
+ * reader actually consumes for that key. Getting this right matters in both
+ * directions: a key exempted when its value isn't the consumed shape is a
+ * silent undercount (an object-valued `tool_calls` charging zero tokens);
+ * a key *not* exempted when it is the consumed shape is a double
+ * count (the tool-call payload charged once by `countMessage`'s
+ * `structure.toolCalls` loop, again here as "unrecognized"). Verified
+ * against `adapters/generic.ts`, `adapters/openai.ts` and
+ * `adapters/anthropic.ts` — those three files are the only readers of a
+ * message's structure.
+ */
+function isConsumedValue(key: string, value: unknown): boolean {
+  if (UNCONDITIONALLY_CONSUMED_KEYS.has(key)) return true;
+  if (ARRAY_SHAPED_KEYS.has(key)) return Array.isArray(value);
+  if (STRING_SHAPED_KEYS.has(key)) return typeof value === 'string';
+  return false;
+}
 
 /**
  * True for a plain object (`{}`, or `Object.create(null)`) or an array — the
@@ -202,17 +227,17 @@ function isStructuralValue(value: object): value is Record<string, unknown> | re
 }
 
 /**
- * Accounts for message properties outside {@link CONSUMED_KEYS} — the same
- * safeguard `@llm-kit/tokenizer`'s `describeUnrecognizedFields` applies to
- * its own canonical shape, extended
- * over chat-fit's wider multi-provider key list. Only *structural* values
- * ({@link isStructuralValue} — arrays or plain objects, the shape a legacy
- * `function_call`, a `reasoning` block, or any other real payload actually
- * takes) are counted; scalars (an id, a numeric timestamp — including a
- * `Date`, a finish reason, …) are not content and are skipped, so routine
- * provider metadata does not generate fallback noise. Every structural
- * field found is routed through `describeMessageContent`'s unknown-shape
- * path and reported by key name.
+ * Accounts for message properties {@link isConsumedValue} doesn't exempt —
+ * the same safeguard `@llm-kit/tokenizer`'s `describeUnrecognizedFields`
+ * applies to its own canonical shape, extended over chat-fit's wider
+ * multi-provider key list. Only *structural* values ({@link isStructuralValue}
+ * — arrays or plain objects, the shape a legacy `function_call`, a
+ * `reasoning` block, an object-valued `tool_calls`, or any other real
+ * payload actually takes) are counted; scalars (an id, a numeric timestamp
+ * — including a `Date`, a finish reason, …) are not content and are
+ * skipped, so routine provider metadata does not generate fallback noise.
+ * Every structural field found is routed through `describeMessageContent`'s
+ * unknown-shape path and reported by key name.
  */
 function describeExtraFields(
   message: unknown,
@@ -224,8 +249,8 @@ function describeExtraFields(
   let tokens = 0;
   const reasons: string[] = [];
   for (const key of Object.keys(message as Record<string, unknown>)) {
-    if (CONSUMED_KEYS.has(key)) continue;
     const value = (message as Record<string, unknown>)[key];
+    if (isConsumedValue(key, value)) continue;
     if (value === null || typeof value !== 'object' || !isStructuralValue(value)) continue;
     const fieldResult = describeMessageContent(value, tokenizer);
     tokens += fieldResult.tokens;
@@ -238,7 +263,7 @@ function describeExtraFields(
  * Flags messages whose accounting fell back to a conservative estimate:
  * unrecognized `content` shape (`describeMessageContent`'s `usedFallback` —
  * the non-string multimodal content edge case) and/or an
- * unrecognized structural field outside {@link CONSUMED_KEYS}. Only
+ * unrecognized structural field {@link isConsumedValue} doesn't exempt. Only
  * meaningful when chat-fit owns the counting path (the default counter); a
  * caller-supplied `messageTokenCounter` is opaque, so this is not run for
  * it.
@@ -291,7 +316,7 @@ export interface DefaultMessageTokenCounter<Message> extends MessageTokenCounter
   /**
    * Every message `countMessage` has processed and found to need conservative
    * accounting (unrecognized `content` shape and/or a structural field
-   * outside {@link CONSUMED_KEYS}), keyed by message reference, populated as
+   * {@link isConsumedValue} doesn't exempt), keyed by message reference, populated as
    * a side effect of the counting `buildFitPlan` already does — not a
    * separate pass over the input. Only messages that actually triggered a
    * fallback get an entry, so this stays small regardless of conversation
