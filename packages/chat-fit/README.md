@@ -417,6 +417,56 @@ Set `safetyMarginTokens` yourself if you've measured your own provider's
 overhead independently, or if you're using an exact injected tokenizer (see
 below) that carries none of the approximate tokenizer's built-in headroom.
 
+### Model-aware budgets, without hand-copying context windows
+
+`fitChat`/`fitChatAsync` need an explicit `maxTokens`, and the package core
+never depends on model metadata to get it — but if you already know the
+model id, `chat-fit/models` is a separate entry point that resolves it to a
+context window instead of you hand-copying that number into a constant that
+goes stale the next time a provider changes it. It's not part of the main
+`chat-fit` import: importing `chat-fit/models` is what pulls the bundled
+model registry into your build, so a caller who only ever passes `maxTokens`
+directly never carries that data.
+
+```ts
+import { fitChatForModel } from 'chat-fit/models';
+import type { ChatMessage } from 'chat-fit';
+
+declare const conversationMessages: ChatMessage[];
+
+const result = fitChatForModel(conversationMessages, {
+  model: 'claude-sonnet-5',
+  reserveTokens: 1000,
+});
+```
+
+Or resolve the budget yourself and pass it into `fitChat`/`fitChatAsync`
+directly:
+
+```ts
+import { fitChat, type ChatMessage } from 'chat-fit';
+import { resolveModelBudget } from 'chat-fit/models';
+
+declare const conversationMessages: ChatMessage[];
+
+const { maxTokens, reserveTokens } = resolveModelBudget('claude-sonnet-5', {
+  reserveTokens: 1000,
+});
+const result = fitChat(conversationMessages, { maxTokens, reserveTokens });
+```
+
+An unresolvable model id throws `UnknownModelError` (code `UNKNOWN_MODEL`);
+an id registered under more than one provider with no `provider` qualifier
+throws `AmbiguousAliasError` (code `AMBIGUOUS_ALIAS`) — both propagated
+unchanged from the bundled `@llm-kit/model-registry`, the same way
+`usage-tab` propagates them from its own model resolution. A model that
+resolves but has no recorded context window throws
+`ModelContextWindowUnknownError` (code `MODEL_CONTEXT_WINDOW_UNKNOWN`)
+instead of guessing one — pass `maxTokens` to `fitChatForModel` directly for
+that model instead. An explicit `maxTokens` always wins there and skips
+registry resolution entirely, so an unresolvable `model` id never throws
+when you've already supplied a budget yourself.
+
 ### Injecting an exact tokenizer
 
 The default tokenizer is a zero-dependency estimator. If you have a real

@@ -45,6 +45,14 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
+    "./models": {
+      "types": {
+        "import": "./dist/models.d.ts",
+        "require": "./dist/models.d.cts"
+      },
+      "import": "./dist/models.js",
+      "require": "./dist/models.cjs"
+    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -65,6 +73,7 @@
   },
   "devDependencies": {
     "@llm-kit/build-config": "workspace:*",
+    "@llm-kit/model-registry": "workspace:*",
     "@llm-kit/test-utils": "workspace:*",
     "@llm-kit/tokenizer": "workspace:*"
   }

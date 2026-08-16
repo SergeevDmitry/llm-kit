@@ -15,7 +15,7 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, posix } from 'node:path';
 import {
   PUBLIC_PACKAGES,
   REPO_ROOT,
@@ -138,18 +138,37 @@ try {
         violations.error(`${name}: ${artifact} contains a workspace: specifier`);
       }
 
-      // Declarations must be fully self-contained. tsup's dts step will
-      // happily emit `from './types.js'` pointing into a bundled foundation's
-      // *source* layout — files that do not exist in the tarball. The clean
-      // consumer typecheck below catches it too, but only as an opaque tsc
-      // failure, so name the real problem here.
+      // A relative import in a declaration file is only a problem if it
+      // points somewhere the tarball doesn't actually have. tsup's dts step
+      // will happily emit `from './types.js'` pointing into a bundled
+      // foundation's *source* layout — a file that never gets packaged — if
+      // `internal/build-config`'s `dts.compilerOptions.paths` mapping is
+      // missing or broken; that's the real bug this catches. It is also,
+      // legitimately, how tsup's dts bundler shares one local chunk file
+      // (e.g. `types-*.d.ts`) between two entries of the *same* package
+      // instead of duplicating it — a chunk that genuinely ships in `dist/`
+      // is not a broken import, so this resolves each specifier against the
+      // tarball's own listing rather than rejecting every relative import
+      // outright. The clean consumer typecheck below catches a genuinely
+      // broken one too, but only as an opaque tsc failure, so name the real
+      // problem here.
       if (artifact.endsWith('.d.ts') || artifact.endsWith('.d.cts')) {
-        const relativeImport = /(?:from|import)\s*\(?\s*['"](\.\.?\/[^'"]+)['"]/.exec(contents);
-        if (relativeImport !== null) {
-          violations.error(
-            `${name}: ${artifact} imports "${String(relativeImport[1])}", which does not exist in the tarball — ` +
-              `declarations must be fully inlined (see internal/build-config dts.compilerOptions.paths)`,
-          );
+        const isCts = artifact.endsWith('.d.cts');
+        for (const relativeImport of contents.matchAll(
+          /(?:from|import)\s*\(?\s*['"](\.\.?\/[^'"]+)['"]/g,
+        )) {
+          const specifier = relativeImport[1];
+          if (specifier === undefined) continue;
+          const resolved = posix
+            .normalize(posix.join(posix.dirname(artifact), specifier))
+            .replace(/\.c?js$/, isCts ? '.d.cts' : '.d.ts');
+          if (!listing.includes(resolved)) {
+            violations.error(
+              `${name}: ${artifact} imports "${specifier}", which resolves to "${resolved}" ` +
+                `— not present in the tarball. Declarations must be fully self-contained ` +
+                `(see internal/build-config dts.compilerOptions.paths)`,
+            );
+          }
         }
       }
 

@@ -115,6 +115,9 @@ importers:
       '@llm-kit/build-config':
         specifier: workspace:*
         version: link:../../internal/build-config
+      '@llm-kit/model-registry':
+        specifier: workspace:*
+        version: link:../../internal/model-registry
       '@llm-kit/test-utils':
         specifier: workspace:*
         version: link:../../internal/test-utils

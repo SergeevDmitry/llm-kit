@@ -23,6 +23,56 @@ const violations = new Violations();
 const requested = process.argv.slice(2).filter((arg) => !arg.startsWith('-'));
 
 /**
+ * Maps every specifier a README snippet could import from a public package
+ * to its real source file: `dependency` (the `"."` export) to
+ * `src/index.ts`, and `dependency/foo` (a `"./foo"` export, e.g.
+ * `chat-fit/models`) to `src/foo.ts` — the same filename correspondence
+ * tsup's multi-entry build already relies on (`src/foo.ts` builds to
+ * `dist/foo.js`). Read from each package's own `package.json` `exports`
+ * map rather than assuming only `"."` exists, so a snippet importing a real
+ * subpath export is genuinely typechecked instead of silently resolving to
+ * nothing or needing `no-check` to skip verification a subpath already
+ * supports.
+ */
+/**
+ * Finds the ESM entry file inside one export target, which may be a bare
+ * string or a nested conditional-exports object (`vec-cache`'s `"."` export
+ * puts `import`/`require` under a `"node"` condition rather than at the top
+ * level, alongside a top-level `"default"`). Checks this level's own
+ * `import`/`default` first, then recurses into whatever conditions remain
+ * (`node`, `types`, …) — `require`/`types` targets never match the `.js`
+ * pattern the caller filters for, so recursing into them is harmless.
+ */
+function resolveImportTarget(target: unknown): string | undefined {
+  if (typeof target === 'string') return target;
+  if (typeof target !== 'object' || target === null) return undefined;
+  const obj = target as Readonly<Record<string, unknown>>;
+  if (typeof obj.import === 'string') return obj.import;
+  if (typeof obj.default === 'string') return obj.default;
+  for (const value of Object.values(obj)) {
+    const resolved = resolveImportTarget(value);
+    if (resolved !== undefined) return resolved;
+  }
+  return undefined;
+}
+
+function subpathEntries(dependency: string): Record<string, string> {
+  const pkgJson = JSON.parse(
+    readFileSync(join(REPO_ROOT, 'packages', dependency, 'package.json'), 'utf8'),
+  ) as { readonly exports?: Readonly<Record<string, unknown>> };
+  const entries: Record<string, string> = {};
+  for (const [exportKey, target] of Object.entries(pkgJson.exports ?? {})) {
+    if (exportKey === './package.json') continue;
+    const importPath = resolveImportTarget(target);
+    const match = importPath !== undefined ? /^\.\/dist\/(.+)\.js$/.exec(importPath) : null;
+    if (match?.[1] === undefined) continue;
+    const specifier = exportKey === '.' ? dependency : `${dependency}${exportKey.slice(1)}`;
+    entries[specifier] = join(REPO_ROOT, 'packages', dependency, 'src', `${match[1]}.ts`);
+  }
+  return entries;
+}
+
+/**
  * The root README is checked alongside the six package READMEs, because it is
  * the page every reader of the project sees first, it carries the
  * repository's headline pricing claim, and the rule that every README example
@@ -119,11 +169,14 @@ try {
       fileNames.push(fileName);
     });
 
-    // Map the package's own name to its source so snippets read exactly the
-    // way a consumer would write them.
+    // Map every public package's exported specifiers (its main entry and any
+    // subpath, e.g. `chat-fit` and `chat-fit/models`) to their real source
+    // files, so snippets read exactly the way a consumer would write them.
     const paths: Record<string, string[]> = {};
     for (const dependency of Object.keys(PUBLIC_PACKAGES)) {
-      paths[dependency] = [join(REPO_ROOT, 'packages', dependency, 'src', 'index.ts')];
+      for (const [specifier, srcFile] of Object.entries(subpathEntries(dependency))) {
+        paths[specifier] = [srcFile];
+      }
     }
 
     writeFileSync(
