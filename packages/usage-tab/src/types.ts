@@ -45,7 +45,18 @@ export interface PriceRequest {
   readonly usage: LlmUsage | unknown;
   /** `'batch'` applies the resolved period's `batchMultiplier` when one is published; falls back to standard pricing (with a warning) otherwise. */
   readonly mode?: PriceMode;
-  /** Effective date for pricing-period selection. Defaults to `new Date()`. */
+  /**
+   * Effective date for pricing-period selection. Defaults to `new Date()`.
+   *
+   * Pricing periods start at UTC midnight, so every ISO string form is read
+   * as UTC: an ISO date (`'2026-09-01'`) and an offset-carrying datetime
+   * (`'2026-09-01T05:00:00Z'`) already are, and one *without* an offset
+   * (`'2026-09-01T05:00:00'` — a log timestamp, a `datetime-local` input,
+   * several DB drivers) is read as UTC too, rather than in whatever timezone
+   * the process happens to run. A non-ISO string (`'2026/09/01'`,
+   * `'September 1, 2026'`) is implementation-defined and local in practice —
+   * pass a `Date` or an ISO form instead.
+   */
   readonly at?: Date | string;
 }
 

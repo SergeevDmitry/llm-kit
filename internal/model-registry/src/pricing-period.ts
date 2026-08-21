@@ -8,10 +8,35 @@ import {
 } from './errors.js';
 import type { PricingPeriod } from './types.js';
 
+/**
+ * An ISO datetime with no UTC offset — `2026-09-01T05:00:00`, the shape a log
+ * timestamp, a `datetime-local` input, and several DB drivers produce.
+ *
+ * `Date.parse` reads this in the *machine's* timezone, by specification,
+ * while an ISO date (`2026-09-01`) and an offset-carrying datetime are both
+ * UTC. Period boundaries are UTC midnights, so the local-time reading lands
+ * on either side of a price restatement depending on the host: the identical
+ * historical lookup priced one way in CI and another in production. These
+ * values are therefore read as UTC — the interpretation every *other*
+ * accepted string form already gets — rather than inheriting whatever
+ * timezone the process happens to run in.
+ *
+ * Not covered, because they are implementation-defined rather than
+ * specified: non-ISO forms (`2026/09/01`, `September 1, 2026`), which V8
+ * reads as local midnight. Pass a `Date` or an ISO form; see the caller's
+ * documentation.
+ */
+const OFFSETLESS_ISO_DATETIME = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?$/;
+
 function toTimestamp(value: Date | string): number {
-  const ms = value instanceof Date ? value.getTime() : Date.parse(value);
+  if (value instanceof Date) {
+    const ms = value.getTime();
+    if (Number.isNaN(ms)) throw new InvalidLookupDateError(String(value));
+    return ms;
+  }
+  const ms = Date.parse(OFFSETLESS_ISO_DATETIME.test(value) ? `${value}Z` : value);
   if (Number.isNaN(ms)) {
-    throw new InvalidLookupDateError(value instanceof Date ? value.toISOString() : value);
+    throw new InvalidLookupDateError(value);
   }
   return ms;
 }

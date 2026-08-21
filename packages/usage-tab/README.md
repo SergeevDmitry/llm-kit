@@ -112,7 +112,10 @@ result.warnings; // readonly PriceWarning[] — empty here, never silently dropp
   version) proves two calculations used byte-identical pricing data.
 - **Historical lookups are exact and reproducible.** A cost computed for a
   specific `at` date always resolves the same pricing period, regardless of
-  when you run it.
+  when — or on which machine — you run it: every ISO `at` string is read as
+  UTC, including the offset-less form `Date.parse` would otherwise read in
+  the host's local timezone. See
+  [Historical lookup](#historical-lookup-and-the-data-freshnesseffective-date-policy).
 - **Zero runtime dependencies, browser-safe.** No `node:` import in `src/`.
 
 ## API
@@ -127,7 +130,7 @@ interface PriceRequest {
   provider?: string; // qualifies resolution to one provider — see "two channels, one rule" below
   usage: LlmUsage | unknown; // normalize a raw provider response first — see below
   mode?: 'standard' | 'batch';
-  at?: Date | string; // defaults to `new Date()`
+  at?: Date | string; // defaults to `new Date()`; an ISO string is read as UTC
 }
 
 interface CostBreakdown {
@@ -488,6 +491,20 @@ calculateCost({ model: 'claude-sonnet-5', provider: 'anthropic', usage, at: '202
   .totalUsdExact;
 // "18.00" — the standard rate ($3.00/$15.00), effective 2026-09-01
 ```
+
+Period boundaries are UTC midnights, so **every ISO `at` string is read as
+UTC**. An ISO date (`'2026-09-01'`) and an offset-carrying datetime
+(`'2026-09-01T05:00:00Z'`, `'...+02:00'`) already are by specification; one
+_without_ an offset — `'2026-09-01T05:00:00'`, the shape a log timestamp, a
+`datetime-local` input, and several DB drivers produce — is `Date.parse`'s
+local-time case, and is read as UTC here too. Otherwise the same lookup
+prices at $12.00 in one deployment and $18.00 in another, purely from the
+host's `TZ`.
+
+A non-ISO string (`'2026/09/01'`, `'September 1, 2026'`) is
+implementation-defined rather than specified, so there is no single reading
+to normalize it to and it keeps whatever `Date.parse` does with it — local
+time, in practice. Pass a `Date` or an ISO form.
 
 Pricing data is committed, not fetched — there is no runtime network call,
 ever. That means it can go stale between releases: a provider can change a
