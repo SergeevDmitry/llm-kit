@@ -186,3 +186,31 @@ export interface CustomPriceInput {
   readonly observedAt?: string;
   readonly notes?: readonly string[];
 }
+
+/**
+ * An exact running total over one or more `CostBreakdown`s — see
+ * `createCostAggregator`.
+ */
+export interface CostTotal {
+  /** How many breakdowns this total covers. */
+  readonly count: number;
+  /** Ergonomic numeric total. Not the authoritative value — see `totalUsdExact`. */
+  readonly totalUsd: number;
+  /** Exact decimal string total, summed with the same fixed-point arithmetic each individual cost was computed with. */
+  readonly totalUsdExact: string;
+  /**
+   * Every distinct `registryVersion` the aggregated breakdowns were priced
+   * against, sorted. More than one means the total mixes pricing snapshots —
+   * expected for a report spanning a registry update, a bug for a total meant
+   * to be reproducible against a single one.
+   */
+  readonly registryVersions: readonly string[];
+}
+
+export interface CostAggregator {
+  /** Adds one breakdown to the running totals. Throws `InvalidRateError` if its `totalUsdExact` is not a non-negative decimal string. */
+  add(breakdown: CostBreakdown): void;
+  total(): CostTotal;
+  /** Per-model totals, keyed `` `${provider}:${canonicalModel}` `` — the resolved identity, so two aliases of one model share a bucket. */
+  byModel(): ReadonlyMap<string, CostTotal>;
+}

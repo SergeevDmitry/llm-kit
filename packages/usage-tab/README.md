@@ -429,6 +429,45 @@ result.totalUsdExact; // "0.666666" — exact
 result.totalUsd; // 0.666666    — the same value, as a number
 ```
 
+### Totalling many requests exactly
+
+`sum += breakdown.totalUsd` puts binary floating point back exactly where
+`totalUsdExact` removed it. `createCostAggregator` keeps the running totals
+on the same exact `bigint` path, overall and per model:
+
+```ts
+import { calculateCost, createCostAggregator, sumExactUsd } from 'usage-tab';
+
+const aggregator = createCostAggregator();
+for (const call of [
+  { model: 'gpt-4o', provider: 'openai', usage: { inputTokens: 40_000, outputTokens: 4_000 } },
+  {
+    model: 'claude-sonnet-5',
+    provider: 'anthropic',
+    usage: { inputTokens: 40_000, outputTokens: 4_000 },
+  },
+]) {
+  aggregator.add(calculateCost({ ...call, at: '2026-08-15' }));
+}
+
+aggregator.total().totalUsdExact; // exact decimal string — the value to store
+aggregator.total().count; // 2
+aggregator.byModel(); // Map keyed "openai:gpt-4o", "anthropic:claude-sonnet-5"
+
+// Already have the strings — from a database column, say:
+sumExactUsd(['0.10', '0.20']); // "0.30", where 0.1 + 0.2 gives 0.30000000000000004
+```
+
+`total().registryVersions` lists every pricing snapshot the aggregate drew
+on. More than one is expected for a report spanning a registry update, and a
+bug for a total meant to be reproducible against a single one — this package
+reports it rather than guessing which you meant.
+
+Both throw `InvalidRateError` on a value that is not a non-negative decimal
+string, rather than coercing it: a stringified `NaN` or an exponent-notation
+`"1e-7"` silently summing to something wrong is the failure this exists to
+prevent.
+
 ### Historical lookup and the data-freshness/effective-date policy
 
 Every price carries an `effectiveFrom` (and, when superseded, an

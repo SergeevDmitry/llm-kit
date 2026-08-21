@@ -34,7 +34,11 @@ const DECIMAL_PATTERN = /^\d+(\.\d+)?$/;
  * double.
  */
 export function parseDecimalRate(value: string, field: string): ExactAmount {
-  if (!DECIMAL_PATTERN.test(value)) {
+  // `typeof` first: `RegExp.test` stringifies its argument, so a `number`
+  // that reached here past the type (a hand-built override, a JSON
+  // round-trip) would pass the pattern and then throw a raw `TypeError` from
+  // `indexOf` — outside this package's error taxonomy.
+  if (typeof value !== 'string' || !DECIMAL_PATTERN.test(value)) {
     throw new InvalidRateError(field, value);
   }
   const dot = value.indexOf('.');

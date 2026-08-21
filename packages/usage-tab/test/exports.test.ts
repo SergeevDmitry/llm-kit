@@ -16,6 +16,7 @@ describe('usage-tab public surface', () => {
         'REGISTRY_VERSION',
         'UnknownModelError',
         'calculateCost',
+        'createCostAggregator',
         'createPriceCalculator',
         'createPriceOverride',
         'normalizeAnthropicUsage',
@@ -23,6 +24,7 @@ describe('usage-tab public surface', () => {
         'normalizeOpenAICompatibleUsage',
         'normalizeOpenAIUsage',
         'resolveModel',
+        'sumExactUsd',
       ].sort(),
     );
   });

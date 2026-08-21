@@ -12,6 +12,7 @@ export { calculateCost } from './calculate-cost.js';
 export { resolveModel } from './resolve-model.js';
 export { createPriceCalculator } from './calculator.js';
 export { createPriceOverride } from './overrides.js';
+export { sumExactUsd, createCostAggregator } from './aggregate.js';
 
 export {
   NoPricingPeriodError,
@@ -51,6 +52,8 @@ export type {
   PriceCalculatorOptions,
   PriceCalculator,
   CustomPriceInput,
+  CostTotal,
+  CostAggregator,
 } from './types.js';
 
 // Re-exported types this package's public API is built on (bundled, never
