@@ -151,6 +151,54 @@ describe('resolveModel — resolution order', () => {
     expect(result.matchedBy).toBe('canonical-qualified');
   });
 
+  // A provider qualifier is what every doc tells callers to supply, so it must
+  // never make ambiguity detection *weaker* than the unqualified lookup. Both
+  // caller-supplied channels — `overrides` (step 1) and `registry` (step 2) —
+  // can carry the same provider+canonicalId twice when two lists are merged;
+  // resolving by array order prices the identical request differently
+  // depending on concatenation order.
+  it.each([
+    {
+      channel: 'overrides',
+      resolve: () =>
+        resolveModel('custom-model', REGISTRY, {
+          provider: 'openai',
+          overrides: [
+            model({ canonicalId: 'custom-model', provider: 'openai', aliases: [] }),
+            model({ canonicalId: 'custom-model', provider: 'openai', aliases: [] }),
+          ],
+        }),
+    },
+    {
+      channel: 'registry',
+      resolve: () =>
+        resolveModel(
+          'custom-model',
+          [
+            model({ canonicalId: 'custom-model', provider: 'openai', aliases: [] }),
+            model({ canonicalId: 'custom-model', provider: 'openai', aliases: [] }),
+          ],
+          { provider: 'openai' },
+        ),
+    },
+  ])(
+    'a provider-qualified exact canonical id duplicated in $channel is ambiguous, not first-wins',
+    ({ resolve }) => {
+      let error: unknown;
+      try {
+        resolve();
+      } catch (e) {
+        error = e;
+      }
+      assertErrorShape(error, { name: 'AmbiguousAliasError', code: 'AMBIGUOUS_ALIAS' });
+      const { candidates } = error as { candidates: { provider: string; canonicalId: string }[] };
+      expect(candidates).toEqual([
+        { provider: 'openai', canonicalId: 'custom-model' },
+        { provider: 'openai', canonicalId: 'custom-model' },
+      ]);
+    },
+  );
+
   it('step 5: an explicit fallback resolves an id nothing else matches', () => {
     const result = resolveModel('totally-unknown-id', REGISTRY, { fallback: 'llama-70b' });
     expect(result.matchedBy).toBe('fallback');

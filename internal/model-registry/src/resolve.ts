@@ -57,8 +57,14 @@ function matchExact(
   provider: string | undefined,
 ): { readonly unique?: ModelDescriptor; readonly ambiguous?: readonly ModelDescriptor[] } {
   if (provider !== undefined) {
-    const canonical = pool.find((d) => d.provider === provider && d.canonicalId === id);
-    if (canonical !== undefined) return { unique: canonical };
+    // `filter`, not `find`: a provider qualifier must never *downgrade*
+    // ambiguity detection. Two pool entries sharing `provider` + `canonicalId`
+    // — an org-wide override list concatenated with a team's — would otherwise
+    // be resolved by array order, silently pricing the same request against
+    // whichever entry happened to come first.
+    const canonical = pool.filter((d) => d.provider === provider && d.canonicalId === id);
+    if (canonical.length === 1) return { unique: canonical[0] };
+    if (canonical.length > 1) return { ambiguous: canonical };
 
     const scoped = pool.filter((d) => d.provider === provider && d.aliases.includes(id));
     if (scoped.length === 1) return { unique: scoped[0] };
@@ -111,16 +117,25 @@ export function resolveModel(
 
   // Steps 2–3: exact canonical id, then exact alias, both scoped to `provider`.
   if (provider !== undefined) {
-    const canonical = registry.find(
+    // `filter`, not `find` — same reasoning as `matchExact`'s qualified
+    // branch. The generated registry enforces uniqueness, so this only ever
+    // fires on a caller-supplied registry.
+    const canonical = registry.filter(
       (d) => d.provider === provider && d.canonicalId === requestedId,
     );
-    if (canonical !== undefined) {
-      return {
-        descriptor: canonical,
-        matchedBy: 'canonical-qualified',
-        requestedId,
-        requestedProvider: provider,
-      };
+    if (canonical.length === 1) {
+      const descriptor = canonical[0];
+      if (descriptor !== undefined) {
+        return {
+          descriptor,
+          matchedBy: 'canonical-qualified',
+          requestedId,
+          requestedProvider: provider,
+        };
+      }
+    }
+    if (canonical.length > 1) {
+      throw new AmbiguousAliasError(requestedId, canonical.map(toCandidate));
     }
 
     const scoped = registry.filter(
