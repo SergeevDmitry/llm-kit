@@ -1,3 +1,4 @@
+import { Readable } from 'node:stream';
 import { createFakeClock, createSleepRecorder } from '@llm-kit/test-utils';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { toAbortError } from '../src/abort-utils.js';
@@ -735,5 +736,126 @@ describe('fetchWithLlmBackoff — a Request carries its own signal', () => {
     optionsController.abort(reason);
 
     await expect(promise).rejects.toBe(reason);
+  });
+});
+
+// Node's fetch (undici) accepts more than a `ReadableStream` as a body and
+// turns each of them into a stream internally. Some of those sources replay
+// across attempts and some are drained by the first one; the guard has to
+// tell them apart, because getting it wrong in the permissive direction is
+// silent — attempt 2 sends zero bytes and the server answers 200.
+describe('fetchWithLlmBackoff — single-shot request bodies beyond ReadableStream', () => {
+  async function* asyncChunks(): AsyncGenerator<string> {
+    yield '{"model":"m",';
+    yield '"input":"hello"}';
+  }
+  function* syncChunks(): Generator<string> {
+    yield '{"model":"m",';
+    yield '"input":"hello"}';
+  }
+
+  it.each([
+    ['an async generator', (): unknown => asyncChunks()],
+    ['a sync generator', (): unknown => syncChunks()],
+    ['a node:stream Readable', (): unknown => Readable.from(['{"input":"hello"}'])],
+    [
+      'a hand-rolled async iterable that yields itself',
+      (): unknown => ({
+        [Symbol.asyncIterator]() {
+          return this;
+        },
+        next: async () => ({ done: true, value: undefined }),
+      }),
+    ],
+  ])('refuses %s before making any request', async (_label, makeBody) => {
+    let calls = 0;
+    stubFetch(async () => {
+      calls += 1;
+      return new Response('unreachable');
+    });
+
+    await expect(
+      fetchWithLlmBackoff('https://example.test/resource', {
+        method: 'POST',
+        body: makeBody(),
+        duplex: 'half',
+      } as unknown as RequestInit),
+    ).rejects.toMatchObject({ code: 'REQUEST_BODY_NOT_REPLAYABLE' });
+    // Refused up front, so the body is still intact for the caller to salvage.
+    expect(calls).toBe(0);
+  });
+
+  it('allows a single-shot body when maxAttempts is 1, exactly like a ReadableStream', async () => {
+    stubFetch(async () => new Response('ok', { status: 200 }));
+
+    const response = await fetchWithLlmBackoff(
+      'https://example.test/resource',
+      { method: 'POST', body: asyncChunks(), duplex: 'half' } as unknown as RequestInit,
+      { maxAttempts: 1 },
+    );
+
+    expect(response.status).toBe(200);
+  });
+
+  // The other half of the rule, and the half that would break real callers if
+  // the guard were written as "iterable means single-shot": these are all
+  // iterable and all genuinely replay, because `fetch` asks each of them for a
+  // *fresh* iterator on every attempt.
+  it.each([
+    ['FormData', (): unknown => new FormData()],
+    ['URLSearchParams', (): unknown => new URLSearchParams({ prompt: 'hello' })],
+    ['an array of chunks', (): unknown => ['{"input":', '"hello"}']],
+    ['a Set of chunks', (): unknown => new Set(['{"input":"hello"}'])],
+  ])('retries normally with %s, which replays', async (_label, makeBody) => {
+    const clock = createFakeClock();
+    const sleep = createSleepRecorder(clock);
+    let calls = 0;
+    stubFetch(async () => {
+      calls += 1;
+      return new Response(null, {
+        status: calls === 1 ? 429 : 200,
+        headers: { 'retry-after': '1' },
+      });
+    });
+
+    const response = await fetchWithLlmBackoff(
+      'https://example.test/resource',
+      { method: 'POST', body: makeBody() } as unknown as RequestInit,
+      { sleep: sleep.sleep, now: clock.nowFn },
+    );
+
+    expect(response.status).toBe(200);
+    expect(calls).toBe(2);
+  });
+
+  it('leaves a plain string body alone even though a string is iterable', async () => {
+    const clock = createFakeClock();
+    const sleep = createSleepRecorder(clock);
+    let calls = 0;
+    stubFetch(async () => {
+      calls += 1;
+      return new Response(null, {
+        status: calls === 1 ? 429 : 200,
+        headers: { 'retry-after': '1' },
+      });
+    });
+
+    const response = await fetchWithLlmBackoff(
+      'https://example.test/resource',
+      { method: 'POST', body: '{"input":"hello"}' },
+      { sleep: sleep.sleep, now: clock.nowFn },
+    );
+
+    expect(response.status).toBe(200);
+    expect(calls).toBe(2);
+  });
+
+  it('an explicit null body is not mistaken for a stream', async () => {
+    stubFetch(async () => new Response('ok', { status: 200 }));
+    const response = await fetchWithLlmBackoff('https://example.test/resource', {
+      method: 'POST',
+      body: null,
+    });
+    expect(response.status).toBe(200);
   });
 });

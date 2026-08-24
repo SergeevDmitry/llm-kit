@@ -556,11 +556,11 @@ const response = await fetchWithLlmBackoff(request);
 
 ### Non-replayable request bodies
 
-A `ReadableStream` request body can only be read once. If your body is a
-stream and more than one attempt is possible, `fetchWithLlmBackoff` throws
-`LlmBackoffError` (`REQUEST_BODY_NOT_REPLAYABLE`) **before making any
-request**, rather than risk a retry that sends an empty body because the
-stream was already consumed:
+Some request bodies can only be read once. If yours is one of them and more
+than one attempt is possible, `fetchWithLlmBackoff` throws `LlmBackoffError`
+(`REQUEST_BODY_NOT_REPLAYABLE`) **before making any request**, rather than
+risk a retry that sends an empty body because the first attempt already
+drained the source:
 
 ```ts
 import { fetchWithLlmBackoff } from 'llm-backoff';
@@ -580,6 +580,17 @@ try {
   console.warn(error);
 }
 ```
+
+Node's `fetch` accepts more than a `ReadableStream` here, and the ones that
+are equally single-shot are refused the same way:
+
+| Body                                                                        | Retried?                           |
+| --------------------------------------------------------------------------- | ---------------------------------- |
+| `string`, `Blob`, `ArrayBuffer`, `Uint8Array`                               | Yes — read fresh on every attempt  |
+| `FormData`, `URLSearchParams`, an array or `Set` of chunks                  | Yes — a fresh iterator per attempt |
+| `ReadableStream`                                                            | No — `REQUEST_BODY_NOT_REPLAYABLE` |
+| An async iterable, including a `node:stream` `Readable` (Node's fetch only) | No — `REQUEST_BODY_NOT_REPLAYABLE` |
+| A generator object, sync or async                                           | No — `REQUEST_BODY_NOT_REPLAYABLE` |
 
 ### Forcing a provider profile
 

@@ -12,13 +12,15 @@
  * `response.ok`/`response.status` meaning exactly what they mean for plain
  * `fetch` on every status this package does not intervene on.
  *
- * Non-replayable bodies: a `ReadableStream` body can only be read once. If
- * more than one attempt is possible
- * (`options.maxAttempts ?? 5 > 1`) and the request body is a stream, this
+ * Non-replayable bodies: a `ReadableStream` body can only be read once, and so
+ * can an async iterable (a `node:stream` `Readable` is one) or a generator,
+ * both of which Node's fetch also accepts. If more than one attempt is possible
+ * (`options.maxAttempts ?? 5 > 1`) and the request body is any of those, this
  * throws `LlmBackoffError` with code `REQUEST_BODY_NOT_REPLAYABLE`
  * *before making any request* — refusing outright rather than risking a
- * second attempt that sends an empty body because the stream was already
- * consumed by the first. The safe paths: buffer the body into a
+ * second attempt that sends an empty body because the first already drained
+ * the source. See `isSingleShotBody` below for which iterable bodies do
+ * replay and are therefore allowed. The safe paths: buffer the body into a
  * `string`/`Blob`/`ArrayBuffer`/`Uint8Array` before calling this function (any
  * of those *can* be replayed — `fetch` reads them fresh on every call), or
  * pass `maxAttempts: 1` to accept no retries.
@@ -37,10 +39,43 @@ import { FetchRetryableStatusError, LlmBackoffError } from './errors.js';
 import { withLlmBackoff } from './with-llm-backoff.js';
 import type { FetchInput, LlmBackoffOptions } from './types.js';
 
+/**
+ * A body value that can only be read once, so a second attempt would send
+ * nothing.
+ *
+ * A `ReadableStream` is the obvious one, but Node's fetch (undici) also
+ * accepts an async iterable — an async generator, or a `node:stream`
+ * `Readable`, which is one — and a sync iterable, and turns either into a
+ * stream internally. The distinction that matters is not "is it iterable" but
+ * "does asking it for an iterator give a *fresh* one": every replayable
+ * standard body type that happens to be iterable (`FormData`,
+ * `URLSearchParams`, and an `Array`/`Set` of chunks) hands out a new iterator
+ * per `fetch` call, so all of them genuinely replay.
+ *
+ * Two shapes do not, and both are treated as single-shot:
+ * - anything with `Symbol.asyncIterator`. No replayable standard body type has
+ *   it, and an async iterator is consumed as it is read.
+ * - an *iterable iterator* — an object carrying both `next` and
+ *   `Symbol.iterator`, which is exactly what a generator object is, and what a
+ *   hand-rolled single-shot iterator looks like. Its `Symbol.iterator` returns
+ *   itself, already partly consumed. None of the replayable types above carry
+ *   a `next` method.
+ *
+ * Both checks read properties only; neither calls the iterator method, so
+ * probing a body never consumes it.
+ */
+function isSingleShotBody(body: unknown): boolean {
+  if (body instanceof ReadableStream) return true;
+  // A string is iterable and replayable; `null` is an explicit *empty* body.
+  if (typeof body !== 'object' || body === null) return false;
+  const candidate = body as Partial<AsyncIterable<unknown> & Iterable<unknown> & Iterator<unknown>>;
+  if (typeof candidate[Symbol.asyncIterator] === 'function') return true;
+  return typeof candidate.next === 'function' && typeof candidate[Symbol.iterator] === 'function';
+}
+
 function bodyIsNonReplayable(input: FetchInput, init: RequestInit | undefined): boolean {
   const explicitBody = init?.body;
-  if (explicitBody instanceof ReadableStream) return true;
-  if (explicitBody !== undefined) return false; // any other body type is replayable across calls
+  if (explicitBody !== undefined) return isSingleShotBody(explicitBody);
 
   // No override body: a Request object's own body is used, and it is a
   // stream too — and, unlike a plain body value, is consumed the moment this
@@ -60,8 +95,9 @@ export async function fetchWithLlmBackoff(
 
   if (maxAttempts > 1 && bodyIsNonReplayable(input, init)) {
     throw new LlmBackoffError(
-      'llm-backoff: fetchWithLlmBackoff refuses to retry a request whose body is a ReadableStream ' +
-        '(it cannot be re-sent after the first attempt consumes it). Buffer the body into a string/Blob/' +
+      'llm-backoff: fetchWithLlmBackoff refuses to retry a request whose body can only be read once ' +
+        '(a ReadableStream, an async iterable such as a node:stream Readable, or a generator — it cannot ' +
+        'be re-sent after the first attempt consumes it). Buffer the body into a string/Blob/' +
         'ArrayBuffer/Uint8Array first, or pass { maxAttempts: 1 } to accept no retries.',
       'REQUEST_BODY_NOT_REPLAYABLE',
       [],
