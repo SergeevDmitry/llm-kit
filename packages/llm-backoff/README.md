@@ -322,6 +322,7 @@ console.log(classification.retryable, classification.reason);
 interface LlmBackoffOptions {
   maxAttempts?: number; // default 5 — total attempts, including the first
   maxElapsedMs?: number; // default 60_000 — true wall-clock budget (includes operation time), checked before every sleep
+  attemptTimeoutMs?: number; // off by default — per-attempt ceiling; a timed-out attempt is cancelled and *retried*
   maxDelayMs?: number; // default 30_000 — caps the fallback backoff only, never an explicit header delay
   baseDelayMs?: number; // default 500 — fallback backoff base
   retryableStatuses?: readonly number[]; // added to the mandatory {429, 529}
@@ -400,6 +401,7 @@ exported directly from `llm-backoff` for your own type annotations.
 | Any other status, no option set                                                                 | No                  | Conservative default                                           |
 | Recognized transient network code (`ECONNRESET`, `ETIMEDOUT`, `ECONNREFUSED`, `EAI_AGAIN`, ...) | Yes                 | Not configurable off                                           |
 | `AbortError` (from `operation` or from `signal`)                                                | **Never**           | Not configurable — always propagates unwrapped                 |
+| Attempt exceeded `attemptTimeoutMs`                                                             | Yes                 | Only when you set `attemptTimeoutMs` — off by default          |
 | Unrecognized error shape (no status, no known network code)                                     | No                  | Normalize your error, or add its status to `retryableStatuses` |
 
 ## Advanced options and adapters
@@ -554,6 +556,54 @@ const request = new Request('https://api.example.com/v1/messages', {
 const response = await fetchWithLlmBackoff(request);
 ```
 
+### `attemptTimeoutMs`: a ceiling on one attempt
+
+A hung call — connection established, tokens never arrive — is the failure
+`maxElapsedMs` cannot rescue you from, because that budget is only checked
+_between_ attempts: one hung attempt quietly eats all of it. `attemptTimeoutMs`
+caps a single attempt instead, and a timed-out attempt is **cancelled and
+retried**, since a hang is transient:
+
+```ts
+import { AttemptTimeoutError, LlmBackoffError, fetchWithLlmBackoff } from 'llm-backoff';
+
+try {
+  const response = await fetchWithLlmBackoff(
+    'https://api.example.com/v1/chat',
+    { method: 'POST', body: JSON.stringify({ prompt: 'hello' }) },
+    { attemptTimeoutMs: 30_000 }, // no attempt gets more than 30s of its own
+  );
+  console.log(response.status);
+} catch (error) {
+  // Every attempt hung: the cause says so, and names the ceiling it broke.
+  if (error instanceof LlmBackoffError && error.cause instanceof AttemptTimeoutError) {
+    console.warn(`gave up after ${String(error.attempts.length)} hung attempts`);
+  }
+}
+```
+
+Wiring the ceiling yourself with `AbortSignal.timeout()` inside your operation
+does not work: its `TimeoutError` carries no status, so the classifier reads it
+as a non-retryable failure and gives up after one attempt. Only this package
+can tell its own ceiling apart from a cancellation you asked for.
+
+Three things that follow from that, and are tested as invariants:
+
+- **`options.signal` always outranks the ceiling.** If both fire on the same
+  attempt, your abort reason is what propagates, unwrapped and unretried.
+- **The ceiling cancels, it does not merely walk away.** Your attempt receives
+  it through `RetryContext.signal` — forward that to `fetch` (or your SDK's
+  own signal option) so a timed-out request stops holding its connection.
+  `fetchWithLlmBackoff` already does.
+- **A failure that arrived before the ceiling is classified as itself.** A
+  `400` that came back in 50 ms under a 30 s ceiling is still a `400`, still
+  non-retryable.
+
+Time spent on a timed-out attempt counts toward `maxElapsedMs` like any other
+wall-clock time, and the delay before the retry comes from the usual header /
+fallback machinery — there are no headers on a hang, so it is the bounded
+exponential fallback in practice.
+
 ### Non-replayable request bodies
 
 Some request bodies can only be read once. If yours is one of them and more
@@ -689,12 +739,9 @@ checked _before_ each sleep, not by interrupting an `operation` call that is
 already in flight. A single unusually slow attempt can therefore still push
 real elapsed time past your budget before this package gets a chance to
 check it again — the guard prevents _starting a new wait_ that would blow the
-budget, it does not preemptively cancel a call already underway. If you need
-a hard ceiling on an individual attempt's own duration as well, compose your
-own `AbortSignal.timeout(ms)` (or a per-call timeout inside `operation`
-itself) and pass it as `options.signal` (see [Cancellation](#cancellation)
-above) — this package fully respects it at every phase, including mid-attempt
-if `operation` honors it too.
+budget, it does not preemptively cancel a call already underway. Set
+[`attemptTimeoutMs`](#attempttimeoutms-a-ceiling-on-one-attempt) if you need a
+hard ceiling on an individual attempt's own duration.
 
 ## Security and privacy
 

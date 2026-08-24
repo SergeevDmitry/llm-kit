@@ -149,9 +149,15 @@ export async function fetchWithLlmBackoff(
 
   try {
     return await withLlmBackoff(
-      async () => {
+      async (context) => {
         releasePending(); // the previous attempt's response, if any, is now dead
-        const response = await fetch(input, { ...init, signal });
+        // `context.signal`, not the combined signal built above: when
+        // `options.attemptTimeoutMs` is set the retry loop hands each attempt
+        // its own signal, carrying that ceiling *and* everything combined
+        // here. Using the outer one would leave a timed-out request in flight,
+        // holding its connection, while the loop moved on. With no attempt
+        // timeout the two are the same signal.
+        const response = await fetch(input, { ...init, signal: context.signal });
         pending = response;
         const { retryable } = classifyStatus(response.status, {
           retryableStatuses: options.retryableStatuses,

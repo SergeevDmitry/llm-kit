@@ -15,7 +15,12 @@ export { withLlmBackoff } from './with-llm-backoff.js';
 export { fetchWithLlmBackoff } from './fetch-with-llm-backoff.js';
 export { parseRateLimitHeaders } from './delay/choose-delay.js';
 export { classifyLlmError } from './classify-error.js';
-export { LlmBackoffError, FetchRetryableStatusError, type LlmBackoffErrorCode } from './errors.js';
+export {
+  LlmBackoffError,
+  AttemptTimeoutError,
+  FetchRetryableStatusError,
+  type LlmBackoffErrorCode,
+} from './errors.js';
 
 export type {
   AttemptRecord,

@@ -41,6 +41,12 @@ export interface RetryContext {
    * slow `operation` call can still push real elapsed time past the budget.
    */
   readonly elapsedMs: number;
+  /**
+   * Forward this to whatever your operation calls (`fetch`, a provider SDK) so
+   * a cancellation actually reaches the in-flight request. It carries
+   * `LlmBackoffOptions.signal` and, when `attemptTimeoutMs` is set, this
+   * attempt's own timeout — combined, so either one cancels the call.
+   */
   readonly signal?: AbortSignal;
 }
 
@@ -53,6 +59,32 @@ export interface LlmBackoffOptions {
    * Checked before every sleep. Default `60_000`.
    */
   readonly maxElapsedMs?: number;
+  /**
+   * Ceiling on a *single* attempt, in milliseconds. Off by default.
+   *
+   * The failure this exists for is a hung call — connection established,
+   * tokens never arrive — which `maxElapsedMs` cannot rescue you from, because
+   * that budget is checked between attempts and one hung attempt eats all of
+   * it. With this set, an attempt that outlives the ceiling is cancelled and
+   * **retried**: a hung call is transient, so it flows through the normal
+   * delay machinery like any other retryable failure, and surfaces as an
+   * `AttemptTimeoutError` on `LlmBackoffError.cause` if every attempt times
+   * out.
+   *
+   * Doing this yourself with `AbortSignal.timeout()` inside `operation` does
+   * not work: its `TimeoutError` carries no status, so the classifier reads it
+   * as a non-retryable failure and gives up after one attempt. Only this
+   * package can tell "my own per-attempt ceiling fired" (transient, retry)
+   * apart from "the caller cancelled" (propagate unwrapped, never retry) —
+   * `options.signal` keeps absolute precedence over this in every race.
+   *
+   * Time spent waiting on a timed-out attempt still counts toward
+   * `maxElapsedMs`, which is measured on the wall clock. The timer is armed
+   * through the injectable `sleep`, so it never reaches a real platform timer
+   * in a test that injects one, and it is cancelled the moment the attempt
+   * settles.
+   */
+  readonly attemptTimeoutMs?: number;
   /** Cap applied to the *fallback* exponential delay only — never to an explicit server delay. Default `30_000`. */
   readonly maxDelayMs?: number;
   /** Base of the fallback exponential delay. Default `500`. */

@@ -39,6 +39,36 @@ export class LlmBackoffError extends Error {
 }
 
 /**
+ * Thrown internally when an attempt outlives `LlmBackoffOptions.attemptTimeoutMs`,
+ * and classified retryable: a hung call (connection up, tokens never arrive) is
+ * transient, and retrying it is the whole point of setting a per-attempt
+ * ceiling. Surfaces to the caller as `LlmBackoffError.cause` if every attempt
+ * times out.
+ *
+ * Deliberately **not** named `AbortError`, even though the mechanism that
+ * cancels the attempt is an `AbortSignal`. The retry loop propagates an abort
+ * unwrapped and never retries it; a per-attempt timeout is the opposite on both
+ * counts, and `isAbortError` keys off the name. Only the caller's own signal is
+ * a cancellation.
+ */
+export class AttemptTimeoutError extends Error {
+  readonly code = 'ATTEMPT_TIMEOUT';
+  /** 1-based attempt number that timed out. */
+  readonly attempt: number;
+  /** The configured ceiling this attempt exceeded, in milliseconds. */
+  readonly attemptTimeoutMs: number;
+
+  constructor(attempt: number, attemptTimeoutMs: number) {
+    super(
+      `llm-backoff: attempt ${String(attempt)} exceeded attemptTimeoutMs (${String(attemptTimeoutMs)}ms)`,
+    );
+    this.name = 'AttemptTimeoutError';
+    this.attempt = attempt;
+    this.attemptTimeoutMs = attemptTimeoutMs;
+  }
+}
+
+/**
  * Thrown internally by `fetchWithLlmBackoff`'s operation when a response's
  * status is classified retryable, so the shared retry loop in
  * `with-llm-backoff.ts` can drive it through the same classification/delay

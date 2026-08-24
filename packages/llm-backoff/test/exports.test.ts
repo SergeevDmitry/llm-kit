@@ -9,6 +9,7 @@ describe('llm-backoff public surface', () => {
     // leave no runtime trace on the module namespace, so only value exports
     // appear here.
     expect(exportNames(api)).toEqual([
+      'AttemptTimeoutError',
       'FetchRetryableStatusError',
       'LlmBackoffError',
       'classifyLlmError',

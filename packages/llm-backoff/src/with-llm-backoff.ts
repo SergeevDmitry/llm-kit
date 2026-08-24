@@ -4,7 +4,7 @@
  * backoff → abortable sleep → max-attempt/max-elapsed enforcement →
  * `onRetry` events.
  */
-import { isAbortError, throwIfAborted, toAbortError } from './abort-utils.js';
+import { combineSignals, isAbortError, throwIfAborted, toAbortError } from './abort-utils.js';
 import { classifyLlmError } from './classify-error.js';
 import {
   DEFAULT_BASE_DELAY_MS,
@@ -15,7 +15,7 @@ import {
 import { parseRateLimitHeaders } from './delay/choose-delay.js';
 import { computeFallbackDelayMs } from './delay/fallback-backoff.js';
 import { defaultSleep } from './delay/sleep.js';
-import { LlmBackoffError } from './errors.js';
+import { AttemptTimeoutError, LlmBackoffError } from './errors.js';
 import { sanitizeHeaderNames } from './retry-event.js';
 import type {
   AttemptRecord,
@@ -31,6 +31,7 @@ import type {
 interface NormalizedOptions {
   readonly maxAttempts: number;
   readonly maxElapsedMs: number;
+  readonly attemptTimeoutMs: number | undefined;
   readonly maxDelayMs: number;
   readonly baseDelayMs: number;
   readonly retryableStatuses: readonly number[];
@@ -59,6 +60,13 @@ function normalizeOptions(options: LlmBackoffOptions): NormalizedOptions {
   if (!Number.isFinite(maxElapsedMs) || maxElapsedMs < 0) {
     throw invalidOptions('options.maxElapsedMs must be a finite number >= 0');
   }
+  const attemptTimeoutMs = options.attemptTimeoutMs;
+  if (
+    attemptTimeoutMs !== undefined &&
+    (!Number.isFinite(attemptTimeoutMs) || attemptTimeoutMs <= 0)
+  ) {
+    throw invalidOptions('options.attemptTimeoutMs must be a finite number > 0');
+  }
   if (!Number.isFinite(maxDelayMs) || maxDelayMs < 0) {
     throw invalidOptions('options.maxDelayMs must be a finite number >= 0');
   }
@@ -69,6 +77,7 @@ function normalizeOptions(options: LlmBackoffOptions): NormalizedOptions {
   return {
     maxAttempts,
     maxElapsedMs,
+    attemptTimeoutMs,
     maxDelayMs,
     baseDelayMs,
     retryableStatuses: options.retryableStatuses ?? [],
@@ -132,6 +141,69 @@ function toAttemptRecord(
   };
 }
 
+/**
+ * Classification for an attempt that outlived `attemptTimeoutMs`. Retryable by
+ * construction, and `isAbort: false` on purpose — the ceiling is this
+ * package's own, not a cancellation the caller asked for, and the two must
+ * stay distinguishable in `onRetry` events and attempt history.
+ */
+function attemptTimeoutClassification(error: AttemptTimeoutError): RetryClassification {
+  return {
+    retryable: true,
+    reason: `attempt exceeded attemptTimeoutMs (${String(error.attemptTimeoutMs)}ms)`,
+    status: undefined,
+    isAbort: false,
+    headers: undefined,
+  };
+}
+
+/**
+ * Runs one attempt under `attemptTimeoutMs`, if one is configured.
+ *
+ * The timeout is decided by a race, not by asking afterwards whether the
+ * timeout signal fired. That matters for correctness, not style: an operation
+ * that ignores `context.signal` keeps running after the ceiling fires, so by
+ * the time it rejects — with, say, a `400` — the signal has fired and the
+ * after-the-fact reading would call that `400` a retryable timeout, retrying a
+ * status this package promises never to retry. A race settles on whatever
+ * genuinely happened first, so a failure that arrived before the ceiling is
+ * always classified as itself.
+ *
+ * The ceiling is armed through the injectable `sleep`, so a test that injects
+ * one never reaches a platform timer, and cancelled in `finally` the moment
+ * the attempt settles, so a fast attempt leaves no timer behind. Both the
+ * arming sleep and the operation are already awaited by `Promise.race`, so
+ * whichever loses is still "handled" and cannot surface as an unhandled
+ * rejection.
+ */
+async function runAttempt<T>(
+  operation: (context: RetryContext) => Promise<T>,
+  context: RetryContext,
+  cfg: NormalizedOptions,
+): Promise<T> {
+  const { attemptTimeoutMs } = cfg;
+  if (attemptTimeoutMs === undefined) return operation(context);
+
+  const timeoutController = new AbortController();
+  const armController = new AbortController(); // cancels the arming sleep
+  const combined = combineSignals([cfg.signal, timeoutController.signal]);
+
+  const ceiling = cfg.sleep(attemptTimeoutMs, armController.signal).then((): never => {
+    const reason = new AttemptTimeoutError(context.attempt, attemptTimeoutMs);
+    // Aborting is what actually stops the in-flight call; throwing is what
+    // ends the race, for an operation that never looks at its signal.
+    timeoutController.abort(reason);
+    throw reason;
+  });
+
+  try {
+    return await Promise.race([operation({ ...context, signal: combined.signal }), ceiling]);
+  } finally {
+    armController.abort();
+    combined.dispose();
+  }
+}
+
 export async function withLlmBackoff<T>(
   operation: (context: RetryContext) => Promise<T>,
   options: LlmBackoffOptions = {},
@@ -146,7 +218,11 @@ export async function withLlmBackoff<T>(
     try {
       // True wall-clock elapsed time so far — includes every prior attempt's
       // own operation latency, not just time spent sleeping.
-      return await operation({ attempt, elapsedMs: cfg.now() - startMs, signal: cfg.signal });
+      return await runAttempt(
+        operation,
+        { attempt, elapsedMs: cfg.now() - startMs, signal: cfg.signal },
+        cfg,
+      );
     } catch (error) {
       // A signal can fire while `operation()` is in flight. Two independent
       // ways an abort reaches here:
@@ -176,10 +252,16 @@ export async function withLlmBackoff<T>(
 
       const elapsedMs = cfg.now() - startMs;
 
-      const classification = classifyLlmError(error, {
-        retryableStatuses: cfg.retryableStatuses,
-        nonRetryableStatuses: cfg.nonRetryableStatuses,
-      });
+      // An attempt timeout is this package's own signal to itself, so it
+      // never goes through `classifyLlmError` — there is no status or header
+      // to classify, and the answer is fixed: retryable.
+      const classification =
+        error instanceof AttemptTimeoutError
+          ? attemptTimeoutClassification(error)
+          : classifyLlmError(error, {
+              retryableStatuses: cfg.retryableStatuses,
+              nonRetryableStatuses: cfg.nonRetryableStatuses,
+            });
 
       if (!classification.retryable) {
         attempts.push(toAttemptRecord(attempt, elapsedMs, classification));
