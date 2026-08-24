@@ -623,3 +623,117 @@ describe('fetchWithLlmBackoff — mid-operation abort', () => {
     expect(onRetryCalls).toBe(0);
   });
 });
+
+// A `Request` always carries a signal, and it is the third cancellation
+// channel into this function — the one plain `fetch(request)` honors for
+// free. Passing `signal` in the init bag *replaces* it per the fetch spec, so
+// it has to be combined in explicitly or aborting the Request's controller
+// silently stops cancelling anything. Every phase is covered here because the
+// two failure modes land in different ones: a replaced signal breaks the
+// in-flight fetch, an undefined one breaks the sleep and the error taxonomy.
+describe('fetchWithLlmBackoff — a Request carries its own signal', () => {
+  // GET, no body: a Request with a body exposes it as a ReadableStream, which
+  // `REQUEST_BODY_NOT_REPLAYABLE` refuses before any of this is reached.
+  function requestWith(signal: AbortSignal): Request {
+    return new Request('https://example.test/resource', { signal });
+  }
+
+  it('rejects before the first attempt when the Request signal is already aborted', async () => {
+    let calls = 0;
+    stubFetch(async () => {
+      calls += 1;
+      return new Response('ok', { status: 200 });
+    });
+    const controller = new AbortController();
+    const reason = new Error('cancelled before we started');
+    controller.abort(reason);
+
+    await expect(fetchWithLlmBackoff(requestWith(controller.signal))).rejects.toBe(reason);
+    expect(calls).toBe(0);
+  });
+
+  it('surfaces a mid-fetch abort unwrapped, exactly like options.signal does', async () => {
+    const controller = new AbortController();
+    const reason = new Error('cancelled mid-flight');
+    stubFetch(async (_input, init) => {
+      controller.abort(reason);
+      return Promise.reject((init?.signal as AbortSignal).reason);
+    });
+
+    await expect(fetchWithLlmBackoff(requestWith(controller.signal))).rejects.toBe(reason);
+  });
+
+  it('interrupts the sleep between attempts instead of waiting it out, and never wraps the reason', async () => {
+    const clock = createFakeClock();
+    stubFetch(async () => new Response(null, { status: 429, headers: { 'retry-after': '5' } }));
+    const controller = new AbortController();
+    const reason = new Error('cancelled mid-sleep');
+
+    let sleepInvoked: (() => void) | undefined;
+    const sleepInvokedPromise = new Promise<void>((resolve) => {
+      sleepInvoked = resolve;
+    });
+    let releaseSleep: (() => void) | undefined;
+    const manualSleep = (_ms: number, signal?: AbortSignal): Promise<void> => {
+      sleepInvoked?.();
+      return new Promise<void>((resolve, reject) => {
+        releaseSleep = resolve;
+        signal?.addEventListener('abort', () => reject(toAbortError(signal.reason)), {
+          once: true,
+        });
+      });
+    };
+
+    const promise = fetchWithLlmBackoff(requestWith(controller.signal), undefined, {
+      sleep: manualSleep,
+      now: clock.nowFn,
+    });
+    await sleepInvokedPromise; // the loop is now awaiting cfg.sleep(...)
+    controller.abort(reason);
+
+    // Unwrapped and identity-preserving: without the Request's signal in the
+    // combination the loop has no signal at all, so `manualSleep` gets nothing
+    // to interrupt and the abort is never observed — the retries run to
+    // exhaustion and the caller gets an LlmBackoffError instead of `reason`.
+    const caught: unknown = await promise.catch((error: unknown) => error);
+    expect(caught).toBe(reason);
+    expect(caught).not.toBeInstanceOf(LlmBackoffError);
+    releaseSleep?.(); // avoid leaving a dangling unresolved promise
+  });
+
+  it('still cancels when options.signal is also present — the init signal does not replace it', async () => {
+    const clock = createFakeClock();
+    const sleep = createSleepRecorder(clock);
+    stubFetch(async () => new Response(null, { status: 429, headers: { 'retry-after': '1' } }));
+    const requestController = new AbortController();
+    const optionsController = new AbortController();
+    const reason = new Error('cancelled via the Request');
+
+    const promise = fetchWithLlmBackoff(requestWith(requestController.signal), undefined, {
+      sleep: sleep.sleep,
+      now: clock.nowFn,
+      signal: optionsController.signal,
+    });
+    requestController.abort(reason);
+
+    await expect(promise).rejects.toBe(reason);
+  });
+
+  it('leaves options.signal working for a Request input', async () => {
+    const clock = createFakeClock();
+    const sleep = createSleepRecorder(clock);
+    stubFetch(async () => new Response(null, { status: 429, headers: { 'retry-after': '1' } }));
+    const requestController = new AbortController();
+    const optionsController = new AbortController();
+    const reason = new Error('cancelled via options.signal');
+
+    const promise = fetchWithLlmBackoff(requestWith(requestController.signal), undefined, {
+      sleep: sleep.sleep,
+      now: clock.nowFn,
+      signal: optionsController.signal,
+    });
+    optionsController.abort(reason);
+
+    await expect(promise).rejects.toBe(reason);
+  });
+});

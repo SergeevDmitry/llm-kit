@@ -527,15 +527,32 @@ same normalization `throwIfAborted` and the default `sleep` already apply;
 check `error instanceof DOMException && error.name === 'AbortError'` for
 that case rather than an identity comparison.
 
-`fetchWithLlmBackoff` combines `options.signal` and a caller-supplied
-`init.signal` into one signal per call (`AbortSignal.any` where available)
-and detaches any listeners it attached for that once the call settles —
-whether it succeeds, fails, or is aborted — so reusing one long-lived
-`AbortSignal` (an app-lifetime shutdown signal, say) across many
+`fetchWithLlmBackoff` combines every signal that reaches it into one signal
+per call (`AbortSignal.any` where available): `options.signal`, a
+caller-supplied `init.signal`, and — when you pass a `Request` — the signal
+that `Request` carries. All three cancel the whole retry loop, not just the
+attempt in flight. It detaches any listeners it attached for that once the
+call settles — whether it succeeds, fails, or is aborted — so reusing one
+long-lived `AbortSignal` (an app-lifetime shutdown signal, say) across many
 `fetchWithLlmBackoff` calls does not accumulate listeners on it over time.
 The reason surfaced to the caller is always the _original_ signal's reason —
-whichever of `options.signal`/`init.signal` fired first — never a synthetic
-reason from the combinator itself.
+whichever fired first — never a synthetic reason from the combinator itself.
+
+```ts
+import { fetchWithLlmBackoff } from 'llm-backoff';
+
+const controller = new AbortController();
+const request = new Request('https://api.example.com/v1/messages', {
+  method: 'POST',
+  body: JSON.stringify({ model: 'claude-sonnet-5' }),
+  signal: controller.signal,
+});
+
+// Aborting the Request's own controller cancels the retry loop, exactly as it
+// would cancel a plain `fetch(request)` — including during the sleep between
+// attempts, and with the reason propagated unwrapped.
+const response = await fetchWithLlmBackoff(request);
+```
 
 ### Non-replayable request bodies
 

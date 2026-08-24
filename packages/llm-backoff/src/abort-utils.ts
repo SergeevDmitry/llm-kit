@@ -42,8 +42,9 @@ const NOOP_DISPOSE = (): void => undefined;
 
 /**
  * Combines any number of optional signals into one. Used by
- * `fetchWithLlmBackoff` so `options.signal` and a caller-supplied `init.signal`
- * both cancel the whole retry operation, not just one attempt.
+ * `fetchWithLlmBackoff` so `options.signal`, a caller-supplied `init.signal`
+ * and the signal a `Request` input carries all cancel the whole retry
+ * operation, not just one attempt.
  *
  * Callers MUST call the returned `dispose()` once they are done with the
  * combined signal (typically in a `finally`). Without it, the manual-fallback

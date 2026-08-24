@@ -68,7 +68,19 @@ export async function fetchWithLlmBackoff(
     );
   }
 
-  const combined = combineSignals([options.signal, init?.signal ?? undefined]);
+  // Three cancellation channels reach this function, not two: `options.signal`,
+  // `init.signal`, and the signal a `Request` always carries. The third has to
+  // be combined in explicitly, because passing `signal` in the init bag
+  // *replaces* the Request's own signal per the fetch spec — omitting it would
+  // make `fetchWithLlmBackoff(request)` ignore an abort that plain
+  // `fetch(request)` honors. It also matters when no other signal is present:
+  // a Request's signal is always defined, so combining it gives the retry loop
+  // a signal to interrupt a `Retry-After` sleep with, and to classify the
+  // resulting rejection as an abort (propagated unwrapped) rather than a
+  // non-retryable failure wrapped in `LlmBackoffError`.
+  const requestSignal =
+    typeof Request !== 'undefined' && input instanceof Request ? input.signal : undefined;
+  const combined = combineSignals([options.signal, init?.signal ?? undefined, requestSignal]);
   const signal = combined.signal;
 
   // A response fetched on any attempt that isn't the one reaching the caller
