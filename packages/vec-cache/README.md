@@ -690,9 +690,10 @@ _create_ one on your behalf too.
   in its batch disagree in width with what it ends up receiving, it throws
   `DIMENSION_IDENTITY_CONFLICT` — see
   [Dimensionality is part of identity](#dimensionality-is-part-of-identity).
-- SQLite handles cross-process locking (a `busy_timeout` pragma waits out a
-  lock instead of failing immediately) and the `cache_key` primary key's
-  upsert semantics prevent duplicate rows.
+- SQLite handles cross-process locking (`busyTimeoutMs` waits out a lock
+  instead of failing immediately, and applies from the moment the database is
+  opened) and the `cache_key` primary key's upsert semantics prevent
+  duplicate rows.
 - **What this does _not_ cover:** two separate _processes_ pointed at the
   same database file are not coordinated by the single-flight registry above
   — that registry is in-memory, per process. If both processes are missing

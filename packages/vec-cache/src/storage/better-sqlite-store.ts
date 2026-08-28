@@ -33,10 +33,21 @@ export interface BetterSqliteStoreOptions {
   readonly busyTimeoutMs?: number;
 }
 
-function openDatabase(path: string): Database.Database {
+/**
+ * `timeout` is passed to the constructor, not left to the `busy_timeout`
+ * pragma below: the driver applies its own default of 5 s at native open, so
+ * a configured timeout larger than that would be silently capped for the
+ * whole open sequence — the header probe, the migration reads, the WAL
+ * switch, and the migration write that runs on every open. Another process
+ * checkpointing its WAL on `close()` holds an exclusive lock over exactly
+ * that window. It is a connection setting, not a file write, so the
+ * deliberate classify-before-WAL ordering in `createBetterSqliteStore` is
+ * untouched.
+ */
+function openDatabase(path: string, busyTimeoutMs: number): Database.Database {
   let db: Database.Database | undefined;
   try {
-    db = new Database(path);
+    db = new Database(path, { timeout: busyTimeoutMs });
     // `new Database()` can succeed even when `path` is not a valid SQLite
     // file — the driver validates the file header lazily, on first real
     // access. Force that validation now, with a cheap header-only read
@@ -62,7 +73,8 @@ function openDatabase(path: string): Database.Database {
 }
 
 export function createBetterSqliteStore(options: BetterSqliteStoreOptions): VectorCacheStore {
-  const db = openDatabase(options.path);
+  const busyTimeoutMs = options.busyTimeoutMs ?? DEFAULT_BUSY_TIMEOUT_MS;
+  const db = openDatabase(options.path, busyTimeoutMs);
 
   // Classify the file — empty, already ours, or foreign — before anything
   // below writes a single byte to it. `journal_mode = WAL` two lines down
@@ -87,7 +99,10 @@ export function createBetterSqliteStore(options: BetterSqliteStoreOptions): Vect
     // to swallow unconditionally here: `openDatabase` already proved this is
     // a genuine, readable SQLite file above.
   }
-  db.pragma(`busy_timeout = ${String(options.busyTimeoutMs ?? DEFAULT_BUSY_TIMEOUT_MS)}`);
+  // Redundant with the constructor's `timeout` above, and kept: it is the
+  // documented pragma a `PRAGMA busy_timeout` read reports, and it costs one
+  // statement per open.
+  db.pragma(`busy_timeout = ${String(busyTimeoutMs)}`);
 
   try {
     applyMigrations(db, plan);
