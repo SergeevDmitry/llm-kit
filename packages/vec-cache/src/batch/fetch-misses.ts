@@ -36,6 +36,8 @@ export interface FetchMissesParams {
   readonly storeText: boolean;
   readonly nowMs: number;
   readonly ttlMs: number | undefined;
+  /** The caller's explicit `dimensions`, or `undefined`. Folded into the cache key, so a differing embed result must not be written. */
+  readonly requestedDimensions: number | undefined;
 }
 
 export interface FetchMissesResult {
@@ -47,7 +49,8 @@ export interface FetchMissesResult {
 /**
  * Validates that `embed` honored its all-or-error contract: the result count
  * must match the request count exactly (`EMBED_RESULT_COUNT_MISMATCH`),
- * every returned vector must share one non-zero dimension
+ * every returned vector must share one non-zero dimension — and match
+ * `requestedDimensions` when the caller named one
  * (`EMBED_DIMENSION_MISMATCH`), and every element of every vector must be a
  * finite number (`EMBED_RESULT_INVALID`), and — when this call's
  * `vectorEncoding` is `'float32'` — that every element's magnitude fits in
@@ -70,6 +73,7 @@ function validateEmbedResult(
   vectors: readonly EmbeddingVector[],
   expectedCount: number,
   vectorEncoding: VectorEncoding,
+  requestedDimensions: number | undefined,
 ): void {
   if (vectors.length !== expectedCount) {
     throw new VectorCacheError(
@@ -97,6 +101,19 @@ function validateEmbedResult(
     }
   }
 
+  // The caller's `dimensions` is part of the cache key, so a width that
+  // disagrees with it would be stored under a key claiming the requested one:
+  // every later identical call finds the row, demotes it as a dimension
+  // mismatch, re-embeds and rewrites it — a permanent paid re-embed loop.
+  // `setMany` enforces the same declared-vs-actual rule under `INVALID_INPUT`;
+  // this is the second channel into it.
+  if (requestedDimensions !== undefined && dimensions !== requestedDimensions) {
+    throw new VectorCacheError(
+      `embed callback returned ${String(dimensions)}-dimensional vector(s) but dimensions: ${String(requestedDimensions)} was requested — the requested width is part of the cache key, so storing this would poison it`,
+      'EMBED_DIMENSION_MISMATCH',
+    );
+  }
+
   for (let index = 0; index < vectors.length; index += 1) {
     try {
       validateVector(
@@ -117,9 +134,15 @@ export async function fetchMisses(params: FetchMissesParams): Promise<FetchMisse
   const vectors = await params.embed({
     texts: params.texts,
     model: params.model,
+    dimensions: params.requestedDimensions,
     signal: undefined,
   });
-  validateEmbedResult(vectors, params.keys.length, params.vectorEncoding);
+  validateEmbedResult(
+    vectors,
+    params.keys.length,
+    params.vectorEncoding,
+    params.requestedDimensions,
+  );
 
   const vectorMap = new Map<string, EmbeddingVector>();
   const storedEntries: StoredEmbedding[] = [];

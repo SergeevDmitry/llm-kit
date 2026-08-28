@@ -200,6 +200,43 @@ describe('VectorCache.getOrCreate', () => {
     expect((caught as VectorCacheError).code).not.toBe('EMBED_RESULT_COUNT_MISMATCH');
   });
 
+  describe('an explicit dimensions request is checked against what embed returns', () => {
+    // The equivalence test for `setMany`'s INVALID_INPUT rule: `dimensions`
+    // is folded into the cache key, so a row stored at another width is
+    // keyed as one width and stored as another — every later identical call
+    // finds it, demotes it as a mismatch, and pays for the same embed again.
+    it('throws EMBED_DIMENSION_MISMATCH when embed returns a width other than the requested one', async () => {
+      const wide = createCountingEmbed(1536);
+      await expect(
+        cache.getOrCreate(['a'], { model: 'm', dimensions: 512, embed: wide.embed }),
+      ).rejects.toMatchObject({ code: 'EMBED_DIMENSION_MISMATCH' });
+
+      // Nothing was written: the next call is a clean miss, not a demoted hit.
+      const good = createCountingEmbed(512);
+      const result = await cache.getOrCreate(['a'], {
+        model: 'm',
+        dimensions: 512,
+        embed: good.embed,
+      });
+      expect(result.report.dimensionMismatches).toEqual([]);
+      expect(
+        (await cache.getOrCreate(['a'], { model: 'm', dimensions: 512, embed: good.embed })).report
+          .hitCount,
+      ).toBe(1);
+      expect(good.callCount()).toBe(1);
+    });
+
+    it('passes the requested dimensions to the embed callback', async () => {
+      const counting = createCountingEmbed(8);
+      await cache.getOrCreate(['a'], { model: 'm', dimensions: 8, embed: counting.embed });
+      expect(counting.calls[0]?.dimensions).toBe(8);
+
+      const noRequest = createCountingEmbed();
+      await cache.getOrCreate(['b'], { model: 'm', embed: noRequest.embed });
+      expect(noRequest.calls[0]?.dimensions).toBeUndefined();
+    });
+  });
+
   it('throws EMBED_DIMENSION_MISMATCH for an empty vector', async () => {
     const badEmbed = () => Promise.resolve([new Float32Array([])]);
     await expect(cache.getOrCreate(['a'], { model: 'm', embed: badEmbed })).rejects.toMatchObject({

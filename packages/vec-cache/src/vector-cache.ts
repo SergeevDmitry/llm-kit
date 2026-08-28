@@ -203,6 +203,7 @@ export class VectorCache {
           storeText: this.storeText,
           nowMs: writeAtMs,
           ttlMs,
+          requestedDimensions: options.dimensions,
         }).then((result) => {
           // Re-checked here, not just at entry: `close()` may run while this
           // call's `embed` promise is still pending.

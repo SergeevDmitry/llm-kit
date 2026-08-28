@@ -26,6 +26,14 @@ export interface EmbedBatchRequest {
   readonly texts: readonly string[];
   readonly model: string;
   /**
+   * The `dimensions` the caller passed to `getOrCreate`, or `undefined` if
+   * they passed none. Forward it to your provider: the value is folded into
+   * the cache key, so returning a different width is rejected with
+   * `EMBED_DIMENSION_MISMATCH` rather than written under a key that claims
+   * the requested one.
+   */
+  readonly dimensions?: number;
+  /**
    * Always `undefined`. A fetch this package starts
    * may be joined by other concurrent `getOrCreate` calls after it has
    * already begun, so no single caller's `signal` is forwarded here — doing

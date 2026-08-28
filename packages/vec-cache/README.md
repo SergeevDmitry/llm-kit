@@ -467,6 +467,11 @@ cache.close();
 the cache key this package computed before this option existed, so existing
 databases and call sites are unaffected.
 
+The requested width is passed to your callback as `request.dimensions`, and
+what the callback returns is checked against it: a batch of vectors at any
+other width throws `EMBED_DIMENSION_MISMATCH` and writes nothing, rather than
+storing a row keyed as one width and stored as another.
+
 Independently of whether you pass `dimensions`, every lookup is defensive: if
 a would-be hit's stored width disagrees with what the current call expects
 (an explicit `dimensions` value, or — absent that — another hit already found
