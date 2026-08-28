@@ -1,6 +1,6 @@
 {
   "name": "vec-cache",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "SQLite-backed embedding cache with partial batch hits, in-batch deduplication and model-scoped keys.",
   "keywords": [
     "embeddings",
