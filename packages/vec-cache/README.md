@@ -154,6 +154,7 @@ const result = await cache.getOrCreate(['a', 'b', 'a'], {
   model: 'text-embedding-3-small',
   namespace: 'my-app', // optional override of the instance default
   embed: (request) => callEmbeddingProvider(request.texts), // called once, with ["a", "b"]
+  maxEmbedBatchSize: 2048, // optional cap on texts per embed call
   ttlMs: 30 * 24 * 60 * 60 * 1000, // optional per-call TTL override
   signal: undefined, // optional AbortSignal
 });
@@ -208,6 +209,7 @@ type EmbeddingVector = readonly number[] | Float32Array | Float64Array;
 interface EmbedBatchRequest {
   texts: readonly string[]; // unique misses only, deterministic order
   model: string;
+  dimensions?: number; // whatever the caller passed to getOrCreate — forward it
   signal?: AbortSignal;
 }
 type EmbedBatch = (request: EmbedBatchRequest) => Promise<readonly EmbeddingVector[]>;
@@ -222,7 +224,7 @@ interface VectorCacheBatchReport {
   hitCount: number;
   missCount: number; // duplicates counted once per position
   uniqueMissCount: number; // distinct texts actually sent to embed
-  embedCallCount: number; // 0 (full hit or fully coalesced) or 1 — never more
+  embedCallCount: number; // 0 (full hit or fully coalesced), 1, or one per maxEmbedBatchSize sub-batch
   elapsedMs: number;
 }
 ```
@@ -251,6 +253,37 @@ try {
 }
 cache.close();
 ```
+
+### `maxEmbedBatchSize` — respecting your provider's batch limit
+
+By default every unique miss goes out in one `embed` call, so a cold cache
+over a 10,000-document corpus hands your callback 10,000 texts at once —
+past every provider's per-request cap (OpenAI allows 2048 inputs; Voyage and
+Cohere less). Set `maxEmbedBatchSize` and `vec-cache` does the splitting:
+
+```ts
+import { VectorCache } from 'vec-cache';
+
+const cache = new VectorCache({ path: './cache.sqlite' });
+const result = await cache.getOrCreate(tenThousandDocs, {
+  model: 'text-embedding-3-small',
+  maxEmbedBatchSize: 2048,
+  embed: (request) => callEmbeddingProvider(request.texts), // <= 2048 texts each time
+});
+result.report.embedCallCount; // 5 — the calls actually made
+cache.close();
+
+declare const tenThousandDocs: string[];
+declare function callEmbeddingProvider(texts: readonly string[]): Promise<Float32Array[]>;
+```
+
+Sub-batches run one after another — providers cap batch size because of their
+own rate limits, so firing all of them at once is the shape most likely to
+trip them — and **each is written to the cache as it succeeds**. If a later
+sub-batch throws, the call throws, the completed sub-batches stay cached, and
+the next call pays only for what never finished. The all-or-error contract is
+unchanged within each sub-batch: a wrong count or a wrong width still throws
+and writes nothing for that sub-batch.
 
 Error codes: `INVALID_INPUT`, `EMBED_RESULT_COUNT_MISMATCH`,
 `EMBED_DIMENSION_MISMATCH`, `EMBED_RESULT_INVALID`,

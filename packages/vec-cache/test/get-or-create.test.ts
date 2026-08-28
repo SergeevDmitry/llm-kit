@@ -1,7 +1,12 @@
 import { createFakeClock, createTempDatabase, type TempDatabase } from '@llm-kit/test-utils';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { VectorCache, VectorCacheError } from '../src/index.js';
-import { createControlledEmbed, createCountingEmbed, deterministicVector } from './helpers.js';
+import { VectorCache, VectorCacheError, type EmbedBatch } from '../src/index.js';
+import {
+  createControlledEmbed,
+  createCountingEmbed,
+  deterministicVector,
+  toPlainArray,
+} from './helpers.js';
 
 describe('VectorCache.getOrCreate', () => {
   let db: TempDatabase;
@@ -234,6 +239,72 @@ describe('VectorCache.getOrCreate', () => {
       const noRequest = createCountingEmbed();
       await cache.getOrCreate(['b'], { model: 'm', embed: noRequest.embed });
       expect(noRequest.calls[0]?.dimensions).toBeUndefined();
+    });
+  });
+
+  describe('maxEmbedBatchSize splits the miss set across several embed calls', () => {
+    it('sends every unique miss, in order, in bounded sub-batches and reports the real call count', async () => {
+      const texts = Array.from({ length: 10 }, (_, i) => `t-${String(i)}`);
+      const counting = createCountingEmbed();
+
+      const result = await cache.getOrCreate(texts, {
+        model: 'm',
+        embed: counting.embed,
+        maxEmbedBatchSize: 4,
+      });
+
+      expect(counting.callCount()).toBe(3);
+      expect(counting.calls.map((call) => call.texts.length)).toEqual([4, 4, 2]);
+      expect(counting.allTexts()).toEqual(texts);
+      expect(result.report.embedCallCount).toBe(3);
+      expect(result.embeddings.map(toPlainArray)).toEqual(
+        texts.map((text) => toPlainArray(deterministicVector(text))),
+      );
+
+      // All of it landed in the cache: the rerun is a full hit.
+      const rerun = createCountingEmbed();
+      expect(
+        (await cache.getOrCreate(texts, { model: 'm', embed: rerun.embed })).report.hitCount,
+      ).toBe(10);
+      expect(rerun.callCount()).toBe(0);
+    });
+
+    it('omitting it keeps one call for the whole miss set', async () => {
+      const counting = createCountingEmbed();
+      const result = await cache.getOrCreate(['a', 'b', 'c'], { model: 'm', embed: counting.embed });
+      expect(counting.callCount()).toBe(1);
+      expect(result.report.embedCallCount).toBe(1);
+    });
+
+    it('a sub-batch that throws leaves the completed sub-batches cached, and the call throws', async () => {
+      const texts = Array.from({ length: 6 }, (_, i) => `t-${String(i)}`);
+      let calls = 0;
+      const failsOnThird: EmbedBatch = (request) => {
+        calls += 1;
+        if (calls === 3) return Promise.reject(new Error('provider rate limit'));
+        return Promise.resolve(request.texts.map((text) => deterministicVector(text)));
+      };
+
+      await expect(
+        cache.getOrCreate(texts, { model: 'm', embed: failsOnThird, maxEmbedBatchSize: 2 }),
+      ).rejects.toThrow('provider rate limit');
+
+      // The first two sub-batches are cached; the next call pays only for
+      // what never completed.
+      const resume = createCountingEmbed();
+      const result = await cache.getOrCreate(texts, { model: 'm', embed: resume.embed });
+      expect(result.report.hitCount).toBe(4);
+      expect(resume.allTexts()).toEqual(['t-4', 't-5']);
+    });
+
+    it('rejects a non-positive or fractional value with INVALID_INPUT, before embed runs', async () => {
+      const counting = createCountingEmbed();
+      for (const bad of [0, -1, 1.5, Number.NaN]) {
+        await expect(
+          cache.getOrCreate(['a'], { model: 'm', embed: counting.embed, maxEmbedBatchSize: bad }),
+        ).rejects.toMatchObject({ code: 'INVALID_INPUT' });
+      }
+      expect(counting.callCount()).toBe(0);
     });
   });
 

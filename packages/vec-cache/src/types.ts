@@ -127,6 +127,19 @@ export interface GetOrCreateOptions extends CacheIdentityOptions {
   readonly ttlMs?: number;
   /** Same meaning and defensive behavior as {@link CacheLookupOptions.dimensions}. */
   readonly dimensions?: number;
+  /**
+   * Largest number of texts handed to `embed` in one call. Default: no limit
+   * — every unique miss goes out in a single call, as before. Set it to your
+   * provider's per-request input cap (OpenAI: 2048; Voyage and Cohere are
+   * lower) and this package splits the miss set for you, in order.
+   *
+   * Sub-batches run one after another and each is persisted as it succeeds,
+   * so a failure part-way through leaves the completed sub-batches cached
+   * and throws — the same shape as an aborted call, and the next call picks
+   * up where this one stopped. `report.embedCallCount` is the number of
+   * calls actually made.
+   */
+  readonly maxEmbedBatchSize?: number;
 }
 
 /**
@@ -156,7 +169,7 @@ export interface VectorCacheBatchReport {
   readonly missCount: number;
   /** Distinct texts actually sent to `embed` — `<= missCount`, equal only when a batch has no in-batch duplicate misses. */
   readonly uniqueMissCount: number;
-  /** `0` when this call never invoked `embed` (full hit, or every miss was coalesced into another in-flight call); otherwise `1` — `embed` is called at most once per `getOrCreate` call. */
+  /** `0` when this call never invoked `embed` (full hit, or every miss was coalesced into another in-flight call); otherwise `1`, or the number of sub-batches when {@link GetOrCreateOptions.maxEmbedBatchSize} splits the miss set. */
   readonly embedCallCount: number;
   readonly elapsedMs: number;
   /** Hits demoted to misses because their stored dimensions disagreed with what this batch expected. Empty in the common case. */

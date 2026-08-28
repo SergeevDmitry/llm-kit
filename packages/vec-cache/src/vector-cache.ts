@@ -68,6 +68,7 @@ import {
   validateModel,
   validateNamespaceOption,
   validateOptionalDurationMs,
+  validateOptionalPositiveInteger,
   validateTexts,
   validateText,
   validateVector,
@@ -134,6 +135,10 @@ export class VectorCache {
     validateTexts(texts);
     validateNamespaceOption(options.namespace);
     validateOptionalDurationMs(options.ttlMs, 'GetOrCreateOptions.ttlMs');
+    validateOptionalPositiveInteger(
+      options.maxEmbedBatchSize,
+      'GetOrCreateOptions.maxEmbedBatchSize',
+    );
 
     const startedAtMs = this.now();
     if (texts.length === 0) {
@@ -186,8 +191,9 @@ export class VectorCache {
       }
 
       if (ownKeys.length > 0) {
-        embedCallCount = 1;
+        embedCallCount = Math.ceil(ownKeys.length / (options.maxEmbedBatchSize ?? ownKeys.length));
         const writeAtMs = this.now();
+        const embedded: EmbeddingVector[] = [];
         const shared = fetchMisses({
           keys: ownKeys,
           texts: ownTexts,
@@ -204,30 +210,37 @@ export class VectorCache {
           nowMs: writeAtMs,
           ttlMs,
           requestedDimensions: options.dimensions,
-        }).then((result) => {
-          // Re-checked here, not just at entry: `close()` may run while this
-          // call's `embed` promise is still pending.
-          if (this.closed) {
-            throw new VectorCacheError(
-              'VectorCache was closed while a getOrCreate() call was in flight',
-              'STORE_CLOSED',
-            );
-          }
-          // Gate the write itself: this call's own cache
-          // hits and its own freshly embedded vectors must agree on width
-          // *before* anything is persisted — otherwise a hit at one width
-          // and a fresh miss at another would both land in the result (and
-          // the fresh one on disk) with no diagnostic at all. Narrower than
-          // the final check below (it only sees this call's own hits and
-          // its own embed result, not anything joined from elsewhere), but
-          // it is the one that can still stop a bad write before it happens.
-          assertConsistentDimensions([...hitVectors.values(), ...result.vectors.values()], {
-            modelId: options.model,
-            namespace,
-          });
-          this.store.putMany(result.storedEntries);
-          return result.vectors;
-        });
+          maxEmbedBatchSize: options.maxEmbedBatchSize,
+          // Runs once per `embed` call, before the next one starts, so a
+          // failure part-way through a split miss set leaves the sub-batches
+          // that did succeed cached rather than paid for and thrown away.
+          onBatch: (batch) => {
+            // Re-checked here, not just at entry: `close()` may run while
+            // this call's `embed` promise is still pending.
+            if (this.closed) {
+              throw new VectorCacheError(
+                'VectorCache was closed while a getOrCreate() call was in flight',
+                'STORE_CLOSED',
+              );
+            }
+            for (const vector of batch.vectors.values()) embedded.push(vector);
+            // Gate the write itself: this call's own cache
+            // hits and its own freshly embedded vectors must agree on width
+            // *before* anything is persisted — otherwise a hit at one width
+            // and a fresh miss at another would both land in the result (and
+            // the fresh one on disk) with no diagnostic at all. Narrower than
+            // the final check below (it only sees this call's own hits and
+            // its own embed result, not anything joined from elsewhere), but
+            // it is the one that can still stop a bad write before it
+            // happens. `embedded` spans every sub-batch so far, so two
+            // sub-batches disagreeing with each other is caught here too.
+            const seen: EmbeddingVector[] = [];
+            for (const vector of hitVectors.values()) seen.push(vector);
+            for (const vector of embedded) seen.push(vector);
+            assertConsistentDimensions(seen, { modelId: options.model, namespace });
+            this.store.putMany(batch.storedEntries);
+          },
+        }).then((result) => result.vectors);
 
         for (const key of ownKeys) {
           const perKey = this.singleFlight.register(

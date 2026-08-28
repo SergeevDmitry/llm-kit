@@ -38,6 +38,16 @@ export interface FetchMissesParams {
   readonly ttlMs: number | undefined;
   /** The caller's explicit `dimensions`, or `undefined`. Folded into the cache key, so a differing embed result must not be written. */
   readonly requestedDimensions: number | undefined;
+  /** Largest number of texts per `embed` call, or `undefined` for one call with all of them. */
+  readonly maxEmbedBatchSize: number | undefined;
+  /**
+   * Called with each sub-batch's rows once they are built and validated, and
+   * before the next `embed` call starts. This function still does not touch
+   * the store — the caller decides what persistence means — but running that
+   * per sub-batch is what leaves completed sub-batches cached when a later
+   * one throws.
+   */
+  readonly onBatch: (batch: FetchMissesResult) => void;
 }
 
 export interface FetchMissesResult {
@@ -129,41 +139,57 @@ function validateEmbedResult(
   }
 }
 
+/**
+ * Sub-batches are sequential, not concurrent: providers cap batch size
+ * because of their own rate limits, so firing every sub-batch at once is the
+ * shape most likely to trip them. Sequential also gives the all-or-error
+ * contract a meaningful boundary — each sub-batch is complete for its own
+ * keys, so a failure part-way through leaves earlier ones written and
+ * nothing guessed.
+ */
 export async function fetchMisses(params: FetchMissesParams): Promise<FetchMissesResult> {
-  // No `signal` here on purpose — see the module doc above.
-  const vectors = await params.embed({
-    texts: params.texts,
-    model: params.model,
-    dimensions: params.requestedDimensions,
-    signal: undefined,
-  });
-  validateEmbedResult(
-    vectors,
-    params.keys.length,
-    params.vectorEncoding,
-    params.requestedDimensions,
-  );
-
   const vectorMap = new Map<string, EmbeddingVector>();
   const storedEntries: StoredEmbedding[] = [];
+  const batchSize = params.maxEmbedBatchSize ?? params.keys.length;
 
-  for (let index = 0; index < params.keys.length; index += 1) {
-    const key = params.keys[index] as string;
-    const text = params.texts[index] as string;
-    const vector = vectors[index] as EmbeddingVector;
-    vectorMap.set(key, vector);
-    storedEntries.push({
-      cacheKey: key,
-      namespace: params.namespace,
-      modelId: params.model,
-      textHash: hashText(text),
-      textValue: params.storeText ? text : undefined,
-      dimensions: vector.length,
-      vectorEncoding: params.vectorEncoding,
-      vectorBlob: encodeVector(vector, params.vectorEncoding),
-      createdAtMs: params.nowMs,
-      expiresAtMs: params.ttlMs !== undefined ? params.nowMs + params.ttlMs : undefined,
+  for (let start = 0; start < params.keys.length; start += batchSize) {
+    const keys = params.keys.slice(start, start + batchSize);
+    const texts = params.texts.slice(start, start + batchSize);
+
+    // No `signal` here on purpose — see the module doc above.
+    const vectors = await params.embed({
+      texts,
+      model: params.model,
+      dimensions: params.requestedDimensions,
+      signal: undefined,
     });
+    validateEmbedResult(vectors, keys.length, params.vectorEncoding, params.requestedDimensions);
+
+    const batchVectors = new Map<string, EmbeddingVector>();
+    const batchEntries: StoredEmbedding[] = [];
+    for (let index = 0; index < keys.length; index += 1) {
+      const key = keys[index] as string;
+      const text = texts[index] as string;
+      const vector = vectors[index] as EmbeddingVector;
+      batchVectors.set(key, vector);
+      batchEntries.push({
+        cacheKey: key,
+        namespace: params.namespace,
+        modelId: params.model,
+        textHash: hashText(text),
+        textValue: params.storeText ? text : undefined,
+        dimensions: vector.length,
+        vectorEncoding: params.vectorEncoding,
+        vectorBlob: encodeVector(vector, params.vectorEncoding),
+        createdAtMs: params.nowMs,
+        expiresAtMs: params.ttlMs !== undefined ? params.nowMs + params.ttlMs : undefined,
+      });
+    }
+
+    params.onBatch({ vectors: batchVectors, storedEntries: batchEntries });
+
+    for (const [key, vector] of batchVectors) vectorMap.set(key, vector);
+    for (const entry of batchEntries) storedEntries.push(entry);
   }
 
   return { vectors: vectorMap, storedEntries };

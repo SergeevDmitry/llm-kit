@@ -73,6 +73,17 @@ export function validateOptionalDurationMs(value: number | undefined, label: str
   }
 }
 
+/** A count, not a duration: zero would mean "send nothing" and loop forever. */
+export function validateOptionalPositiveInteger(value: number | undefined, label: string): void {
+  if (value === undefined) return;
+  if (typeof value !== 'number' || !Number.isSafeInteger(value) || value < 1) {
+    throw new VectorCacheError(
+      `${label} must be a positive safe integer when provided (got ${String(value)})`,
+      'INVALID_INPUT',
+    );
+  }
+}
+
 /**
  * `encoding` is optional so callers who don't yet know the target encoding
  * (or genuinely don't care, e.g. a future codec-agnostic caller) still get
