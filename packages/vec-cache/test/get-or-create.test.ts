@@ -271,7 +271,10 @@ describe('VectorCache.getOrCreate', () => {
 
     it('omitting it keeps one call for the whole miss set', async () => {
       const counting = createCountingEmbed();
-      const result = await cache.getOrCreate(['a', 'b', 'c'], { model: 'm', embed: counting.embed });
+      const result = await cache.getOrCreate(['a', 'b', 'c'], {
+        model: 'm',
+        embed: counting.embed,
+      });
       expect(counting.callCount()).toBe(1);
       expect(result.report.embedCallCount).toBe(1);
     });
