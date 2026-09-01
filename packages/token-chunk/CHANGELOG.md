@@ -1,5 +1,26 @@
 # token-chunk
 
+## 1.2.0
+
+### Minor Changes
+
+- 628c1b7: Add `TextChunk.syntheticPrefixLength: number`, how many leading characters of `chunk.text` were synthesized rather than sliced out of the input (a rendered heading breadcrumb, a repeated table header, or both) — so `chunk.text.slice(chunk.syntheticPrefixLength)` is exactly the documented source reconstruction, and a consumer can strip the non-source-backed part before hashing, deduplicating or mapping a position back to an input offset without re-deriving the prefix. It is `0` when nothing was prepended, including when a prefix was dropped to keep the chunk within budget.
+
+### Patch Changes
+
+- 0c727b4: Keep a table row's trailing newline when the row itself has to be split. The
+  row unit was built from the bare line, one character short of the extent
+  `bodySpans` records, so that newline landed in no chunk's `text` and in no
+  chunk's `source` range: the chunk stopped reconstructing its own source slice,
+  and the row ran straight into whatever unit packed after it.
+- eba51b9: Stop dropping a split table's header row. When the header fit the budget on its
+  own but not alongside the first body row, that row was split out on a path that
+  bypassed the only code emitting the header as text — so the header and
+  separator lines appeared in no chunk's `text` **and** in no chunk's `source`
+  range, leaving retrieved rows with no column names. The header is now emitted
+  once as its own source-backed chunk, and every fragment of that row repeats it
+  as a synthetic prefix, as documented.
+
 ## 1.1.0
 
 ### Minor Changes
