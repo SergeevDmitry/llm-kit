@@ -135,6 +135,11 @@ export function packLeafUnits(
       tokenCount: assembled.tokenCount,
       tokenizerId: resolved.tokenizer.id,
       source: { charStart: sourceCharStart, charEnd: sourceCharEnd },
+      // `assembled.usedPrefix`, not `prefixText.length` on its own:
+      // `assembleWithinBudget` drops the prefix (last, after overlap and
+      // trailing units) when the chunk would otherwise exceed the budget, and
+      // this field describes the `text` that is actually returned.
+      syntheticPrefixLength: assembled.usedPrefix ? prefixText.length : 0,
       headings,
       kinds,
       overlap: assembled.usedOverlap

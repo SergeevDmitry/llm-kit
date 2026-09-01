@@ -85,7 +85,9 @@ randomly generated documents and budgets (`fast-check`, seeded):
   When a prefix is rendered (`includeHeadingTextInContent: true`, or a
   repeated table header), it comes first in `chunk.text` and is never part
   of `source` — the source-backed portion still reconstructs exactly as a
-  suffix.
+  suffix, and `chunk.syntheticPrefixLength` says exactly where it starts:
+  `chunk.text.slice(chunk.syntheticPrefixLength)` is always that
+  reconstruction.
 - **Content order is preserved.** Chunks are emitted in document order with
   sequential `index` values starting at `0`.
 - **`overlapTokens` is a target maximum, never a license to exceed budget.**
@@ -146,6 +148,7 @@ interface Chunk extends TextChunk {
   tokenCount: number; // token count for `text`, per the resolved tokenizer
   tokenizerId: string; // options.tokenizer?.id ?? APPROX_TOKENIZER_ID — travels with the chunk, not just the call
   source: { charStart: number; charEnd: number }; // offsets into the ORIGINAL input
+  syntheticPrefixLength: number; // leading chars of `text` that came from no source offset — see below
   headings: readonly Heading[]; // ancestry active at the start of this chunk
   kinds: readonly BlockKind[]; // structural kinds packed into this chunk — see below
   overlap: ChunkOverlap; // { tokensFromPrevious: number; sourceCharStart?: number }
@@ -173,6 +176,29 @@ A block split across chunks (an oversized code fence or table, for instance)
 reports its kind on every chunk it spans — `kinds` describes what content is
 _present_, not whether a block is whole in this particular chunk. `kinds` is
 never empty, including for the documented over-budget exception.
+
+`chunk.syntheticPrefixLength` is how many leading characters of `chunk.text`
+this package synthesized rather than sliced out of your input — a rendered
+heading breadcrumb, a repeated table header, or both. Everything after it is
+source-backed, which turns the reconstruction guarantee above into something
+you can compute instead of re-deriving the prefix yourself:
+
+```ts
+import { chunkMarkdown } from 'token-chunk';
+
+declare const markdown: string;
+
+for (const chunk of chunkMarkdown(markdown, { maxTokens: 500 })) {
+  const sourceBacked = chunk.text.slice(chunk.syntheticPrefixLength);
+  // === input.slice(chunk.source.charStart, chunk.source.charEnd), normalized
+  const fingerprint = sourceBacked; // hash this to dedupe across re-chunks
+  void fingerprint;
+}
+```
+
+It is `0` whenever nothing was prepended — including when a prefix _would_
+have been rendered but was dropped to keep the chunk within budget, so
+stripping `syntheticPrefixLength` characters never eats real content.
 
 `Tokenizer` (re-exported from the private `@llm-kit/tokenizer` foundation,
 bundled into this package — you never install it separately):

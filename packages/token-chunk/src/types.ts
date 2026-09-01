@@ -127,6 +127,24 @@ export interface TextChunk {
    * heading prefix, if any, is not source-backed and is excluded.
    */
   readonly source: { readonly charStart: number; readonly charEnd: number };
+  /**
+   * How many leading characters of `text` were synthesized rather than taken
+   * from the source: a rendered heading breadcrumb
+   * (`includeHeadingTextInContent`), a repeated table header on a continuation
+   * chunk, or both. `0` when nothing was prepended — including when a prefix
+   * *would* have been rendered but was dropped to keep the chunk within
+   * budget, so this always describes the `text` actually returned rather than
+   * the intent.
+   *
+   * This is what makes the source-reconstruction guarantee checkable rather
+   * than merely stated: `text.slice(syntheticPrefixLength)` is always exactly
+   * `normalizeLineEndings(input.slice(source.charStart, source.charEnd))`, and
+   * `text.slice(0, syntheticPrefixLength)` is the part that corresponds to no
+   * input offsets at all. Strip it before hashing a chunk for deduplication
+   * across re-chunks, or before mapping a position in `text` back to an input
+   * offset.
+   */
+  readonly syntheticPrefixLength: number;
   /** Heading ancestry active at the start of this chunk. Empty for plain text or content before any heading. */
   readonly headings: readonly HeadingRef[];
   /**

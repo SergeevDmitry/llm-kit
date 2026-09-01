@@ -80,6 +80,7 @@ function makeChunk(
     tokenCount: 1,
     tokenizerId: 'differential-test',
     source: { charStart, charEnd },
+    syntheticPrefixLength: 0,
     headings: [],
     kinds: ['paragraph'],
     overlap: { tokensFromPrevious: 0 },

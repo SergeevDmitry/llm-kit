@@ -129,9 +129,13 @@ describe('source reconstruction (property)', () => {
           const chunks = chunkMarkdown(doc, { maxTokens, includeHeadingTextInContent: true });
           for (const chunk of chunks) {
             const slice = doc.slice(chunk.source.charStart, chunk.source.charEnd);
-            // the source-backed portion must appear as a *suffix* of chunk.text
-            // (prefix, if any, comes first and is never source-backed).
-            expect(chunk.text.endsWith(slice)).toBe(true);
+            // The source-backed portion is a *suffix* of chunk.text (the
+            // prefix, if any, comes first and is never source-backed) — and
+            // `syntheticPrefixLength` says exactly where it starts, so this
+            // is an equality rather than an `endsWith`: it also pins that the
+            // reported prefix length is neither short (leaving synthesized
+            // text in the "source" half) nor long (eating real content).
+            expect(chunk.text.slice(chunk.syntheticPrefixLength)).toBe(slice);
           }
         },
       ),
