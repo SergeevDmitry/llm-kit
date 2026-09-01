@@ -127,11 +127,21 @@ export function splitTable(
           tokenCount: headerTokens,
         });
       }
+      // The row's real extent, `unit.text.slice(relStart, relEnd)` — not the
+      // bare `row.text` line, which stops one character short of it.
+      // `bodySpans` records `relEnd` past the row's own trailing newline (and,
+      // for the last row, past any trailing blank lines `closeGaps` folded
+      // into this unit), exactly as `flush()` slices it. Splitting the bare
+      // line instead left that newline in no leaf at all: absent from every
+      // chunk's `text` and from every chunk's `source` range, so the packed
+      // chunk stopped reconstructing its own source slice and the row ran
+      // straight into whatever unit packed after it.
+      const rowText = unit.text.slice(row.relStart, row.relEnd);
       const rowUnit: DocumentUnit = {
         kind: 'table',
-        text: row.text,
+        text: rowText,
         start: row.start,
-        end: row.start + row.text.length,
+        end: row.start + rowText.length,
         headings: unit.headings,
         blockLike: false,
       };

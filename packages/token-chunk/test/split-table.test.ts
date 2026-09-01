@@ -133,13 +133,31 @@ describe('split-table edge cases', () => {
     }
   });
 
-  it('leaves no non-blank character of a table uncovered by some chunk source range', () => {
+  it('reconstructs a table exactly when the header squeeze sends every row down the row-splitting path', () => {
+    // Both rows here cost more than the budget leaves once the header is
+    // reserved, so each is split out on its own. That path used to build its
+    // unit from the bare line, one character short of the row's real extent,
+    // dropping the row-terminating newline from every chunk's `text` and from
+    // every chunk's `source` range — so a chunk stopped reconstructing its own
+    // source slice, and the row ran straight into whatever packed after it.
+    const doc =
+      '| product | qty |\n| --- | --- |\n| widget alpha model 2000 | 12 |\n| widget beta | 7 |\n';
+    const chunks = chunkMarkdown(doc, { maxTokens: 22 });
+    expect(chunks.length).toBeGreaterThan(1);
+    expect(chunks.map((chunk) => chunk.text).join('')).toBe(doc);
+    for (const chunk of chunks) {
+      const slice = normalizeLineEndings(
+        doc.slice(chunk.source.charStart, chunk.source.charEnd),
+      ).text;
+      expect(chunk.text).toBe(slice);
+    }
+  });
+
+  it('leaves no character of a table uncovered by some chunk source range', () => {
     // The union of every chunk's `source` range must cover the whole input.
-    // Non-blank only: a row-terminating newline can still fall outside every
-    // range when a single row is split at finer boundaries, which is a
-    // separate defect from losing content. Budgets are swept because the
-    // header-loss shape only appears in the band where the header fits alone
-    // but not beside the first row.
+    // Budgets are swept because both the header-loss and dropped-newline
+    // shapes only appear in the band where the header fits alone but not
+    // beside the first row.
     const docs = [
       '| product | qty |\n| --- | --- |\n| widget alpha model 2000 | 12 |\n| widget beta | 7 |\n',
       '| a | b |\n| --- | --- |\n| 1 | 2 |\n| 3 | 4 |\n',
@@ -156,13 +174,11 @@ describe('split-table edge cases', () => {
           }
         }
         for (let index = 0; index < doc.length; index += 1) {
-          if (covered[index] === 1) continue;
-          const character = doc[index] as string;
           expect(
-            character.trim(),
-            `uncovered non-blank character ${JSON.stringify(character)} at ${String(index)} ` +
+            covered[index],
+            `uncovered character ${JSON.stringify(doc[index])} at ${String(index)} ` +
               `of ${JSON.stringify(doc)} at maxTokens ${String(maxTokens)}`,
-          ).toBe('');
+          ).toBe(1);
         }
       }
     }
