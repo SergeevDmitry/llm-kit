@@ -109,4 +109,62 @@ describe('split-table edge cases', () => {
       expect(chunk.text.length).toBeGreaterThan(0);
     }
   });
+
+  it('emits the header as real, source-backed text when the first body row leaves no room for it', () => {
+    // The header fits the budget on its own (18 tokens against 22) but not
+    // alongside the first row, so that row is split out on its own and never
+    // reaches `flush()` — the only other place the header is emitted as text.
+    // Without a header leaf of its own the header/separator span appears in
+    // no chunk's `text` and in no chunk's `source` range: the column names
+    // vanish from the result, leaving rows nobody can interpret.
+    const doc =
+      '| product | qty |\n| --- | --- |\n| widget alpha model 2000 | 12 |\n| widget beta | 7 |\n';
+    const chunks = chunkMarkdown(doc, { maxTokens: 22 });
+
+    const headerChunk = chunks.find((chunk) => chunk.text.includes('| product | qty |'));
+    expect(headerChunk).toBeDefined();
+    // Source-backed, not a synthesized prefix: the reported range really is
+    // the header's own span in the input.
+    expect(doc.slice(headerChunk?.source.charStart, headerChunk?.source.charEnd)).toContain(
+      '| product | qty |\n| --- | --- |\n',
+    );
+    for (const chunk of chunks) {
+      expect(chunk.tokenCount).toBeLessThanOrEqual(22);
+    }
+  });
+
+  it('leaves no non-blank character of a table uncovered by some chunk source range', () => {
+    // The union of every chunk's `source` range must cover the whole input.
+    // Non-blank only: a row-terminating newline can still fall outside every
+    // range when a single row is split at finer boundaries, which is a
+    // separate defect from losing content. Budgets are swept because the
+    // header-loss shape only appears in the band where the header fits alone
+    // but not beside the first row.
+    const docs = [
+      '| product | qty |\n| --- | --- |\n| widget alpha model 2000 | 12 |\n| widget beta | 7 |\n',
+      '| a | b |\n| --- | --- |\n| 1 | 2 |\n| 3 | 4 |\n',
+      'Intro paragraph.\n\n| id | name |\n| --- | --- |\n| 1 | alpha beta gamma delta |\n| 2 | x |\n\nAfter.\n',
+      '# Title\n\n| k | v |\n| --- | --- |\n| one | a longer value that will not fit beside a header |\n',
+    ];
+    for (const doc of docs) {
+      for (let maxTokens = 8; maxTokens <= 40; maxTokens += 2) {
+        const chunks = chunkMarkdown(doc, { maxTokens });
+        const covered = new Uint8Array(doc.length);
+        for (const chunk of chunks) {
+          for (let index = chunk.source.charStart; index < chunk.source.charEnd; index += 1) {
+            covered[index] = 1;
+          }
+        }
+        for (let index = 0; index < doc.length; index += 1) {
+          if (covered[index] === 1) continue;
+          const character = doc[index] as string;
+          expect(
+            character.trim(),
+            `uncovered non-blank character ${JSON.stringify(character)} at ${String(index)} ` +
+              `of ${JSON.stringify(doc)} at maxTokens ${String(maxTokens)}`,
+          ).toBe('');
+        }
+      }
+    }
+  });
 });

@@ -5,6 +5,11 @@
  * `syntheticPrefix` rather than baking it into `text` — the header is a real
  * substring of the source only in the first piece; later pieces render it
  * as non-source-backed content, exactly like a heading breadcrumb.
+ *
+ * Whichever path runs, exactly one piece covers the header's own source span:
+ * the first piece `flush()` emits (header baked into `text`), or — when the
+ * first body row is oversized and never reaches `flush()` — a header-only
+ * leaf emitted by the row-splitting branch below.
  */
 import type { DocumentUnit, LeafUnit } from '../document/types.js';
 import type { ChunkDiagnostic, HardBoundary, Tokenizer } from '../types.js';
@@ -92,6 +97,36 @@ export function splitTable(
       // A single row alone doesn't fit even with the header reserved: split
       // the row itself at finer boundaries, each as its own piece (no header
       // repetition inside a single logical row).
+      //
+      // Emit the header block itself first when nothing has emitted it yet.
+      // `flush()` is the only other place that does, and it only bakes the
+      // header into `text` for the *first* piece — so when the first body row
+      // takes this branch, `flush()` has never run, every fragment below
+      // carries the header as a non-source-backed `syntheticPrefix`, and the
+      // header/separator span ends up in no chunk's `text` *and* in no
+      // chunk's `source` range: those characters disappear from the result
+      // entirely, taking the column names with them. It is not an
+      // oversized-table edge case either — it fires whenever
+      // `header + first row` exceeds the budget while the header alone fits,
+      // which is routine at retrieval-sized budgets.
+      //
+      // A separate leaf, not `headerBlock + fragment.text` the way `flush()`
+      // bakes it in: `splitOversizedUnit` already sized that fragment against
+      // the whole budget, so prepending the header could push it over.
+      // `headerTokens < hardBudget` is guaranteed above, so this leaf always
+      // fits on its own, and having no `syntheticPrefix` lets `packLeafUnits`
+      // pack it together with whatever precedes the table.
+      if (pieces.length === 0) {
+        pieces.push({
+          kind: 'table',
+          text: headerBlock,
+          start: unit.start,
+          end: unit.start + headerBlock.length,
+          headings: unit.headings,
+          blockLike: true,
+          tokenCount: headerTokens,
+        });
+      }
       const rowUnit: DocumentUnit = {
         kind: 'table',
         text: row.text,
@@ -106,7 +141,10 @@ export function splitTable(
         hardBoundary,
         diagnostics,
       })) {
-        pieces.push(pieces.length === 0 ? piece : { ...piece, syntheticPrefix: headerBlock });
+        // Every fragment repeats the header as a synthetic prefix — including
+        // the first, which the header leaf above has already emitted as real,
+        // source-backed text.
+        pieces.push({ ...piece, syntheticPrefix: headerBlock });
       }
       continue;
     }
