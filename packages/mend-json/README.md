@@ -234,6 +234,8 @@ export interface JsonMendResult<T = unknown> {
   readonly validPrefixLength: number;
   /** The literal closing text appended to make `repairedJson` parseable. */
   readonly appendedSuffix: string;
+  /** Half-open `[start, end)` ranges cut out from *inside* the valid prefix. */
+  readonly removedRanges: readonly (readonly [number, number])[];
   /** Every repair action behind this snapshot, oldest first. Always JSON-serializable. */
   readonly diagnostics: readonly JsonMendDiagnostic[];
   /** Which part is still incomplete - see "What is still incomplete" below. */
@@ -375,6 +377,35 @@ mendJson('{"a":1,"a":2}', { duplicateKeyPolicy: 'error' });
 // throws JsonMendDuplicateKeyError({ code: 'DUPLICATE_KEY', key: 'a' })
 ```
 
+`'first'` is the one policy that drops text from the _middle_ of the valid
+prefix rather than truncating at the end of it, so it is the one case where
+`validPrefixLength` alone does not describe the output. `removedRanges` says
+which ranges were cut, and completes the identity a caller slicing the raw
+buffer themselves needs:
+
+```ts
+import { mendJson } from 'mend-json';
+
+const input = '{"a":1,"a":2,"b":3}';
+const r = mendJson(input, { duplicateKeyPolicy: 'first' });
+
+r.repairedJson; // '{"a":1,"b":3}'
+r.removedRanges; // [[6, 12]] - the repeated member, comma included
+input.slice(0, r.validPrefixLength) + r.appendedSuffix; // the whole input, duplicate and all
+
+let rebuilt = '';
+let cursor = 0;
+for (const [start, end] of r.removedRanges) {
+  rebuilt += input.slice(cursor, start);
+  cursor = end;
+}
+rebuilt += input.slice(cursor, r.validPrefixLength) + r.appendedSuffix;
+rebuilt === r.repairedJson; // true
+```
+
+The ranges are sorted, non-overlapping, and empty under every other policy
+and repair.
+
 ### Incomplete scalars - `'omit'` vs. `'best-effort'`
 
 Under the default `'omit'`, a number or literal that hasn't been confirmed by
@@ -410,7 +441,7 @@ mendJson('{"n":01', { incompleteScalarPolicy: 'best-effort' }).value;
 // {} - "01" is invalid, not truncated: nothing to trim back to
 ```
 
-Both halves require the input to still be a *prefix* of something legal. A
+Both halves require the input to still be a _prefix_ of something legal. A
 character that contradicted the value - `01`, `1.x`, `tru5` - is a syntax
 error, not a truncation, so it is omitted under `'best-effort'` exactly as
 under `'omit'`.
@@ -689,8 +720,8 @@ back to a manual, deterministic decoder otherwise.
 - Retained duplicate-key diagnostics (`'duplicate-key-skipped'`) are capped
   at 1,000 per mender regardless of `maxBufferBytes` or `includeDiagnostics`
   - see [Diagnostics](#diagnostics). The repair itself (dropping the
-  duplicate from the parsed value) is never capped or skipped; only how many
-  of those repairs get an individually-reported diagnostic entry is.
+    duplicate from the parsed value) is never capped or skipped; only how many
+    of those repairs get an individually-reported diagnostic entry is.
 - The internal bookkeeping needed to _apply_ that repair
   (`excludedRanges`, one entry per dropped duplicate) is **not** capped the
   same way - it can't be without putting dropped duplicates back into

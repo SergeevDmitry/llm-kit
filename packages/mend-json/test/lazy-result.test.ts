@@ -20,6 +20,7 @@ describe('lazy value/repairedJson: transparent to a normal consumer', () => {
         'complete',
         'diagnostics',
         'pending',
+        'removedRanges',
         'repairedJson',
         'validPrefixLength',
         'value',

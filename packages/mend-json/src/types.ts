@@ -134,8 +134,26 @@ export interface JsonMendResult<T = unknown> {
   readonly complete: boolean;
   /** Count of input characters (UTF-16 code units) that contributed to this snapshot's valid prefix. */
   readonly validPrefixLength: number;
-  /** The literal closing text appended after `validPrefixLength` to make `repairedJson` parseable. */
+  /**
+   * The literal closing text appended after `validPrefixLength` to make
+   * `repairedJson` parseable. Together with {@link removedRanges} this
+   * states an identity a caller slicing the raw buffer themselves can rely
+   * on: `input.slice(0, validPrefixLength)`, with every range in
+   * `removedRanges` cut out, followed by `appendedSuffix`, is exactly
+   * `repairedJson`.
+   */
   readonly appendedSuffix: string;
+  /**
+   * Half-open `[start, end)` ranges of the input that `repairedJson` leaves
+   * out from *inside* `validPrefixLength`, sorted and non-overlapping.
+   *
+   * Only `duplicateKeyPolicy: 'first'` produces any: a repeated member is
+   * scanned normally, to keep nesting correct, and then cut. Empty for every
+   * other repair, where truncating at `validPrefixLength` is the whole
+   * story. A caller rendering incrementally from its own buffer slice needs
+   * these, or it will show a member this package reports as dropped.
+   */
+  readonly removedRanges: readonly (readonly [number, number])[];
   /** Every repair action that produced this snapshot, oldest first. Always JSON-serializable. */
   readonly diagnostics: readonly JsonMendDiagnostic[];
   /**

@@ -199,7 +199,12 @@ function decideLeaf(
 function mergeRanges(ranges: readonly (readonly [number, number])[]): [number, number][] {
   if (ranges.length === 0) return [];
   const sorted = [...ranges].sort((a, b) => a[0] - b[0]);
-  const merged: [number, number][] = [sorted[0] as [number, number]];
+  // Copy the first tuple rather than seating it in `merged` directly: the
+  // loop below widens `last[1]` in place, which on the original would mutate
+  // a tuple `state.excludedRanges` still owns (breaking `buildSnapshot`'s
+  // purity) and hand the same aliased tuple out through `removedRanges`.
+  const first = sorted[0] as readonly [number, number];
+  const merged: [number, number][] = [[first[0], first[1]]];
   for (let i = 1; i < sorted.length; i += 1) {
     const [start, end] = sorted[i] as [number, number];
     const last = merged[merged.length - 1] as [number, number];
@@ -233,24 +238,33 @@ function findActiveSuppression(
   return undefined;
 }
 
-/** Concatenates `buffer[0, sliceEnd)`, skipping any excluded sub-range. */
+/** Nothing was cut out: a shared empty array, so the common case allocates none. */
+const NO_REMOVED_RANGES: readonly (readonly [number, number])[] = [];
+
+/**
+ * Concatenates `buffer[0, sliceEnd)`, skipping any excluded sub-range, and
+ * reports the ranges it skipped (already merged and sorted) so a caller can
+ * reproduce the same cut from the raw buffer. The ranges are a by-product of
+ * building the text, not extra work.
+ */
 function sliceWithExclusions(
   buffer: string,
   sliceEnd: number,
   excludedRanges: readonly [number, number][],
-): string {
+): { readonly text: string; readonly removed: readonly (readonly [number, number])[] } {
   const relevant = excludedRanges.filter(([, end]) => end <= sliceEnd);
   if (relevant.length === 0) {
-    return buffer.slice(0, sliceEnd);
+    return { text: buffer.slice(0, sliceEnd), removed: NO_REMOVED_RANGES };
   }
+  const merged = mergeRanges(relevant);
   let out = '';
   let cursor = 0;
-  for (const [start, end] of mergeRanges(relevant)) {
+  for (const [start, end] of merged) {
     out += buffer.slice(cursor, start);
     cursor = end;
   }
   out += buffer.slice(cursor, sliceEnd);
-  return out;
+  return { text: out, removed: merged };
 }
 
 /**
@@ -311,6 +325,7 @@ export function buildSnapshot<T>(
       appendedSuffix: '',
       diagnostics: [],
       pending: undefined,
+      removedRanges: NO_REMOVED_RANGES,
     };
   }
 
@@ -438,18 +453,27 @@ export function buildSnapshot<T>(
   // reading every intermediate result never pays for the results it never
   // looked at, while a caller that *does* read `value`/`repairedJson` on
   // every push sees no difference in behavior - only in when the cost lands.
-  let cached: { readonly value: T | undefined; readonly json: string | undefined } | undefined;
-  function resolve(): { readonly value: T | undefined; readonly json: string | undefined } {
+  interface Resolved {
+    readonly value: T | undefined;
+    readonly json: string | undefined;
+    readonly removedRanges: readonly (readonly [number, number])[];
+  }
+  let cached: Resolved | undefined;
+  function resolve(): Resolved {
     if (cached === undefined) {
-      const repairedJson =
-        sliceWithExclusions(buffer, sliceEnd, state.excludedRanges) + appendedSuffix;
+      const { text, removed } = sliceWithExclusions(buffer, sliceEnd, state.excludedRanges);
+      const repairedJson = text + appendedSuffix;
       try {
-        cached = { value: JSON.parse(repairedJson) as T, json: repairedJson };
+        cached = {
+          value: JSON.parse(repairedJson) as T,
+          json: repairedJson,
+          removedRanges: removed,
+        };
       } catch {
         // Every reachable `leaf` branch produces text that parses; this is a
         // last-resort guard so a scanner defect degrades to "no value"
         // instead of throwing out of a read-only call.
-        cached = { value: undefined, json: undefined };
+        cached = { value: undefined, json: undefined, removedRanges: removed };
       }
     }
     return cached;
@@ -460,8 +484,7 @@ export function buildSnapshot<T>(
   // `complete`, not once the scanner froze on invalid input (nothing more
   // will ever be scanned), and not for a leaf inside a suppressed duplicate
   // member, which never reaches `value` at all.
-  const pending =
-    complete || state.errored || suppressed ? undefined : describePending(state);
+  const pending = complete || state.errored || suppressed ? undefined : describePending(state);
 
   const result = {
     complete,
@@ -479,6 +502,15 @@ export function buildSnapshot<T>(
     enumerable: true,
     configurable: true,
     get: () => resolve().json,
+  });
+  // Lazy for the same reason as the two above: the filter+merge over
+  // `state.excludedRanges` is the cost `resolve()` exists to defer, and
+  // computing it eagerly would charge every `push()` for a field most
+  // callers never read.
+  Object.defineProperty(result, 'removedRanges', {
+    enumerable: true,
+    configurable: true,
+    get: () => resolve().removedRanges,
   });
   return result;
 }
