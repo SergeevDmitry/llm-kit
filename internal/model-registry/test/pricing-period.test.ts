@@ -6,10 +6,14 @@ import type { PricingPeriod } from '../src/types.js';
 const SOURCE_URL = 'https://platform.claude.com/docs/en/about-claude/models/overview';
 const OBSERVED_AT = '2026-08-05';
 
-// The real claude-sonnet-5 shape from docs/provider-data/anthropic.json: an
-// introductory rate through 2026-08-31, then the standard rate from
-// 2026-09-01. This is the brief's mandated golden fixture for effective-date
-// selection — the two most important boundary dates are asserted explicitly.
+// The two-period shape claude-sonnet-5 carried in
+// docs/provider-data/anthropic.json until 2026-09-07, when Anthropic
+// cancelled the scheduled increase and the model collapsed to one open
+// period. Kept verbatim as a synthetic fixture: it is the clearest shape for
+// exercising effective-date selection, and pinning it here means these unit
+// assertions no longer move when provider data does. The equivalent
+// assertions over real registry data live in generated-registry.test.ts,
+// against google:gemini-3.6-flash and openai:gpt-5.6-sol.
 const SONNET_5_PERIODS: readonly PricingPeriod[] = [
   {
     effectiveFrom: '2026-01-01',

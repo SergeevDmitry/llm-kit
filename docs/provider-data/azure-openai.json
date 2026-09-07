@@ -375,18 +375,20 @@
           "cacheWrite": "6.25",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-09-07",
           "notes": [
             "retailPrice confirmed identical across all 24 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
             "No Batch API meter was found for this model/SKU in the Retail Prices API response; batchMultiplier is intentionally omitted rather than assumed.",
-            "Matches OpenAI's own first-party rate for \"gpt-5.6-sol\" in openai.json exactly as observed ($5.00/$30.00/$0.50 cached) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"gpt-5.6-sol\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "canonicalId \"gpt-5.6-sol\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there.",
+            "Re-observed 2026-09-07 via the Retail Prices API filtered to this model's meters (\"5.6 sol ShortCo Inp Std Gl\" $5.00, \"5.6 sol ShortCo Opt Std Gl\" $30.00, \"5.6 sol ShortCo Cd Inp Std Gl\" $0.50): unchanged.",
+            "NOW DIFFERS from OpenAI's own first-party rate in openai.json for the same canonicalId \"gpt-5.6-sol\". Both files recorded $5.00/$30.00/$0.50 on 2026-08-05; on 2026-09-07 OpenAI's pricing page published $4.00/$20.00/$0.40 while Azure's meters stayed at $5.00/$30.00/$0.50. Azure did not follow the first-party cut, so this joins gpt-5.6-terra and gpt-5.6-luna as a confirmed same-id price divergence rather than a transcription error.",
+            "The API also exposes \"LongCo\" (long-context) meters for this model at $10.00 input / $45.00 output Global Standard, alongside the \"ShortCo\" rates recorded here - the same context tiering OpenAI's page labels \"<272K\". This schema has no context-length dimension, so only the ShortCo tier is recorded."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-09-07"
       }
     },
     {
@@ -973,6 +975,8 @@
     "Az-Babbage-002 and Az-Davinci-002 (base and fine-tuned) were left out: these legacy completion-style models are priced as a single undifferentiated meter on Azure's page rather than Azure's usual separate input/output meters, which did not map cleanly onto this schema's required distinct input/output fields without guessing a split.",
     "gpt-35-turbo-Instruct (the completion-style, non-chat instruct variant) and the older gpt-35-turbo '16K'/'16K-1106' and gpt-4-turbo-Vision-128K SKUs were left out in favor of the single current gpt-3.5-turbo (16K-0125) and gpt-4-turbo (128K, non-vision) entries recorded below, to avoid multiplying near-duplicate legacy snapshots of uncertain current relevance.",
     "gpt-4.5 (Azure SKU '4.5 0227') was left out: it is not on OpenAI's current pricing page (not in openai.json) and its preview/deprecation status as of 2026-08-05 was not independently confirmed, so a price was not recorded rather than guessed at its current availability.",
-    "Provisioned Throughput / Provisioned Managed (Global/Data Zone/Regional) SKUs are a reserved-capacity billing model (priced per PTU-hour, not per token) and are out of scope for this per-token schema."
+    "Provisioned Throughput / Provisioned Managed (Global/Data Zone/Regional) SKUs are a reserved-capacity billing model (priced per PTU-hour, not per token) and are out of scope for this per-token schema.",
+    "2026-09-07 pass: only gpt-5.6-sol was re-observed, via a Retail Prices API query filtered to its own meters (504 rows across regions and tiers). The other 31 models keep their 2026-08-05 observedAt because they were not re-fetched - re-paging the full ~20,000-row result set is a separate exercise, and stamping a fresh observation date on a rate nobody looked at would be the exact failure this file's provenance fields exist to prevent.",
+    "No Azure OpenAI GPT6 product exists as of 2026-09-07: a Retail Prices API query for productName containing \"GPT6\" returned zero rows, so OpenAI's new first-party gpt-6-astra has no Azure entry. Confirmed absence, not an unchecked gap."
   ]
 }

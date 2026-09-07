@@ -72,27 +72,29 @@ try {
   }
 }
 
-// --- 3. Historical lookup: claude-sonnet-5's expiring introductory rate ---
+// --- 3. Historical lookup: gemini-3.6-flash's promotional rate ---
+// Google publishes both boundary dates: the promotional rate runs through
+// 2026-12-31, and the standard rate resumes 2027-01-01.
 
-const introRate = calculateCost({
-  model: 'claude-sonnet-5',
-  provider: 'anthropic',
+const promotionalRate = calculateCost({
+  model: 'gemini-3.6-flash',
+  provider: 'google',
   usage: { inputTokens: 1_000_000, outputTokens: 1_000_000 },
-  at: '2026-08-15', // before the 2026-09-01 boundary
+  at: '2026-11-01', // inside the promotional window
 });
 const standardRate = calculateCost({
-  model: 'claude-sonnet-5',
-  provider: 'anthropic',
+  model: 'gemini-3.6-flash',
+  provider: 'google',
   usage: { inputTokens: 1_000_000, outputTokens: 1_000_000 },
-  at: '2026-09-15', // after the boundary
+  at: '2027-01-15', // after the boundary
 });
 
-console.log('\n--- claude-sonnet-5: introductory vs. standard rate ---');
+console.log('\n--- gemini-3.6-flash: promotional vs. standard rate ---');
 console.log(
-  `2026-08-15: $${introRate.totalUsdExact} (effective from ${introRate.pricingEffectiveFrom})`,
+  `2026-11-01: $${promotionalRate.totalUsdExact} (effective from ${promotionalRate.pricingEffectiveFrom})`,
 );
 console.log(
-  `2026-09-15: $${standardRate.totalUsdExact} (effective from ${standardRate.pricingEffectiveFrom})`,
+  `2027-01-15: $${standardRate.totalUsdExact} (effective from ${standardRate.pricingEffectiveFrom})`,
 );
 
 // --- 4. A negotiated-rate override ---

@@ -17,7 +17,8 @@
           "observedAt": "2026-08-05",
           "notes": [
             "Groq's docs page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "No prompt-caching or Batch API discount is documented for Groq in the fetched page, so cachedInput and batchMultiplier are omitted rather than assumed."
+            "No prompt-caching or Batch API discount is documented for Groq in the fetched page, so cachedInput and batchMultiplier are omitted rather than assumed.",
+            "Not surfaced by the 2026-09-07 fetch of the same page, which listed only the gpt-oss and Qwen models with per-token prices. observedAt is deliberately left at 2026-08-05: the rate was not re-observed, and an absence in one page fetch is not evidence of a withdrawal. Re-check before relying on this entry."
           ]
         }
       ],
@@ -43,7 +44,8 @@
           "notes": [
             "Groq's docs page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
             "No prompt-caching or Batch API discount is documented for Groq in the fetched page, so cachedInput and batchMultiplier are omitted rather than assumed.",
-            "This is Groq's own hosted rate for the same open-weight model Together AI also hosts (see together.json's llama-3.3-70b at a different, higher price) and AWS Bedrock resells — each host prices it independently; do not assume parity."
+            "This is Groq's own hosted rate for the same open-weight model Together AI also hosts (see together.json's llama-3.3-70b at a different, higher price) and AWS Bedrock resells — each host prices it independently; do not assume parity.",
+            "Not surfaced by the 2026-09-07 fetch of the same page, which listed only the gpt-oss and Qwen models with per-token prices. observedAt is deliberately left at 2026-08-05: the rate was not re-observed, and an absence in one page fetch is not evidence of a withdrawal. Re-check before relying on this entry."
           ]
         }
       ],
@@ -65,17 +67,18 @@
           "input": "0.15",
           "output": "0.60",
           "sourceUrl": "https://console.groq.com/docs/models",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-09-07",
           "notes": [
             "Groq's docs page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
             "No prompt-caching or Batch API discount is documented for Groq in the fetched page.",
-            "OpenAI's open-weight gpt-oss-120b model, hosted independently by Groq under Groq's own rate card (also hosted by Together AI, at the same $0.15/$0.60 rate as observed — coincidental agreement, not assumed parity)."
+            "OpenAI's open-weight gpt-oss-120b model, hosted independently by Groq under Groq's own rate card (also hosted by Together AI, at the same $0.15/$0.60 rate as observed — coincidental agreement, not assumed parity).",
+            "Re-confirmed unchanged on 2026-09-07 against the same page."
           ]
         }
       ],
       "source": {
         "url": "https://console.groq.com/docs/models",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-09-07"
       }
     },
     {
@@ -91,17 +94,18 @@
           "input": "0.075",
           "output": "0.30",
           "sourceUrl": "https://console.groq.com/docs/models",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-09-07",
           "notes": [
             "Groq's docs page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
             "No prompt-caching or Batch API discount is documented for Groq in the fetched page.",
-            "Also hosted by Together AI at a different rate ($0.05/$0.20 as observed) — each host prices it independently; do not assume parity."
+            "Also hosted by Together AI at a different rate ($0.05/$0.20 as observed) — each host prices it independently; do not assume parity.",
+            "Re-confirmed unchanged on 2026-09-07 against the same page."
           ]
         }
       ],
       "source": {
         "url": "https://console.groq.com/docs/models",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-09-07"
       }
     },
     {
@@ -117,16 +121,43 @@
           "input": "0.60",
           "output": "3.00",
           "sourceUrl": "https://console.groq.com/docs/models",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-09-07",
           "notes": [
             "Listed under Groq's \"Preview\" models section, not \"Production\" — preview models on Groq are explicitly subject to change or removal without notice. Included because a real price was published, but treat this one as less stable than the production-tier entries in this file.",
-            "Groq's docs page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
+            "Groq's docs page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "Re-confirmed unchanged on 2026-09-07 against the same page."
           ]
         }
       ],
       "source": {
         "url": "https://console.groq.com/docs/models",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-09-07"
+      }
+    },
+    {
+      "canonicalId": "qwen3.8-27b",
+      "provider": "groq",
+      "aliases": ["qwen/qwen3.8-27b"],
+      "family": "qwen3.8",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-09-07",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.80",
+          "output": "4.00",
+          "sourceUrl": "https://console.groq.com/docs/models",
+          "observedAt": "2026-09-07",
+          "notes": [
+            "New model: absent from this page on 2026-08-05, present on 2026-09-07. effectiveFrom is the observation date rather than this file's conservative 2026-01-01, since the earlier fetch proves it was not listed then.",
+            "Marked Preview on Groq's page - less stable than a Production model, and its price may move accordingly.",
+            "No cached-input rate and no batch discount are published for Groq models; both fields are omitted rather than guessed."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://console.groq.com/docs/models",
+        "observedAt": "2026-09-07"
       }
     }
   ],
@@ -134,6 +165,7 @@
     "Audio models (Whisper, Whisper Large V3 Turbo, Canopy Labs Orpheus TTS variants) are priced per-hour-of-audio or per-1M-characters on Groq's page, not per-million-tokens — this schema's PricingPeriod is text-token-oriented, so these are left out rather than misrepresented under the wrong unit.",
     "Llama Prompt Guard 2 (22M/86M) are safety-classifier models, not general chat/completion models, and were left out as out of scope for representative coverage.",
     "\"Compound\" and \"Compound Mini\" (Groq's agentic systems) and \"MiniMax M2.7\" showed no price (\"—\" or \"Contact Sales\") on the fetched page and are left out per the never-guess rule.",
-    "This is a representative subset of Groq's Production + one Preview model, not exhaustive; confirm against https://console.groq.com/docs/models for the current full list before adding more."
+    "openai/gpt-oss-safeguard-20b ($0.075 / $0.30, Preview) is excluded on the same grounds as Llama Prompt Guard 2: it is a safety-classifier model, not a general chat/completion model.",
+    "This remains a representative subset rather than Groq's exhaustive catalogue; confirm against https://console.groq.com/docs/models before adding more. As of 2026-09-07 the two Llama chat models in this file were not surfaced by the fetch - see their per-period notes."
   ]
 }

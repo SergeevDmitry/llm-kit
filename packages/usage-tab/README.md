@@ -475,21 +475,21 @@ prevent.
 
 Every price carries an `effectiveFrom` (and, when superseded, an
 `effectiveTo`) date. `calculateCost`'s `at` picks the period active on that
-date — `claude-sonnet-5`'s real introductory rate is the mandated golden
-fixture for this behavior:
+date - `gemini-3.6-flash`'s real promotional rate, whose start and end
+Google publishes, is the golden fixture for this behavior:
 
 ```ts
 import { calculateCost } from 'usage-tab';
 
 const usage = { inputTokens: 1_000_000, outputTokens: 1_000_000 };
 
-calculateCost({ model: 'claude-sonnet-5', provider: 'anthropic', usage, at: '2026-08-15' })
+calculateCost({ model: 'gemini-3.6-flash', provider: 'google', usage, at: '2026-11-01' })
   .totalUsdExact;
-// "12.00" — the introductory rate ($2.00/$10.00), active through 2026-08-31
+// "4.50" - the promotional rate ($0.75/$3.75), published as running through 2026-12-31
 
-calculateCost({ model: 'claude-sonnet-5', provider: 'anthropic', usage, at: '2026-09-15' })
+calculateCost({ model: 'gemini-3.6-flash', provider: 'google', usage, at: '2027-01-15' })
   .totalUsdExact;
-// "18.00" — the standard rate ($3.00/$15.00), effective 2026-09-01
+// "9.00" - the standard rate ($1.50/$7.50), resuming 2027-01-01
 ```
 
 Period boundaries are UTC midnights, so **every ISO `at` string is read as

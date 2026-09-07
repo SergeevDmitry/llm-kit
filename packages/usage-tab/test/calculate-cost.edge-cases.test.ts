@@ -265,9 +265,9 @@ describe('cached/cache-write tokens with no dedicated rate (groq has neither)', 
 
 describe('a pricing correction landing with an earlier effective date', () => {
   it('selectPeriodOrThrow still resolves the latest-effectiveFrom period covering the lookup date', () => {
-    // claude-sonnet-5's introductory period (2026-01-01..2026-09-01) already
-    // demonstrates this at the registry level; here we assert the same
-    // behavior end-to-end through calculateCost.
+    // gemini-3.6-flash's three periods demonstrate this at the registry
+    // level; here we assert the same behavior end-to-end through
+    // calculateCost, on a model with a single open-ended period.
     const early = calculateCost({
       model: 'claude-sonnet-5',
       provider: 'anthropic',

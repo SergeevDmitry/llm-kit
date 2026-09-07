@@ -57,10 +57,10 @@ describe('golden calculation — batch mode halves every line via batchMultiplie
   });
 });
 
-describe('golden calculation — cache-write tokens (anthropic:claude-sonnet-5, standard rate)', () => {
+describe('golden calculation - cache-write tokens (anthropic:claude-sonnet-4-6)', () => {
   it('bills ordinary input, cached input, cache-write, and output on four lines', () => {
     const result = calculateCost({
-      model: 'claude-sonnet-5',
+      model: 'claude-sonnet-4-6',
       provider: 'anthropic',
       usage: {
         inputTokens: 10_000, // 7,000 ordinary + 2,000 cached + 1,000 cache-write
@@ -68,10 +68,10 @@ describe('golden calculation — cache-write tokens (anthropic:claude-sonnet-5, 
         cachedInputTokens: 2_000,
         cacheWriteTokens: 1_000,
       },
-      at: '2026-09-15', // standard rate: $3.00/$15.00, cachedInput $0.30, cacheWrite $3.75
+      at: '2026-09-15', // $3.00/$15.00, cachedInput $0.30, cacheWrite $3.75
     });
 
-    expect(result.pricingEffectiveFrom).toBe('2026-09-01');
+    expect(result.pricingEffectiveFrom).toBe('2026-01-01');
     expect(result.input.tokens).toBe(7_000);
     expect(result.cachedInput?.tokens).toBe(2_000);
     expect(result.cacheWrite?.tokens).toBe(1_000);
@@ -82,6 +82,32 @@ describe('golden calculation — cache-write tokens (anthropic:claude-sonnet-5, 
     expect(result.cacheWrite?.costUsdExact).toBe('0.00375');
     expect(result.output.costUsdExact).toBe('0.03');
     expect(result.totalUsdExact).toBe('0.05535');
+  });
+
+  it('the same four lines on claude-sonnet-5, whose rate no longer moves on 2026-09-01', () => {
+    // Kept because this used to be the sonnet-5 fixture at its (cancelled)
+    // standard rate. At $2.00/$10.00/$0.20/$2.50 the same request is cheaper,
+    // and the numbers here are what a caller pricing September usage gets.
+    const result = calculateCost({
+      model: 'claude-sonnet-5',
+      provider: 'anthropic',
+      usage: {
+        inputTokens: 10_000,
+        outputTokens: 2_000,
+        cachedInputTokens: 2_000,
+        cacheWriteTokens: 1_000,
+      },
+      at: '2026-09-15',
+    });
+
+    expect(result.pricingEffectiveFrom).toBe('2026-01-01');
+    // input: 7000*2.00/1e6 = 0.014; cachedInput: 2000*0.20/1e6 = 0.0004;
+    // cacheWrite: 1000*2.50/1e6 = 0.0025; output: 2000*10.00/1e6 = 0.02.
+    expect(result.input.costUsdExact).toBe('0.014');
+    expect(result.cachedInput?.costUsdExact).toBe('0.0004');
+    expect(result.cacheWrite?.costUsdExact).toBe('0.0025');
+    expect(result.output.costUsdExact).toBe('0.02');
+    expect(result.totalUsdExact).toBe('0.0369');
   });
 });
 

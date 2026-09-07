@@ -4,7 +4,7 @@
     {
       "canonicalId": "mistral-medium-3.5",
       "provider": "mistral",
-      "aliases": [],
+      "aliases": ["mistral-medium-latest"],
       "family": "mistral-medium",
       "pricing": [
         {
@@ -14,22 +14,26 @@
           "input": "1.50",
           "output": "7.50",
           "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-09-07",
           "notes": [
             "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "No cachedInput or batchMultiplier is documented on the fetched page for this model; omitted rather than assumed."
-          ]
+            "No cachedInput or batchMultiplier is documented on the fetched page for this model; omitted rather than assumed.",
+            "Re-confirmed unchanged on 2026-09-07 against the same page, which prints the API id as 'mistral-medium-latest' (recorded as an alias).",
+            "cachedInput and batchMultiplier added on 2026-09-07: the page publishes \"Cached input: 90% discount\" and \"Batch: 50% discount\" for this model, so cachedInput is 0.1x this model's own input rate (1.50 -> 0.15), computed as an exact decimal, and batchMultiplier is 0.5. Both come from this model's own row, not from a sibling's rate."
+          ],
+          "cachedInput": "0.15",
+          "batchMultiplier": "0.5"
         }
       ],
       "source": {
         "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-09-07"
       }
     },
     {
       "canonicalId": "mistral-small-4",
       "provider": "mistral",
-      "aliases": [],
+      "aliases": ["mistral-small-latest"],
       "family": "mistral-small",
       "pricing": [
         {
@@ -39,21 +43,25 @@
           "input": "0.15",
           "output": "0.60",
           "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-09-07",
           "notes": [
-            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
-          ]
+            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "Re-confirmed unchanged on 2026-09-07 against the same page, which prints the API id as 'mistral-small-latest' (recorded as an alias).",
+            "cachedInput and batchMultiplier added on 2026-09-07: the page publishes \"Cached input: 90% discount\" and \"Batch: 50% discount\" for this model, so cachedInput is 0.1x this model's own input rate (0.15 -> 0.015), computed as an exact decimal, and batchMultiplier is 0.5. Both come from this model's own row, not from a sibling's rate."
+          ],
+          "cachedInput": "0.015",
+          "batchMultiplier": "0.5"
         }
       ],
       "source": {
         "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-09-07"
       }
     },
     {
       "canonicalId": "mistral-large-3",
       "provider": "mistral",
-      "aliases": [],
+      "aliases": ["mistral-large-latest"],
       "family": "mistral-large",
       "pricing": [
         {
@@ -63,16 +71,20 @@
           "input": "0.50",
           "output": "1.50",
           "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-09-07",
           "notes": [
             "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "This is Mistral's own first-party rate. AWS Bedrock also resells \"Mistral Large 3\" under its own rate card at the same $0.50/$1.50 figure as independently observed on Bedrock's pricing page — coincidental agreement between the two sources, not assumed; see aws-bedrock.json."
-          ]
+            "This is Mistral's own first-party rate. AWS Bedrock also resells \"Mistral Large 3\" under its own rate card at the same $0.50/$1.50 figure as independently observed on Bedrock's pricing page — coincidental agreement between the two sources, not assumed; see aws-bedrock.json.",
+            "Re-confirmed unchanged on 2026-09-07 against the same page, which prints the API id as 'mistral-large-latest' (recorded as an alias).",
+            "cachedInput and batchMultiplier added on 2026-09-07: the page publishes \"Cached input: 90% discount\" and \"Batch: 50% discount\" for this model, so cachedInput is 0.1x this model's own input rate (0.50 -> 0.05), computed as an exact decimal, and batchMultiplier is 0.5. Both come from this model's own row, not from a sibling's rate."
+          ],
+          "cachedInput": "0.05",
+          "batchMultiplier": "0.5"
         }
       ],
       "source": {
         "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-09-07"
       }
     },
     {
@@ -90,7 +102,8 @@
           "sourceUrl": "https://mistral.ai/pricing/api",
           "observedAt": "2026-08-05",
           "notes": [
-            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
+            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "Not surfaced by the 2026-09-07 fetch of the same page, which listed only the Medium/Small/Large, Ministral, Codestral, embedding and third-party GLM entries. observedAt is deliberately left at 2026-08-05: the rate was not re-observed, and an absence in one page fetch is not evidence of a withdrawal. Re-check before relying on this entry."
           ]
         }
       ],
@@ -114,7 +127,8 @@
           "sourceUrl": "https://mistral.ai/pricing/api",
           "observedAt": "2026-08-05",
           "notes": [
-            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
+            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "Not surfaced by the 2026-09-07 fetch of the same page, which listed only the Medium/Small/Large, Ministral, Codestral, embedding and third-party GLM entries. observedAt is deliberately left at 2026-08-05: the rate was not re-observed, and an absence in one page fetch is not evidence of a withdrawal. Re-check before relying on this entry."
           ]
         }
       ],
@@ -126,7 +140,7 @@
     {
       "canonicalId": "codestral",
       "provider": "mistral",
-      "aliases": [],
+      "aliases": ["codestral-latest"],
       "family": "codestral",
       "pricing": [
         {
@@ -136,15 +150,16 @@
           "input": "0.30",
           "output": "0.90",
           "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-09-07",
           "notes": [
-            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
+            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "Re-confirmed unchanged on 2026-09-07 against the same page, which prints the API id as 'codestral-latest' (recorded as an alias)."
           ]
         }
       ],
       "source": {
         "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-09-07"
       }
     },
     {
@@ -163,7 +178,8 @@
           "observedAt": "2026-08-05",
           "notes": [
             "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "Listed as a reasoning model on the pricing page; no separate \"reasoning\" surcharge is published, so the reasoning field is omitted."
+            "Listed as a reasoning model on the pricing page; no separate \"reasoning\" surcharge is published, so the reasoning field is omitted.",
+            "Not surfaced by the 2026-09-07 fetch of the same page, which listed only the Medium/Small/Large, Ministral, Codestral, embedding and third-party GLM entries. observedAt is deliberately left at 2026-08-05: the rate was not re-observed, and an absence in one page fetch is not evidence of a withdrawal. Re-check before relying on this entry."
           ]
         }
       ],
@@ -187,7 +203,8 @@
           "sourceUrl": "https://mistral.ai/pricing/api",
           "observedAt": "2026-08-05",
           "notes": [
-            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
+            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "Not surfaced by the 2026-09-07 fetch of the same page, which listed only the Medium/Small/Large, Ministral, Codestral, embedding and third-party GLM entries. observedAt is deliberately left at 2026-08-05: the rate was not re-observed, and an absence in one page fetch is not evidence of a withdrawal. Re-check before relying on this entry."
           ]
         }
       ],
@@ -199,7 +216,7 @@
     {
       "canonicalId": "ministral-3-3b",
       "provider": "mistral",
-      "aliases": [],
+      "aliases": ["ministral-3b-latest"],
       "family": "ministral-3",
       "pricing": [
         {
@@ -209,21 +226,22 @@
           "input": "0.10",
           "output": "0.10",
           "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-09-07",
           "notes": [
-            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
+            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "Re-confirmed unchanged on 2026-09-07 against the same page, which prints the API id as 'ministral-3b-latest' (recorded as an alias)."
           ]
         }
       ],
       "source": {
         "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-09-07"
       }
     },
     {
       "canonicalId": "ministral-3-8b",
       "provider": "mistral",
-      "aliases": [],
+      "aliases": ["ministral-8b-latest"],
       "family": "ministral-3",
       "pricing": [
         {
@@ -233,21 +251,22 @@
           "input": "0.15",
           "output": "0.15",
           "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-09-07",
           "notes": [
-            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01."
+            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "Re-confirmed unchanged on 2026-09-07 against the same page, which prints the API id as 'ministral-8b-latest' (recorded as an alias)."
           ]
         }
       ],
       "source": {
         "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-09-07"
       }
     },
     {
       "canonicalId": "ministral-3-14b",
       "provider": "mistral",
-      "aliases": [],
+      "aliases": ["ministral-14b-latest"],
       "family": "ministral-3",
       "pricing": [
         {
@@ -257,16 +276,17 @@
           "input": "0.20",
           "output": "0.20",
           "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-09-07",
           "notes": [
             "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "AWS Bedrock resells a \"Ministral 14B 3.0\" at the same $0.20/$0.20 figure as independently observed on Bedrock's pricing page — likely the same model, coincidental agreement not assumed; Bedrock's variant was not added to aws-bedrock.json in this pass since the version suffix (\"3.0\") was not cross-checked against this \"ministral-3-14b\" naming."
+            "AWS Bedrock resells a \"Ministral 14B 3.0\" at the same $0.20/$0.20 figure as independently observed on Bedrock's pricing page — likely the same model, coincidental agreement not assumed; Bedrock's variant was not added to aws-bedrock.json in this pass since the version suffix (\"3.0\") was not cross-checked against this \"ministral-3-14b\" naming.",
+            "Re-confirmed unchanged on 2026-09-07 against the same page, which prints the API id as 'ministral-14b-latest' (recorded as an alias)."
           ]
         }
       ],
       "source": {
         "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-09-07"
       }
     },
     {
@@ -285,7 +305,8 @@
           "observedAt": "2026-08-05",
           "notes": [
             "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "An older model generation still listed with a live price on the current pricing page as fetched; included because it is confidently sourced, not because it is a current flagship."
+            "An older model generation still listed with a live price on the current pricing page as fetched; included because it is confidently sourced, not because it is a current flagship.",
+            "Not surfaced by the 2026-09-07 fetch of the same page, which listed only the Medium/Small/Large, Ministral, Codestral, embedding and third-party GLM entries. observedAt is deliberately left at 2026-08-05: the rate was not re-observed, and an absence in one page fetch is not evidence of a withdrawal. Re-check before relying on this entry."
           ]
         }
       ],
@@ -310,7 +331,8 @@
           "observedAt": "2026-08-05",
           "notes": [
             "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "An older model generation still listed with a live price on the current pricing page as fetched."
+            "An older model generation still listed with a live price on the current pricing page as fetched.",
+            "Not surfaced by the 2026-09-07 fetch of the same page, which listed only the Medium/Small/Large, Ministral, Codestral, embedding and third-party GLM entries. observedAt is deliberately left at 2026-08-05: the rate was not re-observed, and an absence in one page fetch is not evidence of a withdrawal. Re-check before relying on this entry."
           ]
         }
       ],
@@ -335,7 +357,8 @@
           "observedAt": "2026-08-05",
           "notes": [
             "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "An older model generation still listed with a live price on the current pricing page as fetched."
+            "An older model generation still listed with a live price on the current pricing page as fetched.",
+            "Not surfaced by the 2026-09-07 fetch of the same page, which listed only the Medium/Small/Large, Ministral, Codestral, embedding and third-party GLM entries. observedAt is deliberately left at 2026-08-05: the rate was not re-observed, and an absence in one page fetch is not evidence of a withdrawal. Re-check before relying on this entry."
           ]
         }
       ],
@@ -343,11 +366,40 @@
         "url": "https://mistral.ai/pricing/api",
         "observedAt": "2026-08-05"
       }
+    },
+    {
+      "canonicalId": "zai-glm-5-2",
+      "provider": "mistral",
+      "aliases": [],
+      "family": "glm",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-09-07",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.40",
+          "cachedInput": "0.14",
+          "output": "4.40",
+          "sourceUrl": "https://mistral.ai/pricing/api",
+          "observedAt": "2026-09-07",
+          "notes": [
+            "New entry: absent from this page on 2026-08-05, present on 2026-09-07. effectiveFrom is the observation date rather than this file's conservative 2026-01-01.",
+            "Listed under \"Third-Party Models\" on Mistral's own pricing page - a Z.ai GLM model resold through La Plateforme, so this is Mistral's resale rate, not Z.ai's first-party rate.",
+            "All three rates are printed per-model on the page. No batch discount is stated for the third-party section, so batchMultiplier is omitted rather than assumed from the first-party models' 50%."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://mistral.ai/pricing/api",
+        "observedAt": "2026-09-07"
+      }
     }
   ],
   "omitted": [
     "Embedding models (Mistral Embed, Codestral Embed) are excluded: the schema's PricingPeriod requires an output rate and these are input-only embedding endpoints.",
     "OCR (per-1,000-pages) and Voxtral audio models (per-1,000-characters for TTS, per-minute for transcription) are excluded: priced in units this per-million-tokens schema does not model.",
-    "Only models with an explicit per-million-tokens input/output price on https://mistral.ai/pricing/api as fetched are included; the top-level https://mistral.ai/pricing overview page and https://mistral.ai/products/la-plateforme page do not render a usable table via automated fetch and were not used as the source of record."
+    "Only models with an explicit per-million-tokens input/output price on https://mistral.ai/pricing/api as fetched are included; the top-level https://mistral.ai/pricing overview page and https://mistral.ai/products/la-plateforme page do not render a usable table via automated fetch and were not used as the source of record.",
+    "Mistral Embed ($0.1/M) and Codestral Embed ($0.15/M) are embedding models: input-only pricing with no output rate, which this schema's required input+output shape does not represent.",
+    "As of 2026-09-07 the Devstral, Magistral, Mistral NeMo and Mixtral entries in this file were not surfaced by the page fetch - see their per-period notes; they are kept at their 2026-08-05 observation rather than deleted."
   ]
 }

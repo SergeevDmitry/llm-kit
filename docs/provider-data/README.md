@@ -90,11 +90,76 @@ diff) is what CI runs; a stale `generated/registry.ts` fails the build.
 
 ## What is included
 
-As of the 2026-08-05 pass, the registry carries **123 models across all 10
-providers** — Azure OpenAI (32 models) closed the last provider gap. Every
-price below was fetched from the provider's own current pricing page (or, for
-Azure OpenAI, its retail pricing API) on 2026-08-05; none was recalled from
-training data.
+As of the 2026-09-07 refresh, the registry carries **152 models across all 10
+providers** (123 before it). Every price was fetched from the provider's own
+current pricing page (or, for Azure OpenAI, its retail pricing API); none was
+recalled from training data.
+
+**Read the 2026-09-07 refresh section below before the per-provider notes**,
+which describe the 2026-08-05 pass and are only amended where the refresh
+changed something.
+
+### The 2026-09-07 refresh
+
+Every provider page was re-fetched. What changed:
+
+- **Anthropic's `claude-sonnet-5` scheduled increase was cancelled.** The
+  pricing page now states the $2.00 / $10.00 launch rate "is now the standard
+  price" and "the previously scheduled increase to $3/$15 per million
+  input/output tokens on September 1, 2026 will not occur". The 2026-08-05
+  data modelled that increase as a real period from 2026-09-01, so **every
+  lookup dated on or after 2026-09-01 was over-reporting this model by 50%**.
+  The second period is removed, not closed: a rate that never took effect must
+  not be reachable at any date.
+- **New models.** Anthropic: `claude-fable-5-1`, `claude-mythos-5-1`,
+  `claude-mythos-5`, plus the legacy models the pricing page still publishes
+  rates for (`claude-opus-4-5`, `claude-opus-4-1`, `claude-opus-4`,
+  `claude-sonnet-4-5`, `claude-sonnet-4`, `claude-haiku-3-5`): 8 models to 17.
+  OpenAI: `gpt-6-astra`. Google: `gemini-3.8-flash`, `gemini-3.7-flash`,
+  `gemini-3.1-flash-lite`. Groq: `qwen3.8-27b`. Mistral: `zai-glm-5-2`.
+  Together: 11 more, including the GLM 5.3 and Qwen 3.8 families. AWS Bedrock:
+  `gemma-3-27b`, `gemma-3-12b`, `nemotron-3-super-120b`.
+- **Price changes.** `openai:gpt-5.6-sol` cut from $5.00 / $30.00 to
+  $4.00 / $20.00. `google:gemini-3.6-flash` moved to a promotional
+  $0.75 / $3.75, published as running through 2026-12-31 with the standard
+  $1.50 / $7.50 resuming 2027-01-01.
+- **Newly published detail, previously omitted for lack of a per-model
+  source.** Google now publishes per-model context-caching and Batch rows, so
+  `cachedInput` is recorded for eight Gemini models and `batchMultiplier` for
+  the two Pro models. Mistral publishes "Cached input: 90% discount" and
+  "Batch: 50% discount" per model, so its three flagship models gain both.
+  OpenRouter's model pages now print Cache Read (and, for Claude, Cache Write)
+  rates. OpenAI's Batch section now states the 50% saving covers **all** text
+  models in the standard table, so the `-pro` tiers no longer omit
+  `batchMultiplier`.
+- **The `UNCERTAIN` flag on `openrouter:anthropic/claude-sonnet-5` is
+  withdrawn.** It was flagged because $2.00 / $10.00 matched Anthropic's
+  introductory rate; that rate turned out to be the standard one, so the
+  listing was right all along. The note recording why the flag existed stays.
+- **`azure-openai:gpt-5.6-sol` is now a price divergence, not a match.** Azure
+  did not follow OpenAI's cut: its meters still read $5.00 / $30.00 / $0.50,
+  re-observed 2026-09-07. It joins `gpt-5.6-terra` and `gpt-5.6-luna` as a
+  confirmed same-id, different-price pair.
+- **What was _not_ re-observed keeps its 2026-08-05 `observedAt`.** Some
+  models in this file did not appear in the 2026-09-07 fetch of the same page
+  (two Groq Llama models, several Mistral and Together entries, the Bedrock
+  Nova models), and 31 of Azure's 32 models were not re-queried. Their rates
+  are unchanged and their per-period notes say why. An absence from one page
+  fetch is not evidence of a withdrawal, and stamping a fresh observation date
+  on a rate nobody looked at is the exact failure these provenance fields
+  exist to prevent.
+
+**The effective-date golden fixture moved.** With `claude-sonnet-5` down to a
+single period, the real-data multi-period fixture is now
+`google:gemini-3.6-flash`, better suited to the role since Google publishes
+both boundary dates rather than leaving them to be inferred.
+`openai:gpt-5.6-sol` gives a second, two-period case.
+`internal/model-registry/test/pricing-period.test.ts` keeps the old
+sonnet-5 shape as a synthetic fixture, and
+`packages/usage-tab/test/effective-date.test.ts` pins the cancellation
+end to end.
+
+### The 2026-08-05 pass
 
 **Anthropic** — 8 models (`claude-fable-5`, `claude-opus-5`,
 `claude-opus-4-8`, `claude-opus-4-7`, `claude-opus-4-6`, `claude-sonnet-5`,
@@ -102,11 +167,11 @@ training data.
 <https://platform.claude.com/docs/en/about-claude/models/overview>, observed
 2026-08-05, and checked against that page directly. Notable shape:
 
-- `claude-sonnet-5` carries **two** pricing periods: an introductory rate
+- `claude-sonnet-5` carried **two** pricing periods: an introductory rate
   ($2.00 / $10.00 input/output per million tokens) active through 2026-08-31,
-  then the standard rate ($3.00 / $15.00) from 2026-09-01. This is the
-  effective-date-selection golden fixture (see
-  `internal/model-registry/test/pricing-period.test.ts`).
+  then the standard rate ($3.00 / $15.00) from 2026-09-01, **superseded by
+  the 2026-09-07 refresh**, which found the increase cancelled. It is now one
+  open period at $2.00 / $10.00, and no longer the golden fixture.
 - `claude-haiku-4-5`'s `canonicalId` is the full dated snapshot id
   (`claude-haiku-4-5-20251001`), with the short form as an alias — a genuine
   alias/canonical-ID resolution case (see
@@ -188,9 +253,10 @@ Anthropic (`anthropic/claude-sonnet-5`), and Google
 the bulk `/api/v1/models` JSON did not render usable pricing consistently
 via automated fetch), observed 2026-08-05. **Flagged uncertainty**: the
 `anthropic/claude-sonnet-5` entry's observed rate ($2.00/$10.00) matches
-Anthropic's own _introductory_ rate rather than the standard rate that takes
-over 2026-09-01 — see that entry's `notes` for the caveat and a
-re-verification reminder.
+Anthropic's own _introductory_ rate rather than the standard rate that was
+then scheduled for 2026-09-01. **Resolved by the 2026-09-07 refresh**: that
+increase was cancelled, so the listing matched the standard rate all along and
+the flag is withdrawn.
 
 **AWS Bedrock** — 8 models: `claude-3.5-sonnet`/`claude-3.5-sonnet-v2`
 (Anthropic, with a page-confirmed effective date of 2025-12-01, the only
