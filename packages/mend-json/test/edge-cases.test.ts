@@ -133,6 +133,29 @@ describe('invalid completed JSON that followed valid partial snapshots', () => {
     expect(r.complete).toBe(false);
     expect(r.value).toEqual({});
   });
+
+  it.each([
+    ['a leading zero followed by a digit', '01'],
+    ['a non-digit after the decimal point', '1.x'],
+    ['a non-digit after the exponent sign', '1e+x'],
+  ])(
+    '%s does not get trimmed back to a valid number under "best-effort" (nothing is invented)',
+    (_label, badNumber) => {
+      const withBest = mendJson(`{"a":${badNumber}}`, { incompleteScalarPolicy: 'best-effort' });
+      const withOmit = mendJson(`{"a":${badNumber}}`, { incompleteScalarPolicy: 'omit' });
+      // A contradicted number must be omitted exactly like under "omit" —
+      // "best-effort" only trims a number truncation never disproved.
+      expect(withBest.value).toEqual(withOmit.value);
+      expect(withBest.value).toEqual({});
+      expect(withBest.diagnostics.map((d) => d.code)).not.toContain('number-truncated');
+    },
+  );
+
+  it('a genuinely truncated (not contradicted) number still trims under "best-effort"', () => {
+    const r = mendJson('{"a":1e+', { incompleteScalarPolicy: 'best-effort' });
+    expect(r.value).toEqual({ a: 1 });
+    expect(r.diagnostics.map((d) => d.code)).toContain('number-truncated');
+  });
 });
 
 describe('nesting near maxDepth boundary', () => {

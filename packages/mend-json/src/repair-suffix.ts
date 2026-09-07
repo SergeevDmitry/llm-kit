@@ -33,7 +33,7 @@ const NO_REPAIR: LeafDecision = { sliceEnd: -1, extra: '', diagnostic: undefined
  * `isFinishing` is `finish()`'s one extra power over `snapshot()`: a number
  * with no dangling unsafe suffix (no bare "-", trailing ".", or trailing "e"
  * / "e+") is legitimately complete once the caller declares no more input is
- * coming — end of stream is itself a valid number terminator in the JSON
+ * coming - end of stream is itself a valid number terminator in the JSON
  * grammar, unlike every other incomplete construct here.
  */
 function decideLeaf(
@@ -108,10 +108,19 @@ function decideLeaf(
       };
 
     case 'in-number': {
+      // Same distinction as `'in-literal'` below: a character that
+      // contradicted the number (`01`, `1.x`, `1e+x`) freezes the scanner via
+      // `fail()` with `errorPos` strictly less than `pos`, whereas plain
+      // truncation leaves `errorPos` undefined and the byte-cap pre-scan
+      // freeze leaves `errorPos === pos`. Trimming back to `numberSafeEnd` is
+      // only legitimate for the latter two: `1.` can still become a number,
+      // but `01` is not a prefix of anything, so best-effort must not turn it
+      // into `0`.
+      const contradicted = state.errorPos !== undefined && state.errorPos < state.pos;
       if (isFinishing && state.numberSafeEnd === state.pos) {
         return { ...NO_REPAIR, sliceEnd: state.pos };
       }
-      if (policy === 'best-effort' && state.numberSafeEnd !== undefined) {
+      if (policy === 'best-effort' && state.numberSafeEnd !== undefined && !contradicted) {
         const trimmed = state.numberSafeEnd < state.pos;
         return {
           sliceEnd: state.numberSafeEnd,
@@ -130,7 +139,9 @@ function decideLeaf(
         extra: '',
         diagnostic: {
           code: 'scalar-omitted',
-          message: 'an incomplete number was omitted (incompleteScalarPolicy: "omit")',
+          message: contradicted
+            ? 'a number that contradicted every valid JSON number form was omitted (not a valid partial match, regardless of incompleteScalarPolicy)'
+            : 'an incomplete number was omitted (incompleteScalarPolicy: "omit")',
         },
       };
     }
@@ -138,21 +149,21 @@ function decideLeaf(
     case 'in-literal': {
       // A scanned character that contradicted the literal (`tRue`, `tru5`)
       // freezes the scanner via `fail()`, which sets `errorPos` to the
-      // *contradicting* character's own offset — strictly less than `pos`,
+      // *contradicting* character's own offset - strictly less than `pos`,
       // which `advanceChar` already advanced past it. That is provably
       // different from the two cases where completion is still legitimate:
       // plain truncation (no more input yet; `errorPos` stays `undefined`)
       // and the `MAX_BUFFER_BYTES_EXCEEDED` pre-scan freeze (nothing was
       // scanned, so `errorPos === pos`, not `<`). Only the contradicted case
       // must be excluded: completing a literal the input already disproved
-      // would invent a value this package never sanctions — best-effort
+      // would invent a value this package never sanctions - best-effort
       // exists for "`tru` can only ever become `true`", not for "the input
       // said otherwise but this is close enough".
       const contradicted = state.errorPos !== undefined && state.errorPos < state.pos;
       if (policy === 'best-effort' && state.literalKind !== undefined && !contradicted) {
         // `role` is only ever `'in-literal'` while `literalMatched <
-        // literalKind.length` — the scanner completes the value (and leaves
-        // this role) the instant the match finishes — so `remainder` here is
+        // literalKind.length` - the scanner completes the value (and leaves
+        // this role) the instant the match finishes - so `remainder` here is
         // always non-empty.
         const remainder = state.literalKind.slice(state.literalMatched);
         return {
@@ -198,8 +209,8 @@ function mergeRanges(ranges: readonly (readonly [number, number])[]): [number, n
 /**
  * Finds the shallowest ancestor frame currently mid-way through scanning a
  * duplicate member (`duplicateKeyPolicy: 'first'`, colon already seen, value
- * not complete yet). While that member's value is still open — however deep
- * the scanner has descended into it — the whole member must stay invisible,
+ * not complete yet). While that member's value is still open - however deep
+ * the scanner has descended into it - the whole member must stay invisible,
  * not just once it finishes: `decideLeaf` only ever reasons about the
  * *innermost* pending thing, so this walks the stack once (O(depth)) to
  * catch a suppression an arbitrary number of frames further out.
@@ -266,12 +277,12 @@ export function buildSnapshot<T>(
   // `state.errorPos` (set by `fail()`) is the last offset that was still
   // part of a well-formed prefix. Most `decideLeaf` branches already roll
   // back to `memberStart` or earlier, which can never be later than
-  // `errorPos` — the error is always detected strictly after the pending
-  // member/value started — so this clamp is a no-op for them. The
+  // `errorPos` - the error is always detected strictly after the pending
+  // member/value started - so this clamp is a no-op for them. The
   // `'after-value'` branch and the empty-frame (`count === 0`) branches of
   // `'object-key-start'`/`'array-value-start'` are the exception: they
-  // report `sliceEnd: state.pos` unconditionally, which — only when the
-  // scanner is actually frozen (`errorPos` set) — would otherwise include
+  // report `sliceEnd: state.pos` unconditionally, which - only when the
+  // scanner is actually frozen (`errorPos` set) - would otherwise include
   // the very character that broke the document. A value already committed
   // to a snapshot must never be destroyed just because trailing
   // non-whitespace followed it.
@@ -326,8 +337,8 @@ export function buildSnapshot<T>(
   const rolledBack = diagnostic !== undefined || suppressed;
   const hasExclusions = state.excludedRanges.some(([, end]) => end <= sliceEnd);
   // Deliberately *not* `!state.errored &&` here. `complete` is a statement
-  // about the returned value — "is this slice of the input, as repaired, a
-  // complete and valid JSON document as-is" — not a promise about whether
+  // about the returned value - "is this slice of the input, as repaired, a
+  // complete and valid JSON document as-is" - not a promise about whether
   // the mender will ever accept more input. A frozen scanner (`state.errored`)
   // does not by itself mean the *value* is wrong or partial; it means no
   // more input will be scanned. Whether the freeze actually invalidated
@@ -335,7 +346,7 @@ export function buildSnapshot<T>(
   // `hasExclusions`) already answer:
   //
   //  - Every freeze that corrupts or truncates already-scanned content goes
-  //    through `fail()`, whose `errorPos` is always `state.pos - 1` —
+  //    through `fail()`, whose `errorPos` is always `state.pos - 1` -
   //    strictly less than the `'after-value'` branch's `sliceEnd: state.pos`
   //    above, so `trailingDataIgnored` is always true and `diagnostic` is
   //    always set, forcing `rolledBack`. This covers every genuine syntax
@@ -345,18 +356,18 @@ export function buildSnapshot<T>(
   //    starting a *new* nested value; the duplicate-key check runs inside an
   //    open object) or, for `maxDepth: 0` at the root, before any value
   //    exists at all (`decideLeaf` returns `undefined` for
-  //    `'root-value-start'`, short-circuiting above `complete` entirely) —
+  //    `'root-value-start'`, short-circuiting above `complete` entirely) -
   //    so `state.stack.length === 0` (or the early `undefined` return)
   //    already forces `complete: false` for these, independent of `errored`.
   //  - `MAX_BUFFER_BYTES_EXCEEDED` is the one freeze that can happen with
   //    *nothing* left to roll back: `push()`'s `checkBufferBytes` throws
   //    before any character of the rejected chunk is scanned, so
-  //    `errorPos === state.pos` there (not `state.pos - 1`) — equal to, not
+  //    `errorPos === state.pos` there (not `state.pos - 1`) - equal to, not
   //    less than, `rawSliceEnd`, so `trailingDataIgnored` is false and no
   //    diagnostic is manufactured. If the document was already complete (or,
   //    via `finish()`, a root number had already reached a safe terminal
   //    state) at the moment the cap tripped, the value the caller already
-  //    holds is genuinely, unambiguously complete — the cap prevented
+  //    holds is genuinely, unambiguously complete - the cap prevented
   //    looking at *more* input, it did not un-parse what was already there.
   //
   // In short: `!rolledBack` already implies "no freeze corrupted this slice"
@@ -371,7 +382,7 @@ export function buildSnapshot<T>(
     sliceEnd === buffer.length;
 
   // `repairedJson` and `value` are the only fields whose cost scales with
-  // buffer size (a slice plus a `JSON.parse`, both O(sliceEnd)) — everything
+  // buffer size (a slice plus a `JSON.parse`, both O(sliceEnd)) - everything
   // above is O(depth) or O(number of diagnostics). Computing them eagerly on
   // every `push()` would make pushing many small chunks quadratic overall
   // (each snapshot re-slicing/re-parsing a buffer that keeps growing),
@@ -379,7 +390,7 @@ export function buildSnapshot<T>(
   // memoized getter means a caller that pushes chunk-by-chunk without
   // reading every intermediate result never pays for the results it never
   // looked at, while a caller that *does* read `value`/`repairedJson` on
-  // every push sees no difference in behavior — only in when the cost lands.
+  // every push sees no difference in behavior - only in when the cost lands.
   let cached: { readonly value: T | undefined; readonly json: string | undefined } | undefined;
   function resolve(): { readonly value: T | undefined; readonly json: string | undefined } {
     if (cached === undefined) {
