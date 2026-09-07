@@ -39,6 +39,16 @@ export interface Frame {
    * but excluded from `repairedJson` output once it completes.
    */
   suppressStart?: number;
+  /**
+   * Object frames only: the decoded key of the member this frame is
+   * currently inside, recorded the moment the key string closes. Array
+   * frames need no equivalent: `count` already *is* the pending element's
+   * index. Read only by `repair-suffix.ts`'s `describePending`, which walks
+   * the stack to build `JsonMendResult.pending.path`; stale once the member
+   * completes, which is why it is only ever read for a frame the scanner is
+   * provably still inside.
+   */
+  currentKey?: string;
 }
 
 export type Role =
@@ -359,6 +369,10 @@ function advanceString(state: ScannerState, ch: string, isKey: boolean): void {
     // still an incomplete member, so it still rolls back to before the key.
     // Duplicate-key detection happens once the colon is seen (below), once
     // `state.keyText` holds the fully decoded key.
+    if (isKey) {
+      const frame = state.stack[state.stack.length - 1];
+      if (frame !== undefined) frame.currentKey = state.keyText;
+    }
     state.role = isKey ? 'object-after-key' : 'after-value';
     return;
   }

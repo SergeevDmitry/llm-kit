@@ -236,6 +236,11 @@ export interface JsonMendResult<T = unknown> {
   readonly appendedSuffix: string;
   /** Every repair action behind this snapshot, oldest first. Always JSON-serializable. */
   readonly diagnostics: readonly JsonMendDiagnostic[];
+  /** Which part is still incomplete - see "What is still incomplete" below. */
+  readonly pending?: {
+    readonly path: readonly (string | number)[];
+    readonly kind: 'string' | 'number' | 'literal' | 'key' | 'member';
+  };
 }
 ```
 
@@ -415,6 +420,35 @@ actually there. `'omit'` is the conservative choice for callers who'd rather
 see nothing than something wrong; `'best-effort'` is for callers who want to
 render partial content as it streams in and can tolerate a value that grows
 in place.
+
+### What is still incomplete - `pending`
+
+`complete` answers "is it done?". `pending` answers "which part isn't?" -
+the location the scanner is currently part-way through, so a UI can put the
+cursor on the field still streaming and a caller can hold off on that one
+field without waiting for the whole document:
+
+```ts
+import { createJsonMender } from 'mend-json';
+
+const mender = createJsonMender();
+mender.push('{"tool_calls":[{"arguments":{"query":"weath').pending;
+// { path: ['tool_calls', 0, 'arguments', 'query'], kind: 'string' }
+```
+
+`path` is object keys and array indexes from the root down, so it indexes
+straight into `value` (it is empty for a root-level scalar). `kind` is
+`'string' | 'number' | 'literal'` for a value whose text is still arriving,
+`'key'` for an object key still being read (`path` then locates the object,
+since the key itself isn't known yet), or `'member'` for a key whose value
+hasn't started.
+
+`pending` is `undefined` whenever nothing is incomplete: the snapshot is
+`complete`, no value has started, the scanner sits between values (just
+after a comma, say), or it froze on invalid input - nothing more will ever
+be scanned there. It is not `undefined` merely because `finish()` was
+called: a truncated payload run through `mendJson` still reports where it
+was cut off.
 
 ### Diagnostics
 

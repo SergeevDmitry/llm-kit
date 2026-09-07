@@ -143,7 +143,7 @@ describe('invalid completed JSON that followed valid partial snapshots', () => {
     (_label, badNumber) => {
       const withBest = mendJson(`{"a":${badNumber}}`, { incompleteScalarPolicy: 'best-effort' });
       const withOmit = mendJson(`{"a":${badNumber}}`, { incompleteScalarPolicy: 'omit' });
-      // A contradicted number must be omitted exactly like under "omit" —
+      // A contradicted number must be omitted exactly like under "omit":
       // "best-effort" only trims a number truncation never disproved.
       expect(withBest.value).toEqual(withOmit.value);
       expect(withBest.value).toEqual({});

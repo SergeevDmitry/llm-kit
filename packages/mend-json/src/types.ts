@@ -93,6 +93,27 @@ export interface JsonMendDiagnostic {
   readonly offset: number;
 }
 
+/**
+ * What kind of thing the scanner is part-way through at snapshot time.
+ *
+ * - `'string'` / `'number'` / `'literal'`: a scalar value whose text is
+ *   still arriving, so the value at `path` may still grow or change.
+ * - `'key'`: an object key still being read; `path` locates the object it
+ *   belongs to, since the key itself is not known yet.
+ * - `'member'`: a key was read but its value has not started arriving.
+ */
+export type JsonMendPendingKind = 'string' | 'number' | 'literal' | 'key' | 'member';
+
+/** Where in the document the scanner currently is. See {@link JsonMendResult.pending}. */
+export interface JsonMendPending {
+  /**
+   * Object keys and array indexes from the root down to the pending thing,
+   * usable as-is for a lookup into `value` (empty at the root).
+   */
+  readonly path: readonly (string | number)[];
+  readonly kind: JsonMendPendingKind;
+}
+
 export interface JsonMendResult<T = unknown> {
   /** The best-effort parsed value, or `undefined` if nothing parseable has arrived yet. */
   readonly value: T | undefined;
@@ -117,6 +138,18 @@ export interface JsonMendResult<T = unknown> {
   readonly appendedSuffix: string;
   /** Every repair action that produced this snapshot, oldest first. Always JSON-serializable. */
   readonly diagnostics: readonly JsonMendDiagnostic[];
+  /**
+   * Which part of the document is still incomplete, or `undefined` when
+   * nothing is: the snapshot is `complete`, the scanner froze on invalid
+   * input (nothing more will ever arrive), or no value has started yet.
+   *
+   * `complete` answers "is it done?"; this answers "which part isn't?", so
+   * a UI can put the cursor on the field still streaming, and a caller can
+   * hold off on that one field without waiting for the whole document. The
+   * value at `path` is present in `value` whenever the policy kept it, but
+   * is not final.
+   */
+  readonly pending?: JsonMendPending;
 }
 
 /** Options for {@link mendStream}: every {@link JsonMenderOptions}, plus cancellation. */

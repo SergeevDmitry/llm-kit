@@ -9,8 +9,14 @@
  * O(buffer) work is the necessarily O(output) string slice/concat needed to
  * actually produce `repairedJson`.
  */
-import type { Frame, ScannerState } from './state-machine.js';
-import type { IncompleteScalarPolicy, JsonMendDiagnostic, JsonMendResult } from './types.js';
+import type { Frame, Role, ScannerState } from './state-machine.js';
+import type {
+  IncompleteScalarPolicy,
+  JsonMendDiagnostic,
+  JsonMendPending,
+  JsonMendPendingKind,
+  JsonMendResult,
+} from './types.js';
 
 const CLOSER_FOR: Record<Frame['kind'], string> = { object: '}', array: ']' };
 
@@ -247,6 +253,46 @@ function sliceWithExclusions(
   return out;
 }
 
+/**
+ * The roles that mean "something is still part-way through"; every other
+ * role is a resting point between values, where nothing is pending.
+ */
+const PENDING_KIND: Partial<Record<Role, JsonMendPendingKind>> = {
+  'in-key-string': 'key',
+  'in-value-string': 'string',
+  'in-number': 'number',
+  'in-literal': 'literal',
+  'object-after-key': 'member',
+  'object-value-start': 'member',
+};
+
+/**
+ * Locates whatever is currently mid-scan, in O(depth) and without touching
+ * the buffer: each object frame contributes the key it is inside
+ * (`frame.currentKey`, recorded when that key's string closed) and each
+ * array frame contributes `frame.count`, which *is* the pending element's
+ * index while an element is open.
+ *
+ * The innermost frame is skipped for `'key'`: there, the frame's own
+ * `currentKey` still names the *previous* member and the key being read is
+ * not known yet, so the path stops at the object itself.
+ */
+function describePending(state: ScannerState): JsonMendPending | undefined {
+  const kind = PENDING_KIND[state.role];
+  if (kind === undefined) return undefined;
+  const depth = kind === 'key' ? state.stack.length - 1 : state.stack.length;
+  const path: (string | number)[] = [];
+  for (let i = 0; i < depth; i += 1) {
+    const frame = state.stack[i] as Frame;
+    // `currentKey` is set for every object frame the scanner is inside a
+    // member of, which is every frame reached here: an outer frame with a
+    // frame above it is by construction mid-member, and the innermost one
+    // is only included for roles that come after its key closed.
+    path.push(frame.kind === 'array' ? frame.count : (frame.currentKey ?? ''));
+  }
+  return { path, kind };
+}
+
 export function buildSnapshot<T>(
   buffer: string,
   state: ScannerState,
@@ -264,6 +310,7 @@ export function buildSnapshot<T>(
       validPrefixLength: 0,
       appendedSuffix: '',
       diagnostics: [],
+      pending: undefined,
     };
   }
 
@@ -408,11 +455,20 @@ export function buildSnapshot<T>(
     return cached;
   }
 
+  // `pending` describes content that is still *arriving*, so it is reported
+  // only while more of it could still turn up: not once the document is
+  // `complete`, not once the scanner froze on invalid input (nothing more
+  // will ever be scanned), and not for a leaf inside a suppressed duplicate
+  // member, which never reaches `value` at all.
+  const pending =
+    complete || state.errored || suppressed ? undefined : describePending(state);
+
   const result = {
     complete,
     validPrefixLength: sliceEnd,
     appendedSuffix,
     diagnostics,
+    pending,
   } as unknown as JsonMendResult<T>;
   Object.defineProperty(result, 'value', {
     enumerable: true,

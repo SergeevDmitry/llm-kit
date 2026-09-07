@@ -20,6 +20,8 @@ export type {
   DuplicateKeyPolicy,
   IncompleteScalarPolicy,
   JsonMendDiagnostic,
+  JsonMendPending,
+  JsonMendPendingKind,
   JsonMendResult,
   JsonMender,
   JsonMenderOptions,
