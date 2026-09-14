@@ -246,3 +246,92 @@ describe('fitChatAsync: summarize-middle', () => {
     assertJsonSerializable(result.report, 'FitChatReport');
   });
 });
+
+describe('fitChatAsync: messages given up to make room for the summary', () => {
+  // The summarizer is only handed the dropped middle range. When the summary
+  // it returns still does not fit, `verifyAndTrim` trims the newest kept
+  // groups next, and no summary replaces those. `summarizedRange` counts the
+  // range alone, so `trimmedForSummaryIndexes` is what accounts for the rest
+  // of `removedIndexes`.
+
+  /** Big old turns, then short recent ones, so the greedy pass can stop with slack to spare. */
+  function unevenConversation(): ChatMessage[] {
+    const messages: ChatMessage[] = [];
+    for (let i = 0; i < 10; i += 1) {
+      messages.push(user(`old turn ${String(i)} ${'padding '.repeat(30)}`));
+    }
+    for (let i = 0; i < 6; i += 1) messages.push(user(`hi ${String(i)}`));
+    return messages;
+  }
+
+  it.each([200, 300, 400, 500])(
+    'names them and reconciles the report against removedIndexes (maxTokens %i)',
+    async (maxTokens) => {
+      const result = await fitChatAsync(longConversation(30), {
+        maxTokens,
+        strategy: 'summarize-middle',
+        summary: { summarizer: async () => system('summary of the earlier conversation') },
+      });
+
+      const range = result.report.summarizedRange;
+      const trimmed = result.report.trimmedForSummaryIndexes;
+      expect(range).toBeDefined();
+      expect(trimmed).toBeDefined();
+      // The defect: the greedy pass has already spent the budget, so a
+      // summary of any size costs at least one kept group.
+      expect(trimmed?.length).toBeGreaterThan(0);
+
+      // The whole point of the field - the report now adds up.
+      expect((range?.messageCount ?? 0) + (trimmed?.length ?? 0)).toBe(
+        result.report.removedIndexes.length,
+      );
+      // Every named index really is gone from the output, and really is
+      // reported as removed.
+      for (const index of trimmed ?? []) {
+        expect(result.report.removedIndexes).toContain(index);
+        expect(result.report.keptIndexes).not.toContain(index);
+      }
+      expect([...(trimmed ?? [])].sort((a, b) => a - b)).toEqual(trimmed);
+
+      // summarizedRange is not widened to swallow them: the summarizer never
+      // saw these messages, so claiming the range covered them would trade a
+      // silent loss for a false one.
+      expect(range?.messageCount).toBeLessThan(result.report.removedIndexes.length);
+
+      const warning = result.report.warnings.find((w) => w.includes('trimmed to fit the summary'));
+      expect(warning).toBeDefined();
+      expect(warning).toContain(`${String(trimmed?.length)} message(s)`);
+      assertJsonSerializable(result.report, 'FitChatReport');
+    },
+  );
+
+  it('is present but empty when the summary fit without giving anything up', async () => {
+    const result = await fitChatAsync(unevenConversation(), {
+      maxTokens: 50,
+      strategy: 'summarize-middle',
+      summary: { summarizer: async () => user('sum'), maxSummaryTokens: 30 },
+    });
+
+    expect(result.report.summarizedRange).toBeDefined();
+    expect(result.report.trimmedForSummaryIndexes).toEqual([]);
+    expect(result.report.summarizedRange?.messageCount).toBe(result.report.removedIndexes.length);
+    expect(result.report.warnings.some((w) => w.includes('trimmed to fit the summary'))).toBe(
+      false,
+    );
+  });
+
+  it('is absent whenever summarizedRange is: no summary means nothing to reconcile', async () => {
+    const dropOldest = await fitChatAsync(longConversation(30), { maxTokens: 400 });
+    expect(dropOldest.report.summarizedRange).toBeUndefined();
+    expect(dropOldest.report.trimmedForSummaryIndexes).toBeUndefined();
+
+    // Summarizer never runs: everything already fits.
+    const nothingDropped = await fitChatAsync(longConversation(2), {
+      maxTokens: 5_000,
+      strategy: 'summarize-middle',
+      summary: { summarizer: async () => system('summary') },
+    });
+    expect(nothingDropped.report.summarizedRange).toBeUndefined();
+    expect(nothingDropped.report.trimmedForSummaryIndexes).toBeUndefined();
+  });
+});

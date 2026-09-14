@@ -195,6 +195,10 @@ interface FitChatReport {
     readonly messageCount: number;
     readonly summaryTokenCount?: number;
   };
+  // Messages given up to make room for the summary itself: removed, and not
+  // covered by any summary. Present exactly when `summarizedRange` is. See
+  // "Messages the summary does not cover" below.
+  readonly trimmedForSummaryIndexes?: readonly number[];
   readonly summaryAttempts: number;
   // "message N: <reason>" content-accounting warnings only ever name an N
   // present in `keptIndexes` — never a dropped message. See "How the
@@ -394,6 +398,44 @@ const result = await fitChatAsync(longConversation, {
 
 result.report.summarizedRange; // { startIndex, endIndex, messageCount, summaryTokenCount } or undefined
 ```
+
+#### Messages the summary does not cover
+
+Your summarizer sees the dropped middle range and nothing else. If the summary
+it returns still does not fit, `chat-fit` gives up the newest kept messages to
+make room, and no summary replaces those. `summarizedRange` covers the range
+alone, so it accounts for fewer removals than actually happened.
+
+`trimmedForSummaryIndexes` names the rest. It is present exactly when
+`summarizedRange` is, and empty when nothing extra was given up, so the two
+together add up to `removedIndexes`:
+
+```ts
+import { fitChatAsync, type ChatMessage, type SummaryRequest } from 'chat-fit';
+
+declare const conversationMessages: ChatMessage[];
+declare const summarizeRange: (request: SummaryRequest<ChatMessage>) => Promise<ChatMessage>;
+
+const result = await fitChatAsync(conversationMessages, {
+  maxTokens: 400,
+  strategy: 'summarize-middle',
+  summary: { summarizer: summarizeRange },
+});
+
+const range = result.report.summarizedRange;
+if (range !== undefined) {
+  const trimmed = result.report.trimmedForSummaryIndexes ?? [];
+  range.messageCount + trimmed.length === result.report.removedIndexes.length; // always true
+  trimmed; // e.g. [52] - removed, and the summary says nothing about them
+}
+```
+
+A non-empty value also shows up in `warnings`. Expect it on most
+conversations: selection has already spent the whole budget by the time the
+summary exists, so paying for the summary usually costs at least one kept
+group. `summarizedRange` is not widened to cover these messages. The summarizer
+never read them, so counting them as part of the range it replaced would make
+`messageCount` wrong.
 
 ### Budget, reserve, and safety margin
 

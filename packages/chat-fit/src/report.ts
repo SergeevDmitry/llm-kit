@@ -22,6 +22,7 @@ export interface BuildReportParams<Message> {
   readonly keptGroups: ReadonlySet<MessageGroup<Message>>;
   readonly diagnostics: readonly GroupingDiagnostic[];
   readonly summarizedRange?: SummarizedRangeReport;
+  readonly trimmedForSummaryIndexes?: readonly number[];
   readonly summaryAttempts: number;
   readonly extraWarnings: readonly string[];
 }
@@ -82,6 +83,9 @@ export function buildReport<Message>(params: BuildReportParams<Message>): FitCha
     removedIndexes,
     toolCallGroups,
     ...(params.summarizedRange !== undefined ? { summarizedRange: params.summarizedRange } : {}),
+    ...(params.trimmedForSummaryIndexes !== undefined
+      ? { trimmedForSummaryIndexes: params.trimmedForSummaryIndexes }
+      : {}),
     summaryAttempts: params.summaryAttempts,
     warnings,
   };

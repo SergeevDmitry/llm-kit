@@ -91,11 +91,33 @@ export async function fitChatAsync<Message = ChatMessage>(
     preservedTokenCount: plan.preservedTokenCount,
   });
 
+  // `verifyAndTrim` gives up the newest kept groups, one at a time, to make
+  // room for a summary that came back too large. The summarizer never saw
+  // those messages: it was handed `rangeMessages` (the middle range) and
+  // nothing else, so `summarizedRange` does not describe them and must not be
+  // widened to claim it does. Reporting their indexes separately is what makes
+  // `summarizedRange.messageCount` plus this count add up to
+  // `report.removedIndexes.length`.
+  const reportingSummarizedRange = summarizedRange !== undefined && !verify.summaryDropped;
+  const trimmedForSummaryIndexes = reportingSummarizedRange
+    ? verify.trimmedGroups.flatMap((group) => [...group.indexes]).sort((a, b) => a - b)
+    : undefined;
+  const trimWarnings =
+    trimmedForSummaryIndexes !== undefined && trimmedForSummaryIndexes.length > 0
+      ? [
+          `${String(verify.trimmedGroups.length)} group(s) selected for keeping were trimmed to ` +
+            `fit the summary; their ${String(trimmedForSummaryIndexes.length)} message(s) are ` +
+            'dropped and are not covered by summarizedRange (see ' +
+            'report.trimmedForSummaryIndexes)',
+        ]
+      : [];
+
   return finalizeResult({
     plan,
     verify,
-    ...(summarizedRange !== undefined && !verify.summaryDropped ? { summarizedRange } : {}),
+    ...(reportingSummarizedRange ? { summarizedRange } : {}),
+    ...(trimmedForSummaryIndexes !== undefined ? { trimmedForSummaryIndexes } : {}),
     summaryAttempts: outcome.attempts,
-    summaryWarnings: outcome.warnings,
+    summaryWarnings: [...outcome.warnings, ...trimWarnings],
   });
 }

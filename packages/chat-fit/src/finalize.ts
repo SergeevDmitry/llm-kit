@@ -13,6 +13,7 @@ export interface FinalizeParams<Message> {
   readonly plan: FitPlan<Message>;
   readonly verify: VerifyAndTrimResult<Message>;
   readonly summarizedRange?: SummarizedRangeReport;
+  readonly trimmedForSummaryIndexes?: readonly number[];
   readonly summaryAttempts: number;
   readonly summaryWarnings: readonly string[];
 }
@@ -79,6 +80,9 @@ export function finalizeResult<Message>(params: FinalizeParams<Message>): FitCha
     keptGroups,
     diagnostics: plan.diagnostics,
     ...(params.summarizedRange !== undefined ? { summarizedRange: params.summarizedRange } : {}),
+    ...(params.trimmedForSummaryIndexes !== undefined
+      ? { trimmedForSummaryIndexes: params.trimmedForSummaryIndexes }
+      : {}),
     summaryAttempts: params.summaryAttempts,
     extraWarnings: [...contentFallbackWarnings, ...params.summaryWarnings],
   });

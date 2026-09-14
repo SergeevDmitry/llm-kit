@@ -195,6 +195,20 @@ export interface FitChatReport {
   readonly toolCallGroups: readonly ToolCallGroupReport[];
   /** Present only under `'summarize-middle'` when a range was actually summarized. */
   readonly summarizedRange?: SummarizedRangeReport;
+  /**
+   * Original indexes removed to make room for the summary itself, ascending:
+   * a subset of `removedIndexes` that `summarizedRange` does not describe.
+   *
+   * Present exactly when `summarizedRange` is, and empty when nothing extra
+   * was given up. The summarizer only sees the middle range it was asked to
+   * compress; if the summary it returns still does not fit, the newest kept
+   * messages are trimmed next, and no summary replaces those.
+   * `summarizedRange.messageCount` counts the range alone, so the two fields
+   * together are what account for every removal:
+   * `summarizedRange.messageCount + trimmedForSummaryIndexes.length === removedIndexes.length`.
+   * A non-empty value is also reported as a `warnings` entry.
+   */
+  readonly trimmedForSummaryIndexes?: readonly number[];
   /** Number of summarizer calls made across the whole operation. */
   readonly summaryAttempts: number;
   /** Human-readable diagnostics: unresolved tool links, fallback content accounting, summary retries. */
