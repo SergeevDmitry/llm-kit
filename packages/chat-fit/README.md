@@ -134,6 +134,51 @@ function fitChatAsync<Message = ChatMessage>(
 Everything `fitChat` does, plus `strategy: 'summarize-middle'`. The only
 `await` inside this function is your own `summarizer` callback.
 
+### `countChatTokens(messages, options?)`
+
+```ts no-check
+function countChatTokens<Message = ChatMessage>(
+  messages: readonly Message[],
+  options?: { tokenizer?: Tokenizer; maxMessages?: number },
+): {
+  tokens: number;
+  counterId: string;
+  approximate: boolean;
+  warnings: readonly string[];
+};
+```
+
+Counts a conversation without trimming it, using the same message accounting
+`fitChat` uses. `tokens` is exactly the `report.initialTokenCount` a `fitChat`
+call would give for the same input and tokenizer.
+
+```ts
+import { countChatTokens, type ChatMessage } from 'chat-fit';
+
+declare const conversationMessages: ChatMessage[];
+
+const { tokens, approximate, warnings } = countChatTokens(conversationMessages);
+
+if (tokens > 120_000) {
+  // trim before sending, with fitChat
+}
+approximate; // true with the bundled tokenizer: `tokens` is an upper bound
+warnings; // e.g. ["message 4: message field \"function_call\" is not a shape chat-fit counts directly"]
+```
+
+Use this when the question is "how big is this conversation?" rather than
+"make it fit". Running `fitChat` with a huge `maxTokens` to read
+`initialTokenCount` gives the same number, but it also groups and selects every
+message to get there. Writing your own counter is the one to avoid: the
+provider shapes in
+[How the default counter handles fields it doesn't recognize](#how-the-default-counter-handles-fields-it-doesnt-recognize)
+are what make a hand-rolled count come out low.
+
+`tokenizer` and `maxMessages` mean what they do in
+[`FitChatOptions`](#fitchatoptionsmessage). There is no
+`messageTokenCounter` option: this function is the default counter, so
+overriding it would leave nothing to call.
+
 ### `FitChatOptions<Message>`
 
 | Option                | Type                                             | Default                           | Meaning                                                                                                      |

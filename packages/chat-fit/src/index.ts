@@ -9,6 +9,11 @@
 
 export { fitChat } from './fit-chat.js';
 export { fitChatAsync } from './fit-chat-async.js';
+export {
+  countChatTokens,
+  type ChatTokenCount,
+  type CountChatTokensOptions,
+} from './count-chat-tokens.js';
 
 export { ChatFitError, type ChatFitErrorCode } from './errors.js';
 
