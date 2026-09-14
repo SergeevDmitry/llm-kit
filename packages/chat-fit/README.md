@@ -373,6 +373,11 @@ re-walking the input a second time — see [Performance](#performance).)
 
 ### Async: summarizing the middle instead of dropping it
 
+`request.messages` gives you the range in original conversation order, so you
+can read it as a transcript. That includes tool-call groups whose messages are
+spread across the range, such as parallel calls whose results arrive between
+other turns.
+
 ```ts
 import { fitChatAsync, type ChatMessage, type SummaryRequest } from 'chat-fit';
 

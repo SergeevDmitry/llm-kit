@@ -58,6 +58,13 @@ export interface MessageGroup<Message> {
 /** The selected middle range handed to a `Summarizer`, plus the room it has to work with. */
 export interface SummaryRequest<Message> {
   /** The messages being summarized, in original chronological order. Never a partial tool-call group. */
+  /**
+   * The messages being summarized, in original conversation order. A
+   * tool-call group's members can be scattered across the range: parallel
+   * calls whose results arrive between other turns, or two turns whose
+   * results come back reversed. They arrive here in the order the
+   * conversation had them, so a reply never precedes what it answers.
+   */
   readonly messages: readonly Message[];
   /** Token budget the returned summary message should fit within. */
   readonly maxSummaryTokens: number;

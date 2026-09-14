@@ -5,7 +5,11 @@
  */
 import { throwIfAborted } from './abort-utils.js';
 import { buildFitPlan } from './selection/plan.js';
-import { middleRangeSpan, type SummaryInsertion } from './selection/middle-range.js';
+import {
+  assembleFinalMessages,
+  middleRangeSpan,
+  type SummaryInsertion,
+} from './selection/middle-range.js';
 import { verifyAndTrim } from './selection/verify-and-trim.js';
 import { summarizeMiddle } from './summary/summarize-middle.js';
 import { finalizeResult } from './finalize.js';
@@ -34,7 +38,12 @@ export async function fitChatAsync<Message = ChatMessage>(
   throwIfAborted(options.signal);
 
   const range = middleRangeSpan(plan.droppedGroups);
-  const rangeMessages = plan.droppedGroups.flatMap((group) => group.messages);
+  // Not `droppedGroups.flatMap((group) => group.messages)`: groups sort by
+  // their first index, but a tool-call group's `indexes` need not be
+  // contiguous, so flattening group by group puts a reply ahead of the turn
+  // it answers. `assembleFinalMessages` sorts by original index, the same
+  // ordering the result itself gets.
+  const rangeMessages = assembleFinalMessages(plan.droppedGroups);
 
   // `plan.normalized.summary` is defined whenever strategy is
   // 'summarize-middle' — normalizeOptions enforces it.

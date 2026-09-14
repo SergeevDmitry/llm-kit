@@ -3,7 +3,14 @@ import { describe, expect, it, vi } from 'vitest';
 import { fitChatAsync } from '../src/fit-chat-async.js';
 import { ChatFitError } from '../src/errors.js';
 import type { ChatMessage, SummaryRequest } from '../src/types.js';
-import { assistant, system, toolExchange, user } from './fixtures/messages.js';
+import {
+  assistant,
+  assistantWithToolCalls,
+  system,
+  toolExchange,
+  toolResult,
+  user,
+} from './fixtures/messages.js';
 
 function longConversation(turns: number): ChatMessage[] {
   const messages: ChatMessage[] = [];
@@ -244,6 +251,93 @@ describe('fitChatAsync: summarize-middle', () => {
       summary: { summarizer },
     });
     assertJsonSerializable(result.report, 'FitChatReport');
+  });
+});
+
+describe('fitChatAsync: the order the summarizer reads the range in', () => {
+  // Groups are ordered by their first index, but a tool-call group's indexes
+  // need not be contiguous: parallel calls can have their results interleaved
+  // with other turns, and two assistant turns' calls can come back in reverse
+  // order. Flattening the dropped groups one at a time reorders the
+  // transcript, so a summarizer reading it sees replies before the messages
+  // they answer.
+
+  const pad = 'padding '.repeat(12);
+
+  /** 0 user, 1 assistant calling a and b, 2 result a, 3 user interjection, 4 result b. */
+  function interleavedResults(): ChatMessage[] {
+    return withTail([
+      user(`idx0 ${pad}`),
+      assistantWithToolCalls(`idx1 ${pad}`, [
+        { id: 'a', name: 'lookup', arguments: {} },
+        { id: 'b', name: 'search', arguments: {} },
+      ]),
+      toolResult('a', `idx2 ${pad}`),
+      user(`idx3 ${pad}`),
+      toolResult('b', `idx4 ${pad}`),
+    ]);
+  }
+
+  /** Two assistant turns whose results come back in reverse order: groups {1,4} and {2,3}. */
+  function reversedResults(): ChatMessage[] {
+    return withTail([
+      user(`idx0 ${pad}`),
+      assistantWithToolCalls(`idx1 ${pad}`, [{ id: 'a', name: 'lookup', arguments: {} }]),
+      assistantWithToolCalls(`idx2 ${pad}`, [{ id: 'b', name: 'search', arguments: {} }]),
+      toolResult('b', `idx3 ${pad}`),
+      toolResult('a', `idx4 ${pad}`),
+    ]);
+  }
+
+  /** Enough recent filler that the five interesting messages all land in the dropped range. */
+  function withTail(head: readonly ChatMessage[]): ChatMessage[] {
+    const messages = [...head];
+    for (let i = 0; i < 8; i += 1) messages.push(user(`tail ${String(i)}`));
+    return messages;
+  }
+
+  async function rangeSeenBySummarizer(messages: readonly ChatMessage[]) {
+    let seen: readonly ChatMessage[] = [];
+    await fitChatAsync(messages, {
+      maxTokens: 90,
+      strategy: 'summarize-middle',
+      summary: {
+        summarizer: async (request: SummaryRequest<ChatMessage>) => {
+          seen = request.messages;
+          return user('sum');
+        },
+        maxSummaryTokens: 20,
+      },
+    });
+    return seen;
+  }
+
+  it.each([
+    ['results interleaved with another turn', interleavedResults],
+    ['two turns whose results come back reversed', reversedResults],
+  ])('reads a non-contiguous tool group in original order (%s)', async (_label, build) => {
+    const seen = await rangeSeenBySummarizer(build());
+    expect(seen.map((m) => String(m.content).slice(0, 4))).toEqual([
+      'idx0',
+      'idx1',
+      'idx2',
+      'idx3',
+      'idx4',
+    ]);
+  });
+
+  it('reads strictly ascending original indexes, with no message twice', async () => {
+    for (const build of [interleavedResults, reversedResults]) {
+      const messages = build();
+      const indexOf = new Map(messages.map((message, index) => [message, index]));
+      const indexes = (await rangeSeenBySummarizer(messages)).map(
+        (message) => indexOf.get(message) as number,
+      );
+
+      expect(indexes.length).toBeGreaterThan(0);
+      expect(indexes).toEqual([...indexes].sort((a, b) => a - b));
+      expect(new Set(indexes).size).toBe(indexes.length);
+    }
   });
 });
 
