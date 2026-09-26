@@ -1,7 +1,7 @@
 import { createFakeClock, createTempDatabase, type TempDatabase } from '@llm-kit/test-utils';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { VectorCache } from '../src/index.js';
-import { deterministicVector } from './helpers.js';
+import { createCountingEmbed, deterministicVector } from './helpers.js';
 
 describe('VectorCache.prune', () => {
   let db: TempDatabase;
@@ -47,6 +47,28 @@ describe('VectorCache.prune', () => {
     expect(report.deletedCount).toBe(1);
     expect(cache.getMany(['old'], { model: 'm' }).report.hitCount).toBe(0);
     expect(cache.getMany(['new'], { model: 'm' }).report.hitCount).toBe(1);
+  });
+
+  it('a re-embed after TTL expiry restarts the entry age, so olderThanMs keeps it', async () => {
+    const { embed, callCount } = createCountingEmbed();
+    await cache.getOrCreate(['doc'], { model: 'm', embed, ttlMs: 7_000 });
+    clock.advance(40_000);
+    await cache.getOrCreate(['doc'], { model: 'm', embed, ttlMs: 7_000 });
+    expect(callCount()).toBe(2);
+
+    expect(cache.stats().oldestEntryMs).toBe(clock.nowFn());
+    expect(cache.stats().newestEntryMs).toBe(clock.nowFn());
+    expect(cache.prune({ olderThanMs: 30_000 }).deletedCount).toBe(0);
+    expect(cache.getMany(['doc'], { model: 'm' }).report.hitCount).toBe(1);
+  });
+
+  it('setMany over an existing key restarts the entry age too', () => {
+    cache.setMany([{ text: 'doc', model: 'm', embedding: deterministicVector('doc') }]);
+    clock.advance(40_000);
+    cache.setMany([{ text: 'doc', model: 'm', embedding: deterministicVector('doc') }]);
+
+    expect(cache.stats().newestEntryMs).toBe(clock.nowFn());
+    expect(cache.prune({ olderThanMs: 30_000 }).deletedCount).toBe(0);
   });
 
   it.each([

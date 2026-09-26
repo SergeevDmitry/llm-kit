@@ -238,6 +238,8 @@ export interface PruneOptions {
    * Also remove entries whose `created_at_ms` is older than `now() - olderThanMs`,
    * regardless of `ttlMs`/`expires_at_ms`. TTL alone cannot express "prune
    * anything older than 30 days" for entries written without a TTL.
+   * Rewriting an entry (a re-embed after expiry, or `setMany` over an existing
+   * key) resets its `created_at_ms`, so its age counts from the latest write.
    */
   readonly olderThanMs?: number;
 }

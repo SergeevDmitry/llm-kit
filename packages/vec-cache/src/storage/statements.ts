@@ -19,6 +19,8 @@ export const MAX_IN_CLAUSE_PARAMS = 500;
 export const SELECT_COLUMNS =
   'cache_key, namespace, model_id, text_hash, text_value, dimensions, vector_encoding, vector_blob, created_at_ms, expires_at_ms';
 
+// A rewrite is a new entry, so `created_at_ms` restarts; keeping the old value would let
+// `prune({ olderThanMs })` delete a freshly re-embedded row and leave `newestEntryMs` stale
 export const INSERT_OR_UPDATE_SQL = `
 INSERT INTO embeddings (cache_key, namespace, model_id, text_hash, text_value, dimensions, vector_encoding, vector_blob, created_at_ms, expires_at_ms)
 VALUES (@cacheKey, @namespace, @modelId, @textHash, @textValue, @dimensions, @vectorEncoding, @vectorBlob, @createdAtMs, @expiresAtMs)
@@ -30,6 +32,7 @@ ON CONFLICT(cache_key) DO UPDATE SET
   dimensions = excluded.dimensions,
   vector_encoding = excluded.vector_encoding,
   vector_blob = excluded.vector_blob,
+  created_at_ms = excluded.created_at_ms,
   expires_at_ms = excluded.expires_at_ms
 `;
 
