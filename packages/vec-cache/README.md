@@ -341,6 +341,29 @@ lookup.report; // { totalCount, hitCount, missCount, elapsedMs }
 cache.close();
 ```
 
+### `findMissing(texts, options): string[]`
+
+Returns the texts that still need embedding, without reading any vectors.
+Use it to plan an ingestion run or size a batch job before paying for it.
+
+```ts
+import { VectorCache } from 'vec-cache';
+
+const cache = new VectorCache({ path: './cache.sqlite' });
+const documents = ['a', 'b', 'a', 'c'];
+const toEmbed = cache.findMissing(documents, { model: 'text-embedding-3-small' });
+toEmbed; // e.g. ['b', 'c'] if only 'a' is cached
+cache.close();
+```
+
+The result is exactly the list `getOrCreate` would pass to `embed` for the
+same batch: each missing text once, in first-occurrence order. Expired
+entries and hits with the wrong width count as missing, as they do in
+`getMany` and `getOrCreate`. It takes the same options as `getMany`
+(`model`, `namespace`, `dimensions`). A concurrent writer can fill or expire
+an entry between this call and the next, so treat the answer as a plan, not
+a reservation.
+
 ### `setMany(entries): void`
 
 Write pre-computed embeddings directly — migrating from another cache, or
@@ -709,16 +732,16 @@ _create_ one on your behalf too.
   explicitly out of scope for v1. If your workload has many processes
   racing on a cold cache, consider warming it from one process first, or
   fronting `embed` with your own distributed lock.
-- `getMany`, `setMany`, and `deleteMany` are synchronous, single-round-trip
-  SQLite calls — there is nothing to coalesce.
+- `getMany`, `findMissing`, `setMany`, and `deleteMany` are synchronous,
+  single-round-trip SQLite calls — there is nothing to coalesce.
 
 ## Edge cases and limitations
 
 - **Not a vector database.** No nearest-neighbour search, no similarity
   scoring, no indexing beyond exact-key lookup. `vec-cache` answers "have I
   embedded this exact text with this exact model before?", nothing else.
-- An **empty input array** to `getOrCreate`/`getMany` returns immediately
-  with an empty result — `embed` is never called.
+- An **empty input array** to `getOrCreate`/`getMany`/`findMissing` returns
+  immediately with an empty result — `embed` is never called.
 - A **database created by a newer schema version** than the installed
   `vec-cache` refuses to open, throwing `SCHEMA_TOO_NEW`, rather than
   guessing how to read a layout it doesn't recognize. If the recorded
@@ -793,24 +816,28 @@ updated to match — not before.
 
 ## Performance
 
-- `getMany`/`getOrCreate`'s lookup issues a small, bounded number of chunked
+- The lookup behind `getMany`, `findMissing` and `getOrCreate` issues a
+  small, bounded number of chunked
   `IN (...)` queries — never one query per key — and prepared statements are
   cached and reused by chunk size across calls.
 - `benchmarks/vec-cache.bench.ts` (`pnpm run bench`) covers cold miss, full
-  hit, the headline 94%-hit scenario, a duplicate-heavy batch, and lookups
-  against a 100,000-row database. Representative numbers from one local run
+  hit, the headline 94%-hit scenario, planning a batch with `findMissing`
+  versus `getMany`, a duplicate-heavy batch, and lookups against a
+  100,000-row database. Representative numbers from one local run
   (Node 24, synthetic in-process `embed`, so these measure `vec-cache`'s own
   overhead — key computation, planning, encode/decode, SQLite I/O — not a
   real provider's network latency):
 
   | scenario                                                  |    mean | ops/sec |
   | --------------------------------------------------------- | ------: | ------: |
-  | cold miss (100 never-before-seen texts)                   | 32.6 ms |    30.7 |
-  | full hit (100 already-cached texts, `embed` never called) |  1.6 ms |   636.9 |
-  | **94% hit (1,000 texts, 940 cached, 60 fresh)**           | 63.8 ms |    15.7 |
-  | duplicate-heavy (1,000 positions, 50 unique texts)        |  9.5 ms |   105.5 |
-  | `getMany`, 1,000 keys against 100,000 rows                |  7.5 ms |   133.0 |
-  | `stats()` over 100,000 rows                               | 60.9 ms |    16.4 |
+  | cold miss (100 never-before-seen texts)                   | 37.6 ms |    26.6 |
+  | full hit (100 already-cached texts, `embed` never called) |  1.6 ms |   634.8 |
+  | **94% hit (1,000 texts, 940 cached, 60 fresh)**           | 57.1 ms |    17.5 |
+  | `findMissing`, 1,000 texts (940 cached, 1536-dim)         |  5.5 ms |   181.9 |
+  | `getMany`, the same 1,000 texts                           | 25.3 ms |    39.5 |
+  | duplicate-heavy (1,000 positions, 50 unique texts)        | 12.6 ms |    79.4 |
+  | `getMany`, 1,000 keys against 100,000 rows                |  8.7 ms |   115.5 |
+  | `stats()` over 100,000 rows                               | 68.4 ms |    14.6 |
 
   Run `pnpm --filter vec-cache run bench` yourself for numbers on your
   hardware — these are a baseline, not a guarantee.

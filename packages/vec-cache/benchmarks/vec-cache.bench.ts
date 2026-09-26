@@ -2,7 +2,8 @@
  * Throughput baseline for `vec-cache` (`vitest bench`), covering every
  * scenario the package brief calls out explicitly: cold miss, full hit, the
  * headline 94%-hit batch ("1,000 texts, 940 cached, 60 sent"),
- * duplicate-heavy batches, and a 100k-row database.
+ * duplicate-heavy batches, and a 100k-row database. It also compares
+ * `findMissing` with `getMany` for planning a batch.
  *
  * Not a correctness check — `test/` owns that. This tracks whether the
  * batch planner stays a small, bounded number of chunked SQL round trips
@@ -76,6 +77,27 @@ describe('vec-cache — 94% hit (the headline scenario: 1,000 texts, 940 cached,
     );
     const texts = [...cachedTexts, ...freshTexts];
     await cache.getOrCreate(texts, { model: 'bench-model', embed: syntheticEmbed });
+  });
+});
+
+describe('vec-cache — planning a 1,000-text batch (940 cached, 60 new)', () => {
+  const db = createTempDatabase('bench-find-missing.sqlite');
+  const cache = new VectorCache({ path: db.databasePath });
+  const cachedTexts = Array.from({ length: 940 }, (_, i) => `bench-plan-cached-${String(i)}`);
+  cache.setMany(
+    cachedTexts.map((text) => ({ text, model: 'bench-model', embedding: syntheticVector(text) })),
+  );
+  const texts = [
+    ...cachedTexts,
+    ...Array.from({ length: 60 }, (_, i) => `bench-plan-new-${String(i)}`),
+  ];
+
+  bench('findMissing: which texts still need embedding', () => {
+    cache.findMissing(texts, { model: 'bench-model' });
+  });
+
+  bench('getMany: the same question, answered by decoding every hit', () => {
+    cache.getMany(texts, { model: 'bench-model' });
   });
 });
 

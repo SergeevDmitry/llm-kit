@@ -2,7 +2,7 @@
  * `VectorCache` — the public lifecycle class. Wires the batch planner
  * (`batch/`), identity (`identity/`), storage
  * (`storage/better-sqlite-store.ts`) and single-flight registry
- * (`single-flight.ts`) together behind the six read/write methods plus
+ * (`single-flight.ts`) together behind the read/write methods plus
  * `stats`/`prune`/`clear`/`close`.
  *
  * `getOrCreate` and single-flight interact in a way worth being explicit
@@ -34,7 +34,7 @@
 import { throwIfAborted, awaitWithAbort } from './abort-utils.js';
 import { assertConsistentDimensions } from './batch/assert-dimension-consistency.js';
 import { fetchMisses } from './batch/fetch-misses.js';
-import { planBatch } from './batch/plan-batch.js';
+import { planBatch, planPresence } from './batch/plan-batch.js';
 import { restoreOrder } from './batch/restore-order.js';
 import { dedupeInOrder } from './batch/deduplicate.js';
 import { VectorCacheError } from './errors.js';
@@ -355,6 +355,29 @@ export class VectorCache {
         dimensionMismatches: plan.dimensionMismatches,
       },
     };
+  }
+
+  /**
+   * Returns the texts `getOrCreate` would send to `embed` for this batch:
+   * each distinct miss once, in first-occurrence order. Runs the same lookup
+   * as `getMany`, with the same expiry and dimension checks, but never reads
+   * or decodes a vector.
+   */
+  findMissing(texts: readonly string[], options: CacheLookupOptions): string[] {
+    this.assertOpen();
+    validateModel(options.model);
+    validateTexts(texts);
+    validateNamespaceOption(options.namespace);
+
+    const plan = planPresence(
+      texts,
+      resolveNamespace(this.namespace, options.namespace),
+      options.model,
+      this.store,
+      this.now(),
+      options.dimensions,
+    );
+    return plan.uniqueMissKeys.map((key) => plan.missTextByKey.get(key) as string);
   }
 
   setMany(entries: readonly CacheWriteEntry[]): void {

@@ -22,17 +22,21 @@
  * caller's explicit request (`expectedDimensions`) or, when absent, the
  * first hit encountered in original text order — deterministic for the same
  * reason `uniqueMissKeys`'s first-occurrence rule is.
+ *
+ * `planPresence` runs the same plan over key and dimensions only, for
+ * `findMissing`. Both share one body, so a text `findMissing` reports is
+ * exactly a text `getOrCreate` would send to `embed`.
  */
 import { computeCacheKeys } from '../identity/cache-key.js';
-import type { StoredEmbedding, VectorCacheStore } from '../storage/store.js';
+import type { StoredDimensions, StoredEmbedding, VectorCacheStore } from '../storage/store.js';
 import type { DimensionMismatchDiagnostic } from '../types.js';
 import { dedupeInOrder } from './deduplicate.js';
 
-export interface BatchPlan {
+export interface BatchPlan<Row extends StoredDimensions = StoredEmbedding> {
   /** One cache key per input position, same length and order as `texts`. */
   readonly keys: readonly string[];
   /** Cache-key -> stored row, for every key found (and not expired) in the store, minus any row demoted by a dimension mismatch. */
-  readonly hitMap: ReadonlyMap<string, StoredEmbedding>;
+  readonly hitMap: ReadonlyMap<string, Row>;
   /** Distinct keys with no hit, in first-occurrence order. Includes any key demoted from a hit by a dimension mismatch. */
   readonly uniqueMissKeys: readonly string[];
   /** Cache-key -> its (first-occurrence) source text, for every entry in `uniqueMissKeys`. */
@@ -49,13 +53,36 @@ export function planBatch(
   nowMs: number,
   expectedDimensions?: number,
 ): BatchPlan {
+  return plan(texts, namespace, modelId, expectedDimensions, (keys) => store.getMany(keys, nowMs));
+}
+
+export function planPresence(
+  texts: readonly string[],
+  namespace: string,
+  modelId: string,
+  store: VectorCacheStore,
+  nowMs: number,
+  expectedDimensions?: number,
+): BatchPlan<StoredDimensions> {
+  return plan(texts, namespace, modelId, expectedDimensions, (keys) =>
+    store.getDimensionsMany(keys, nowMs),
+  );
+}
+
+function plan<Row extends StoredDimensions>(
+  texts: readonly string[],
+  namespace: string,
+  modelId: string,
+  expectedDimensions: number | undefined,
+  lookup: (uniqueKeys: readonly string[]) => readonly Row[],
+): BatchPlan<Row> {
   const keys = computeCacheKeys(texts, namespace, modelId, expectedDimensions);
   const uniqueKeys = dedupeInOrder(keys);
 
   // One chunked round trip for every distinct key in the batch — never one
   // query per input position.
-  const rows = store.getMany(uniqueKeys, nowMs);
-  const hitMap = new Map<string, StoredEmbedding>(rows.map((row) => [row.cacheKey, row]));
+  const rows = lookup(uniqueKeys);
+  const hitMap = new Map<string, Row>(rows.map((row) => [row.cacheKey, row]));
 
   const dimensionMismatches: DimensionMismatchDiagnostic[] = [];
   let referenceDimensions = expectedDimensions;

@@ -36,6 +36,13 @@ ON CONFLICT(cache_key) DO UPDATE SET
   expires_at_ms = excluded.expires_at_ms
 `;
 
+export const SELECT_DIMENSIONS_COLUMNS = 'cache_key, dimensions';
+
+export interface RawDimensionsRow {
+  readonly cache_key: string;
+  readonly dimensions: number;
+}
+
 export interface RawEmbeddingRow {
   readonly cache_key: string;
   readonly namespace: string;

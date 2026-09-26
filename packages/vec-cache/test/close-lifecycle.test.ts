@@ -36,6 +36,9 @@ describe('VectorCache.close', () => {
     expect(() => cache.getMany(['a'], { model: 'm' })).toThrowError(
       expect.objectContaining({ code: 'STORE_CLOSED' }),
     );
+    expect(() => cache.findMissing(['a'], { model: 'm' })).toThrowError(
+      expect.objectContaining({ code: 'STORE_CLOSED' }),
+    );
     expect(() => cache.setMany([{ text: 'a', model: 'm', embedding: [1] }])).toThrowError(
       expect.objectContaining({ code: 'STORE_CLOSED' }),
     );

@@ -21,7 +21,9 @@ import {
   MAX_IN_CLAUSE_PARAMS,
   rowToStoredEmbedding,
   SELECT_COLUMNS,
+  SELECT_DIMENSIONS_COLUMNS,
   storedEmbeddingToParams,
+  type RawDimensionsRow,
   type RawEmbeddingRow,
 } from './statements.js';
 import type { StoredEmbedding, StorePruneOptions, VectorCacheStore } from './store.js';
@@ -111,18 +113,39 @@ export function createBetterSqliteStore(options: BetterSqliteStoreOptions): Vect
     throw error;
   }
 
-  const selectStatements = new Map<number, Database.Statement<unknown[], RawEmbeddingRow>>();
-  function selectStatementFor(count: number): Database.Statement<unknown[], RawEmbeddingRow> {
-    let statement = selectStatements.get(count);
-    if (statement === undefined) {
-      const placeholders = new Array<string>(count).fill('?').join(',');
-      statement = db.prepare<unknown[], RawEmbeddingRow>(
-        `SELECT ${SELECT_COLUMNS} FROM embeddings WHERE cache_key IN (${placeholders}) AND (expires_at_ms IS NULL OR expires_at_ms > ?)`,
-      );
-      selectStatements.set(count, statement);
+  // One chunked, unexpired-rows-only lookup per column list. Statements are
+  // memoized by placeholder count, so each list prepares at most
+  // `MAX_IN_CLAUSE_PARAMS` distinct statements
+  function createChunkedSelect<Row>(
+    columns: string,
+  ): (keys: readonly string[], nowMs: number) => Row[] {
+    const statements = new Map<number, Database.Statement<unknown[], Row>>();
+    function statementFor(count: number): Database.Statement<unknown[], Row> {
+      let statement = statements.get(count);
+      if (statement === undefined) {
+        const placeholders = new Array<string>(count).fill('?').join(',');
+        statement = db.prepare<unknown[], Row>(
+          `SELECT ${columns} FROM embeddings WHERE cache_key IN (${placeholders}) AND (expires_at_ms IS NULL OR expires_at_ms > ?)`,
+        );
+        statements.set(count, statement);
+      }
+      return statement;
     }
-    return statement;
+    return (keys, nowMs) => {
+      const rows: Row[] = [];
+      for (const group of chunk(keys, MAX_IN_CLAUSE_PARAMS)) {
+        const args: readonly (string | number)[] = [...group, nowMs];
+        // Bounded by MAX_IN_CLAUSE_PARAMS = 500 — `group` is one chunk from
+        // `chunk(keys, MAX_IN_CLAUSE_PARAMS)` above, plus the fixed `nowMs`
+        // param, never the raw caller-supplied key list.
+        // eslint-disable-next-line no-restricted-syntax
+        for (const row of statementFor(group.length).all(...args)) rows.push(row);
+      }
+      return rows;
+    };
   }
+  const selectRows = createChunkedSelect<RawEmbeddingRow>(SELECT_COLUMNS);
+  const selectDimensions = createChunkedSelect<RawDimensionsRow>(SELECT_DIMENSIONS_COLUMNS);
 
   const insertStatement = db.prepare<Record<string, unknown>>(INSERT_OR_UPDATE_SQL);
   const insertMany = db.transaction((entries: readonly StoredEmbedding[]) => {
@@ -172,19 +195,16 @@ export function createBetterSqliteStore(options: BetterSqliteStoreOptions): Vect
     getMany(keys, nowMs) {
       assertOpen();
       if (keys.length === 0) return [];
-      const rows: StoredEmbedding[] = [];
-      for (const group of chunk(keys, MAX_IN_CLAUSE_PARAMS)) {
-        const args: readonly (string | number)[] = [...group, nowMs];
-        // Bounded by MAX_IN_CLAUSE_PARAMS = 500 — `group` is one chunk from
-        // `chunk(keys, MAX_IN_CLAUSE_PARAMS)` above, plus the fixed `nowMs`
-        // param, never the raw caller-supplied key list.
-        // eslint-disable-next-line no-restricted-syntax
-        const found = selectStatementFor(group.length).all(...args) as RawEmbeddingRow[];
-        for (const row of found) {
-          rows.push(rowToStoredEmbedding(row));
-        }
-      }
-      return rows;
+      return selectRows(keys, nowMs).map(rowToStoredEmbedding);
+    },
+
+    getDimensionsMany(keys, nowMs) {
+      assertOpen();
+      if (keys.length === 0) return [];
+      return selectDimensions(keys, nowMs).map((row) => ({
+        cacheKey: row.cache_key,
+        dimensions: row.dimensions,
+      }));
     },
 
     putMany(entries) {
