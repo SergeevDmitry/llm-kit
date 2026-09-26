@@ -12,7 +12,7 @@
  * shared/pooled allocation, and even when it isn't, an
  * un-copied view would let a caller mutate a "returned" vector and silently
  * corrupt what a later read decodes from the same bytes. Callers should not
- * see the same effect from `restore-order.ts`'s duplicate-index cloning
+ * see the same effect from `restore-order.ts`'s duplicate-index copying
  * either — see that module.
  */
 import type { EmbeddingVector, VectorEncoding } from '../types.js';
@@ -61,10 +61,13 @@ export function decodeVector(
   return encoding === 'float32' ? new Float32Array(copy) : new Float64Array(copy);
 }
 
-/** Returns an independently-allocated copy of `vector`, same concrete type. */
-export function cloneVector(vector: EmbeddingVector): EmbeddingVector {
-  if (vector instanceof Float32Array || vector instanceof Float64Array) {
-    return vector.slice();
-  }
-  return vector.slice();
+/**
+ * Returns a newly allocated copy of `vector` as the typed array `encoding`
+ * names, holding exactly what a read returns once the vector is stored
+ */
+export function toEncodedVector(
+  vector: EmbeddingVector,
+  encoding: VectorEncoding,
+): Float32Array | Float64Array {
+  return encoding === 'float32' ? Float32Array.from(vector) : Float64Array.from(vector);
 }

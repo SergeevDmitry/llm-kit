@@ -5,7 +5,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { VectorCacheError } from '../src/errors.js';
-import { cloneVector, decodeVector, encodeVector } from '../src/storage/vector-codec.js';
+import { decodeVector, encodeVector, toEncodedVector } from '../src/storage/vector-codec.js';
 
 describe('encodeVector / decodeVector round trip', () => {
   it('round-trips a float32 vector exactly (within float32 precision)', () => {
@@ -88,28 +88,30 @@ describe('encodeVector / decodeVector round trip', () => {
   });
 });
 
-describe('cloneVector', () => {
-  it('clones a Float32Array into an independent Float32Array', () => {
+describe('toEncodedVector', () => {
+  it('copies a Float32Array into an independent Float32Array', () => {
     const original = new Float32Array([1, 2, 3]);
-    const clone = cloneVector(original);
-    expect(clone).toBeInstanceOf(Float32Array);
-    expect(clone).not.toBe(original);
-    (clone as Float32Array)[0] = 999;
+    const copy = toEncodedVector(original, 'float32');
+    expect(copy).toBeInstanceOf(Float32Array);
+    expect(copy).not.toBe(original);
+    copy[0] = 999;
     expect(original[0]).toBe(1);
   });
 
-  it('clones a Float64Array into an independent Float64Array', () => {
+  it('copies a Float64Array into an independent Float64Array', () => {
     const original = new Float64Array([1, 2, 3]);
-    const clone = cloneVector(original);
-    expect(clone).toBeInstanceOf(Float64Array);
-    expect(clone).not.toBe(original);
+    const copy = toEncodedVector(original, 'float64');
+    expect(copy).toBeInstanceOf(Float64Array);
+    expect(copy).not.toBe(original);
   });
 
-  it('clones a plain number[] into an independent array', () => {
-    const original = [1, 2, 3];
-    const clone = cloneVector(original) as number[];
-    expect(clone).not.toBe(original);
-    clone[0] = 999;
-    expect(original[0]).toBe(1);
+  it('returns exactly what a stored and decoded vector returns, for either encoding', () => {
+    const original = [0.1, -0.2, 1e-9];
+    for (const encoding of ['float32', 'float64'] as const) {
+      const decoded = decodeVector(encodeVector(original, encoding), encoding, original.length);
+      const copy = toEncodedVector(original, encoding);
+      expect(copy.constructor).toBe(decoded.constructor);
+      expect(Array.from(copy)).toEqual(Array.from(decoded));
+    }
   });
 });

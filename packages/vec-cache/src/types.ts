@@ -177,7 +177,12 @@ export interface VectorCacheBatchReport {
 }
 
 export interface CachedEmbeddingBatch {
-  /** Same length and order as the input `texts`. Every entry is a freshly allocated array, never a view a caller could mutate through. */
+  /**
+   * Same length and order as the input `texts`. Every entry, hit or miss, is
+   * a freshly allocated `Float32Array`, or `Float64Array` under
+   * `vectorEncoding: 'float64'`. A miss holds the value the cache stored, not
+   * the raw `embed` result.
+   */
   readonly embeddings: readonly EmbeddingVector[];
   readonly report: VectorCacheBatchReport;
 }
@@ -193,7 +198,12 @@ export interface VectorCacheLookupReport {
 }
 
 export interface CacheLookupResult {
-  /** Same length and order as the input `texts`. `undefined` at a position means a miss — `getMany` never calls `embed`. */
+  /**
+   * Same length and order as the input `texts`. `undefined` at a position
+   * means a miss; `getMany` never calls `embed`. A hit is a `Float32Array`,
+   * or `Float64Array` under `vectorEncoding: 'float64'`, whatever encoding
+   * the row was written with.
+   */
   readonly embeddings: readonly (EmbeddingVector | undefined)[];
   readonly report: VectorCacheLookupReport;
 }
@@ -238,8 +248,9 @@ export interface PruneOptions {
    * Also remove entries whose `created_at_ms` is older than `now() - olderThanMs`,
    * regardless of `ttlMs`/`expires_at_ms`. TTL alone cannot express "prune
    * anything older than 30 days" for entries written without a TTL.
-   * Rewriting an entry (a re-embed after expiry, or `setMany` over an existing
-   * key) resets its `created_at_ms`, so its age counts from the latest write.
+   * Rewriting an entry, whether `getOrCreate` re-embeds it or `setMany`
+   * overwrites it, resets `created_at_ms`, so its age counts from the latest
+   * write.
    */
   readonly olderThanMs?: number;
 }

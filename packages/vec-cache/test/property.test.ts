@@ -32,7 +32,7 @@ describe('property: restoreOrder places every output at its designated source po
             else missVectors.set(key, vector);
           });
 
-          const result = restoreOrder(keys, hitVectors, missVectors);
+          const result = restoreOrder(keys, hitVectors, missVectors, 'float32');
           expect(result).toHaveLength(keys.length);
           keys.forEach((key, index) => {
             const expected = hitVectors.get(key) ?? missVectors.get(key);

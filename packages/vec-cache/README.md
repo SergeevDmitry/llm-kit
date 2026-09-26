@@ -163,6 +163,11 @@ cache.close();
 declare function callEmbeddingProvider(texts: readonly string[]): Promise<Float32Array[]>;
 ```
 
+`result.embeddings` holds `Float32Array`s, or `Float64Array`s under
+`vectorEncoding: 'float64'`, for hits and misses alike. A miss is converted
+from whatever `embed` returned, including a plain `number[]`, to the value the
+cache stored, so a later hit on the same text returns the same numbers.
+
 **An aborted call can still write to the cache — and it can even still write
 when the call that started the fetch is the one that aborted.** `signal`
 cancels _your_ wait on `getOrCreate` promptly, but `vec-cache` never passes
@@ -331,7 +336,7 @@ import { VectorCache } from 'vec-cache';
 
 const cache = new VectorCache({ path: './cache.sqlite' });
 const lookup = cache.getMany(['a', 'never-embedded'], { model: 'm' });
-lookup.embeddings; // [Float32Array | undefined, Float32Array | undefined] — undefined at a miss
+lookup.embeddings; // [Float32Array | undefined, Float32Array | undefined] - undefined at a miss
 lookup.report; // { totalCount, hitCount, missCount, elapsedMs }
 cache.close();
 ```
@@ -656,9 +661,9 @@ precision most embedding providers actually return. Encoding, dimensions, and
 byte layout (little-endian) are explicit and stored per row — never guessed
 from context on read. **With the default `float32` encoding, a caller who
 hands `getOrCreate`/`setMany` a `Float64Array` (or plain `number[]` double
-values) gets back a `Float32Array` on the next read — a different concrete
-type, narrowed to ~7 significant decimal digits (about 24 bits of mantissa,
-versus 53 for `float64`).** Set `vectorEncoding: 'float64'` if you need the
+values) gets back a `Float32Array` on every read, including the `getOrCreate`
+call that stores it: a different concrete type, narrowed to ~7 significant
+decimal digits (about 24 bits of mantissa, versus 53 for `float64`).** Set `vectorEncoding: 'float64'` if you need the
 returned type and precision to match what you stored.
 
 **This is more than a precision loss at the extreme end of the range.** A

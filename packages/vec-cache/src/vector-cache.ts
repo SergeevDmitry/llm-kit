@@ -48,7 +48,7 @@ import {
 import { createSingleFlightRegistry, type SingleFlightRegistry } from './single-flight.js';
 import { createBetterSqliteStore } from './storage/better-sqlite-store.js';
 import type { StoredEmbedding, VectorCacheStore } from './storage/store.js';
-import { decodeVector, encodeVector } from './storage/vector-codec.js';
+import { decodeVector, encodeVector, toEncodedVector } from './storage/vector-codec.js';
 import type {
   CacheIdentityOptions,
   CacheLookupOptions,
@@ -282,7 +282,7 @@ export class VectorCache {
       namespace,
     });
 
-    const embeddings = restoreOrder(plan.keys, hitVectors, missVectors);
+    const embeddings = restoreOrder(plan.keys, hitVectors, missVectors, this.vectorEncoding);
     let hitCount = 0;
     for (const key of plan.keys) {
       if (hitVectors.has(key)) hitCount += 1;
@@ -337,7 +337,12 @@ export class VectorCache {
       const row = plan.hitMap.get(key);
       if (row === undefined) return undefined;
       hitCount += 1;
-      return decodeVector(row.vectorBlob, row.vectorEncoding, row.dimensions);
+      const decoded = decodeVector(row.vectorBlob, row.vectorEncoding, row.dimensions);
+      // A row written under another `vectorEncoding` is converted to this
+      // instance's, as `getOrCreate` does
+      return row.vectorEncoding === this.vectorEncoding
+        ? decoded
+        : toEncodedVector(decoded, this.vectorEncoding);
     });
 
     return {

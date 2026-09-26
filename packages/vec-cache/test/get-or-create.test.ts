@@ -409,6 +409,52 @@ describe('VectorCache.getOrCreate', () => {
     });
   });
 
+  describe('every returned vector has the instance encoding, hit or miss', () => {
+    const plainEmbed: EmbedBatch = ({ texts }) => Promise.resolve(texts.map(() => [0.1, 0.2, 0.3]));
+
+    it('a number[] embed result comes back as the same Float32Array a later hit returns', async () => {
+      await cache.getOrCreate(['cached-one'], { model: 'm', embed: plainEmbed });
+      const mixed = await cache.getOrCreate(['cached-one', 'fresh-one'], {
+        model: 'm',
+        embed: plainEmbed,
+      });
+      expect(mixed.embeddings.map((vector) => vector.constructor)).toEqual([
+        Float32Array,
+        Float32Array,
+      ]);
+      expect(JSON.stringify(mixed.embeddings[1])).toBe(JSON.stringify(mixed.embeddings[0]));
+
+      const again = await cache.getOrCreate(['fresh-one'], { model: 'm', embed: plainEmbed });
+      expect(again.report.hitCount).toBe(1);
+      expect(Array.from(again.embeddings[0] as Float32Array)).toEqual(
+        Array.from(mixed.embeddings[1] as Float32Array),
+      );
+    });
+
+    it('under vectorEncoding: "float64" both come back as Float64Array at full precision', async () => {
+      const wideDb = createTempDatabase();
+      const wideCache = new VectorCache({ path: wideDb.databasePath, vectorEncoding: 'float64' });
+      try {
+        await wideCache.getOrCreate(['cached-one'], { model: 'm', embed: plainEmbed });
+        const mixed = await wideCache.getOrCreate(['cached-one', 'fresh-one'], {
+          model: 'm',
+          embed: plainEmbed,
+        });
+        expect(mixed.embeddings.map((vector) => vector.constructor)).toEqual([
+          Float64Array,
+          Float64Array,
+        ]);
+        expect(mixed.embeddings.map((vector) => Array.from(vector))).toEqual([
+          [0.1, 0.2, 0.3],
+          [0.1, 0.2, 0.3],
+        ]);
+      } finally {
+        wideCache.close();
+        wideDb.cleanup();
+      }
+    });
+  });
+
   it('rejects non-string entries in texts with INVALID_INPUT, before calling embed', async () => {
     const counting = createCountingEmbed();
     const texts = ['a', 42 as unknown as string];

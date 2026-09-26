@@ -79,6 +79,26 @@ describe('VectorCache.getMany', () => {
     );
   });
 
+  it('converts a row written under another vectorEncoding to this instance encoding', () => {
+    const wide = new VectorCache({ path: db.databasePath, vectorEncoding: 'float64' });
+    try {
+      wide.setMany([{ text: 'wide', model: 'm', embedding: [0.1, 0.2] }]);
+      expect(wide.getMany(['wide'], { model: 'm' }).embeddings[0]).toBeInstanceOf(Float64Array);
+    } finally {
+      wide.close();
+    }
+    cache.setMany([{ text: 'narrow', model: 'm', embedding: [0.1, 0.2] }]);
+
+    const result = cache.getMany(['wide', 'narrow'], { model: 'm' });
+    expect(result.embeddings.map((vector) => vector?.constructor)).toEqual([
+      Float32Array,
+      Float32Array,
+    ]);
+    expect(Array.from(result.embeddings[0] as Float32Array)).toEqual(
+      Array.from(result.embeddings[1] as Float32Array),
+    );
+  });
+
   describe('dimensions', () => {
     it('an explicit dimensions option isolates a lookup from an entry written at a different width', () => {
       cache.setMany([

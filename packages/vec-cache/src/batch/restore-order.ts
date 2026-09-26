@@ -5,25 +5,34 @@
  * neither is an internal bug, not a normal miss, because `plan-batch.ts`
  * guarantees every key is either a hit or a member of `uniqueMissKeys`.
  *
- * Every returned value is cloned (`cloneVector`), even for a key that maps
- * to several output positions (a duplicate text): each position gets its
- * own array, so a caller mutating `embeddings[3]` can never affect
+ * Every returned value is a fresh copy (`toEncodedVector`), even for a key
+ * that maps to several output positions (a duplicate text): each position
+ * gets its own array, so a caller mutating `embeddings[3]` can never affect
  * `embeddings[7]` in the same result, let alone a later cache read.
+ *
+ * Each copy is converted to `encoding`, the instance's `vectorEncoding`.
+ * Without that, a miss would come back as whatever `embed` returned (often a
+ * full-precision `number[]`) beside hits decoded to typed arrays, so one
+ * result would mix element types and a text's first call would return
+ * different numbers from its later hits. A converted miss equals what the
+ * next read of it returns, and the element type depends on configuration,
+ * not on which positions hit.
  */
-import { cloneVector } from '../storage/vector-codec.js';
+import { toEncodedVector } from '../storage/vector-codec.js';
 import { VectorCacheError } from '../errors.js';
-import type { EmbeddingVector } from '../types.js';
+import type { EmbeddingVector, VectorEncoding } from '../types.js';
 
 export function restoreOrder(
   keys: readonly string[],
   hitVectors: ReadonlyMap<string, EmbeddingVector>,
   missVectors: ReadonlyMap<string, EmbeddingVector>,
+  encoding: VectorEncoding,
 ): EmbeddingVector[] {
   return keys.map((key) => {
     const hit = hitVectors.get(key);
-    if (hit !== undefined) return cloneVector(hit);
+    if (hit !== undefined) return toEncodedVector(hit, encoding);
     const miss = missVectors.get(key);
-    if (miss !== undefined) return cloneVector(miss);
+    if (miss !== undefined) return toEncodedVector(miss, encoding);
     throw new VectorCacheError(
       `internal error: cache key ${key} resolved to neither a hit nor a fetched miss`,
       'INTERNAL',

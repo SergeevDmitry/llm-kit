@@ -182,13 +182,13 @@ describe('planBatch', () => {
 });
 
 describe('restoreOrder', () => {
-  it('resolves every position from the hit map or the miss map, cloning either way', () => {
+  it('resolves every position from the hit map or the miss map, copying either way', () => {
     const hit: EmbeddingVector = new Float32Array([1, 1]);
     const miss: EmbeddingVector = new Float32Array([2, 2]);
     const hitVectors = new Map([['k1', hit]]);
     const missVectors = new Map([['k2', miss]]);
 
-    const result = restoreOrder(['k1', 'k2', 'k1'], hitVectors, missVectors);
+    const result = restoreOrder(['k1', 'k2', 'k1'], hitVectors, missVectors, 'float32');
     expect(result).toHaveLength(3);
     expect(Array.from(result[0] as Float32Array)).toEqual([1, 1]);
     expect(Array.from(result[1] as Float32Array)).toEqual([2, 2]);
@@ -198,10 +198,25 @@ describe('restoreOrder', () => {
     expect(result[2]).not.toBe(result[0]);
   });
 
+  it('converts hits and misses alike to the requested encoding', () => {
+    const hitVectors = new Map([['hit', new Float64Array([0.1, 0.2])]]);
+    const missVectors = new Map([['miss', [0.1, 0.2]]]);
+
+    const narrow = restoreOrder(['hit', 'miss'], hitVectors, missVectors, 'float32');
+    expect(narrow.map((vector) => vector.constructor)).toEqual([Float32Array, Float32Array]);
+    expect(Array.from(narrow[1] as Float32Array)).toEqual(Array.from(new Float32Array([0.1, 0.2])));
+
+    const wide = restoreOrder(['hit', 'miss'], hitVectors, missVectors, 'float64');
+    expect(wide.map((vector) => vector.constructor)).toEqual([Float64Array, Float64Array]);
+    expect(Array.from(wide[1] as Float64Array)).toEqual([0.1, 0.2]);
+  });
+
   it('throws a stable internal error if a key is in neither map (defensive — should be unreachable via the public API)', () => {
-    expect(() => restoreOrder(['missing'], new Map(), new Map())).toThrowError(VectorCacheError);
+    expect(() => restoreOrder(['missing'], new Map(), new Map(), 'float32')).toThrowError(
+      VectorCacheError,
+    );
     try {
-      restoreOrder(['missing'], new Map(), new Map());
+      restoreOrder(['missing'], new Map(), new Map(), 'float32');
     } catch (error) {
       expect((error as VectorCacheError).code).toBe('INTERNAL');
     }
