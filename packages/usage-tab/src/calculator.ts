@@ -1,6 +1,6 @@
 /**
  * `createPriceCalculator` — bundles a set of default overrides/fallback/
- * registry once, so a caller pricing many requests against the same
+ * registry/provider once, so a caller pricing many requests against the same
  * negotiated rates doesn't repeat `options` on every call.
  */
 import { calculateCost } from './calculate-cost.js';
@@ -22,7 +22,7 @@ export function createPriceCalculator(defaults: PriceCalculatorOptions = {}): Pr
         overrides: options.overrides ?? defaults.overrides,
         fallback: options.fallback ?? defaults.fallback,
         registry: options.registry ?? defaults.registry,
-        provider: options.provider,
+        provider: options.provider ?? defaults.provider,
       });
     },
     resolveModel(model: string, options: ResolveModelOptions = {}): ResolvedModel {
@@ -30,7 +30,7 @@ export function createPriceCalculator(defaults: PriceCalculatorOptions = {}): Pr
         overrides: options.overrides ?? defaults.overrides,
         fallback: options.fallback ?? defaults.fallback,
         registry: options.registry ?? defaults.registry,
-        provider: options.provider,
+        provider: options.provider ?? defaults.provider,
       });
     },
   };

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createPriceCalculator } from '../src/calculator.js';
+import { AmbiguousAliasError, UnknownModelError } from '../src/index.js';
 import { createPriceOverride } from '../src/overrides.js';
 
 describe('createPriceCalculator', () => {
@@ -62,5 +63,41 @@ describe('createPriceCalculator', () => {
       at: '2026-08-05',
     });
     expect(result.input.costUsdExact).toBe('1.25');
+  });
+
+  describe('default provider', () => {
+    const usage = { inputTokens: 1_000_000, outputTokens: 1_000_000 };
+
+    it('qualifies an id registered under several providers', () => {
+      expect(() => createPriceCalculator().calculateCost({ model: 'gpt-5.6-luna', usage })).toThrow(
+        AmbiguousAliasError,
+      );
+      const calculator = createPriceCalculator({ provider: 'azure-openai' });
+      expect(calculator.calculateCost({ model: 'gpt-5.6-luna', usage }).provider).toBe(
+        'azure-openai',
+      );
+      expect(calculator.resolveModel('gpt-5.6-luna').descriptor.provider).toBe('azure-openai');
+    });
+
+    it('yields to a per-call options.provider or request.provider', () => {
+      const calculator = createPriceCalculator({ provider: 'azure-openai' });
+      expect(
+        calculator.calculateCost({ model: 'gpt-5.6-luna', usage }, { provider: 'openai' }).provider,
+      ).toBe('openai');
+      expect(
+        calculator.calculateCost({ model: 'gpt-5.6-luna', provider: 'openai', usage }).provider,
+      ).toBe('openai');
+      expect(
+        calculator.resolveModel('gpt-5.6-luna', { provider: 'openai' }).descriptor.provider,
+      ).toBe('openai');
+    });
+
+    it('is a hard constraint: a qualified miss throws UNKNOWN_MODEL', () => {
+      const calculator = createPriceCalculator({ provider: 'azure-openai' });
+      expect(() => calculator.calculateCost({ model: 'gpt-5.5-pro', usage })).toThrow(
+        UnknownModelError,
+      );
+      expect(() => calculator.resolveModel('gpt-5.5-pro')).toThrow(UnknownModelError);
+    });
   });
 });

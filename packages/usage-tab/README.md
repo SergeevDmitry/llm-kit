@@ -190,12 +190,10 @@ try {
 }
 ```
 
-`options.provider` exists because `createPriceCalculator` threads its own
-`options` bag through to every call — useful when a calculator built with
-shared overrides also needs a default provider qualifier per call, without
-repeating it on `request` each time. Either channel populates
-`CostBreakdown.requestedProvider`, so that field tells you a qualifier was
-supplied, not which channel carried it.
+`createPriceCalculator({ provider })` sets a default qualifier for every call
+on that calculator; a per-call qualifier on either channel overrides it.
+Either channel populates `CostBreakdown.requestedProvider`, so that field
+tells you a qualifier was supplied, not which channel carried it.
 
 ### `resolveModel(model, options?): ResolvedModel`
 
@@ -218,8 +216,9 @@ resolved.matchedBy; // "alias-scoped"
 
 ### `createPriceCalculator(options?): PriceCalculator`
 
-Bundles a set of default overrides/fallback/registry once, for pricing many
-requests against the same negotiated rates without repeating `options`:
+Bundles a set of default overrides/fallback/registry/provider once, for
+pricing many requests against the same negotiated rates without repeating
+`options`:
 
 ```ts
 import { createPriceCalculator, createPriceOverride } from 'usage-tab';
@@ -240,6 +239,19 @@ calculator.calculateCost({
   provider: 'openai',
   usage: { inputTokens: 1_000_000, outputTokens: 1_000_000 },
 }).totalUsdExact; // "8.40" — the negotiated rate, not the $11.25 list rate
+```
+
+A default `provider` settles ids that several providers list, so no call has
+to repeat it. A per-call `provider` still wins:
+
+```ts
+import { createPriceCalculator } from 'usage-tab';
+
+const azure = createPriceCalculator({ provider: 'azure-openai' });
+const usage = { inputTokens: 1_000_000, outputTokens: 1_000_000 };
+
+azure.calculateCost({ model: 'gpt-5.6-luna', usage }).provider; // "azure-openai"
+azure.calculateCost({ model: 'gpt-5.6-luna', provider: 'openai', usage }).provider; // "openai"
 ```
 
 ### Provider usage adapters

@@ -159,6 +159,12 @@ export interface ResolvedModel {
 export type PriceOptions = ResolveModelOptions;
 
 export interface PriceCalculatorOptions {
+  /**
+   * Default provider qualifier for every call, so an id registered under
+   * several providers resolves without repeating it. A per-call
+   * `options.provider` or `request.provider` takes precedence.
+   */
+  readonly provider?: ProviderId | string;
   readonly overrides?: readonly ModelDescriptor[];
   readonly fallback?: string;
   readonly registry?: readonly ModelDescriptor[];
