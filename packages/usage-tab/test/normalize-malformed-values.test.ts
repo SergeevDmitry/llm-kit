@@ -137,6 +137,16 @@ describe('normalizeAnthropicUsage — malformed known fields', () => {
         });
       }
 
+      it(`rejects a malformed cache_creation.${field} even when cache_creation_input_tokens is present`, () => {
+        expect(() =>
+          normalizeAnthropicUsage({
+            ...base,
+            cache_creation_input_tokens: 10,
+            cache_creation: { [field]: '10' },
+          }),
+        ).toThrow(InvalidUsageError);
+      });
+
       it(`treats a null cache_creation.${field} as absent`, () => {
         const { usage } = normalizeAnthropicUsage({ ...base, cache_creation: { [field]: null } });
         expect(usage.cacheWriteTokens).toBeUndefined();

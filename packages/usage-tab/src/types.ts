@@ -77,7 +77,8 @@ export type PriceWarningCode =
   | 'PARTIAL_TIER_PRICING'
   | 'REASONING_PRICED_AS_OUTPUT'
   | 'CACHED_INPUT_PRICED_AS_INPUT'
-  | 'CACHE_WRITE_PRICED_AS_INPUT';
+  | 'CACHE_WRITE_PRICED_AS_INPUT'
+  | 'CACHE_WRITE_TTL_NOT_MODELED';
 
 /**
  * A non-fatal condition surfaced alongside a `CostBreakdown` — the same rule

@@ -15,7 +15,7 @@
  */
 import { InvalidUsageError } from '../errors.js';
 import type { LlmUsage, NormalizedUsageResult, PriceWarning } from '../types.js';
-import { unsupportedUsageFieldWarning } from '../warnings.js';
+import { cacheWriteTtlNotModeledWarning, unsupportedUsageFieldWarning } from '../warnings.js';
 import { assertUsageObject, isPlainObject, readNumber } from './support.js';
 
 const KNOWN_TOP_LEVEL = new Set([
@@ -86,11 +86,16 @@ export function normalizeAnthropicUsage(value: unknown): NormalizedUsageResult {
       );
     }
     const creation = obj.cache_creation;
-    if (cacheWriteTokens === undefined) {
-      const fiveMinute = readNumber(creation, 'ephemeral_5m_input_tokens', adapterName) ?? 0;
-      const oneHour = readNumber(creation, 'ephemeral_1h_input_tokens', adapterName) ?? 0;
-      if (fiveMinute > 0 || oneHour > 0) cacheWriteTokens = fiveMinute + oneHour;
+    // Both buckets are read even when the aggregate field wins, so a
+    // malformed value throws rather than hiding behind the aggregate
+    const fiveMinute = readNumber(creation, 'ephemeral_5m_input_tokens', adapterName) ?? 0;
+    const oneHour = readNumber(creation, 'ephemeral_1h_input_tokens', adapterName) ?? 0;
+    if (cacheWriteTokens === undefined && (fiveMinute > 0 || oneHour > 0)) {
+      cacheWriteTokens = fiveMinute + oneHour;
     }
+    // The registry's single `cacheWrite` rate is the 5-minute TTL rate, so
+    // 1-hour writes are priced below what they cost
+    if (oneHour > 0) warnings.push(cacheWriteTtlNotModeledWarning(oneHour));
     for (const key of Object.keys(creation)) {
       if (!KNOWN_CACHE_CREATION_FIELDS.has(key)) {
         warnings.push(unsupportedUsageFieldWarning(`cache_creation.${key}`));

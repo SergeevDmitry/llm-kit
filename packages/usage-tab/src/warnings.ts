@@ -80,3 +80,11 @@ export function cacheWritePricedAsInputWarning(
     message: `"${provider}:${canonicalModel}" reported cache-write tokens but its pricing period publishes no dedicated cacheWrite rate. Billed at the ordinary input rate instead of being dropped — the real cache-write rate, usually a premium over input, is not reflected, so this calculation may under-report for this line.`,
   };
 }
+
+export function cacheWriteTtlNotModeledWarning(oneHourTokens: number): PriceWarning {
+  return {
+    code: 'CACHE_WRITE_TTL_NOT_MODELED',
+    field: 'cache_creation.ephemeral_1h_input_tokens',
+    message: `${String(oneHourTokens)} cache-write tokens used the 1-hour cache TTL, but they are priced at the model's single recorded cache-write rate, which is the 5-minute TTL rate. The 1-hour rate is higher, so the cacheWrite line under-reports for these tokens.`,
+  };
+}

@@ -94,6 +94,33 @@ describe('normalizeAnthropicUsage', () => {
     });
     expect(usage.cacheWriteTokens).toBe(50);
     expect(usage.inputTokens).toBe(550);
+    expect(warnings.map((w) => w.code)).toEqual(['CACHE_WRITE_TTL_NOT_MODELED']);
+  });
+
+  it('warns that 1-hour cache writes are priced at the 5-minute rate, with or without the aggregate field', () => {
+    for (const aggregate of [{}, { cache_creation_input_tokens: 10_000 }]) {
+      const { warnings } = normalizeAnthropicUsage({
+        input_tokens: 100,
+        output_tokens: 50,
+        ...aggregate,
+        cache_creation: { ephemeral_5m_input_tokens: 0, ephemeral_1h_input_tokens: 10_000 },
+      });
+      expect(warnings).toEqual([
+        expect.objectContaining({
+          code: 'CACHE_WRITE_TTL_NOT_MODELED',
+          field: 'cache_creation.ephemeral_1h_input_tokens',
+        }),
+      ]);
+    }
+  });
+
+  it('does not warn about the TTL when only 5-minute cache writes occurred', () => {
+    const { warnings } = normalizeAnthropicUsage({
+      input_tokens: 100,
+      output_tokens: 50,
+      cache_creation_input_tokens: 40,
+      cache_creation: { ephemeral_5m_input_tokens: 40, ephemeral_1h_input_tokens: 0 },
+    });
     expect(warnings).toEqual([]);
   });
 
