@@ -6,6 +6,8 @@
  * number narrowing — so this lives once rather than once per adapter.
  */
 import { InvalidUsageError } from '../errors.js';
+import type { PriceWarning } from '../types.js';
+import { unsupportedUsageFieldWarning } from '../warnings.js';
 
 export function isPlainObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -133,4 +135,25 @@ export function readNestedNumber(
     );
   }
   return readNumber(parent, key, adapterName);
+}
+
+/**
+ * Pushes an `UNSUPPORTED_USAGE_FIELD` warning for every key inside the
+ * `detailKeys` objects of `obj` that is not in `knownFields`. A nested
+ * details object is where providers add new billable token classes, so a
+ * key there that no adapter reads must surface rather than go unpriced.
+ */
+export function warnUnknownDetailFields(
+  obj: Record<string, unknown>,
+  detailKeys: readonly string[],
+  knownFields: ReadonlySet<string>,
+  warnings: PriceWarning[],
+): void {
+  for (const detailKey of detailKeys) {
+    const details = obj[detailKey];
+    if (!isPlainObject(details)) continue;
+    for (const key of Object.keys(details)) {
+      if (!knownFields.has(key)) warnings.push(unsupportedUsageFieldWarning(`${detailKey}.${key}`));
+    }
+  }
 }

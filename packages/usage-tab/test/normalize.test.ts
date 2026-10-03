@@ -260,4 +260,34 @@ describe('normalizeOpenAICompatibleUsage', () => {
   it('throws InvalidUsageError without prompt_tokens/completion_tokens', () => {
     expect(() => normalizeOpenAICompatibleUsage({})).toThrow(InvalidUsageError);
   });
+
+  it('warns on an unrecognized field inside a *_details object', () => {
+    const { warnings } = normalizeOpenAICompatibleUsage({
+      prompt_tokens: 100,
+      completion_tokens: 10,
+      prompt_tokens_details: { cached_tokens: 0, image_tokens: 5000 },
+      completion_tokens_details: { reasoning_tokens: 0, made_up_tokens: 1 },
+    });
+    expect(warnings.map((w) => w.field)).toEqual([
+      'prompt_tokens_details.image_tokens',
+      'completion_tokens_details.made_up_tokens',
+    ]);
+  });
+
+  it('agrees with normalizeOpenAIUsage on which detail fields are unrecognized', () => {
+    const raw = {
+      prompt_tokens: 100,
+      completion_tokens: 10,
+      prompt_tokens_details: { cached_tokens: 0, audio_tokens: 0, image_tokens: 5000 },
+      completion_tokens_details: {
+        reasoning_tokens: 0,
+        audio_tokens: 0,
+        accepted_prediction_tokens: 0,
+        rejected_prediction_tokens: 0,
+      },
+    };
+    expect(normalizeOpenAICompatibleUsage(raw).warnings).toEqual(
+      normalizeOpenAIUsage(raw).warnings,
+    );
+  });
 });

@@ -10,7 +10,13 @@
 import { InvalidUsageError } from '../errors.js';
 import type { LlmUsage, NormalizedUsageResult, PriceWarning } from '../types.js';
 import { unsupportedUsageFieldWarning } from '../warnings.js';
-import { assertUsageObject, readNestedNumber, readNumber } from './support.js';
+import { KNOWN_DETAIL_FIELDS } from './openai.js';
+import {
+  assertUsageObject,
+  readNestedNumber,
+  readNumber,
+  warnUnknownDetailFields,
+} from './support.js';
 
 const KNOWN_TOP_LEVEL = new Set([
   'prompt_tokens',
@@ -57,6 +63,12 @@ export function normalizeOpenAICompatibleUsage(value: unknown): NormalizedUsageR
   for (const key of Object.keys(obj)) {
     if (!KNOWN_TOP_LEVEL.has(key)) warnings.push(unsupportedUsageFieldWarning(key));
   }
+  warnUnknownDetailFields(
+    obj,
+    ['prompt_tokens_details', 'completion_tokens_details'],
+    KNOWN_DETAIL_FIELDS,
+    warnings,
+  );
 
   return { usage, warnings };
 }

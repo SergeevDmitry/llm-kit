@@ -13,7 +13,12 @@
 import { InvalidUsageError } from '../errors.js';
 import type { LlmUsage, NormalizedUsageResult, PriceWarning } from '../types.js';
 import { unsupportedUsageFieldWarning } from '../warnings.js';
-import { assertUsageObject, isPlainObject, readNestedNumber, readNumber } from './support.js';
+import {
+  assertUsageObject,
+  readNestedNumber,
+  readNumber,
+  warnUnknownDetailFields,
+} from './support.js';
 
 const KNOWN_TOP_LEVEL = new Set([
   'prompt_tokens',
@@ -27,7 +32,8 @@ const KNOWN_TOP_LEVEL = new Set([
   'output_tokens_details',
 ]);
 
-const KNOWN_DETAIL_FIELDS = new Set([
+// Shared with `openai-compatible.ts`, whose gateways mirror OpenAI's details objects
+export const KNOWN_DETAIL_FIELDS: ReadonlySet<string> = new Set([
   'cached_tokens',
   'reasoning_tokens',
   'audio_tokens',
@@ -68,19 +74,17 @@ export function normalizeOpenAIUsage(value: unknown): NormalizedUsageResult {
   for (const key of Object.keys(obj)) {
     if (!KNOWN_TOP_LEVEL.has(key)) warnings.push(unsupportedUsageFieldWarning(key));
   }
-  for (const detailKey of [
-    'prompt_tokens_details',
-    'completion_tokens_details',
-    'input_tokens_details',
-    'output_tokens_details',
-  ]) {
-    const details = obj[detailKey];
-    if (!isPlainObject(details)) continue;
-    for (const key of Object.keys(details)) {
-      if (!KNOWN_DETAIL_FIELDS.has(key))
-        warnings.push(unsupportedUsageFieldWarning(`${detailKey}.${key}`));
-    }
-  }
+  warnUnknownDetailFields(
+    obj,
+    [
+      'prompt_tokens_details',
+      'completion_tokens_details',
+      'input_tokens_details',
+      'output_tokens_details',
+    ],
+    KNOWN_DETAIL_FIELDS,
+    warnings,
+  );
 
   return { usage, warnings };
 }
