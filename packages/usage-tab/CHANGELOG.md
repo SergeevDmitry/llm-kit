@@ -1,5 +1,41 @@
 # usage-tab
 
+## 1.3.0
+
+### Minor Changes
+
+- a721a5f: Refresh every provider's pricing data (observed 2026-10-03) and add the models released since the last pass. 152 models to 172.
+
+  **Azure now charges OpenAI's first-party price for `gpt-5.6-sol`, `gpt-5.6-terra` and `gpt-5.6-luna`.** Azure cut sol from $5.00/$30.00 to $4.00/$20.00, terra from $2.50/$15.00 to $2.00/$12.00 and luna from $1.00/$6.00 to $0.20/$1.20 per million tokens. The new rates apply from 2026-10-03. Lookups dated earlier still return the prices observed then, so luna on 2026-08-05 is still 5x apart. The README's headline example now uses `gemma-4-31b`, which costs 2.5x more on Together than on AWS Bedrock today.
+
+  **Retired models are removed**, so a lookup for them now throws `UNKNOWN_MODEL` at any date; price historical usage for them with an override. They are Mistral's `devstral-2`, `devstral-small-2`, `magistral-medium`, `magistral-small`, `mistral-nemo`, `mixtral-8x7b` and `mixtral-8x22b`; Groq's `llama-3.1-8b-instant`, `llama-3.3-70b-versatile` and `qwen3.6-27b`; and Cohere's `aya-expanse-8b`.
+
+  `gemini-omni-1.1-flash` and `gemini-omni-flash-preview` record the $9.00 text output rate and carry a `PARTIAL_TIER_PRICING` warning, because video output costs $17.50 per million tokens. `openai:gpt-3.5-turbo` loses its batch rate, since OpenAI's Batch table no longer lists it: a batch request for it is priced at standard rates with a `BATCH_PRICING_UNAVAILABLE` warning.
+
+  Other price changes: `together:qwen3.7-max` rose from $1.25/$3.75 to $1.50/$4.50, and `together:qwen3.8-flash` fell from $0.15/$0.47 to $0.09/$0.28.
+
+  New models: `claude-opus-5-5`, `claude-sonnet-5-5`; `gpt-6.1-sol`, `gpt-6-sol`, `gpt-6-luna`, `chat-latest`, `gpt-5.3-codex`, `gpt-5-search-api`, `gpt-rosalind-research`, `gpt-5.6-cyber`, `gpt-5.5-cyber`; `gemini-3-flash-preview`, `gemini-omni-1.1-flash`, `gemini-omni-flash-preview`, `gemini-robotics-er-2-preview`, `gemini-robotics-er-2-streaming-preview`; `gpt-6-astra` on Azure; `gemma-4-26b-a4b`, `gemma-4-e2b`, `gemma-3-4b` and `nemotron-3-nano-30b` on Bedrock; `command-r7b-12-2024` and `command-r-08-2024` on Cohere; `zai-glm-5-3` on Mistral; seven more on Together.
+
+  Newly published rates fill in fields that were missing:
+
+  - `cacheWrite` on four OpenAI models and OpenRouter's Gemini entry, so their cache writes are priced at the published rate instead of the input rate with a warning.
+  - `cachedInput` on `gemini-3.5-flash-lite`, five Together models and four Mistral models.
+  - `batchMultiplier` on five Mistral models and on Azure's `gpt-4-turbo` and `gpt-4`.
+
+- c5113e6: `createPriceCalculator` accepts a default `provider`.
+
+  An id registered under several providers, such as `gpt-5.6-luna` under `openai` and `azure-openai`, used to throw `AmbiguousAliasError` unless every call repeated the qualifier. A per-call `options.provider` or `request.provider` still takes precedence, and the default is a hard constraint like either of them: an id the provider does not list throws `UnknownModelError`.
+
+### Patch Changes
+
+- b94effd: `normalizeAnthropicUsage` now warns with `CACHE_WRITE_TTL_NOT_MODELED` when a response reports 1-hour cache writes.
+
+  The registry records one cache-write rate per model, the 5-minute TTL rate. A 1-hour write costs more (2x input against 1.25x), so those tokens were under-priced with no warning. The cost is unchanged; the warning now says it is low. `cache_creation.ephemeral_5m_input_tokens` and `ephemeral_1h_input_tokens` are also validated when `cache_creation_input_tokens` is present, so a malformed value throws `InvalidUsageError` instead of being ignored.
+
+- ac175df: `normalizeOpenAICompatibleUsage` now warns about unrecognized fields inside `prompt_tokens_details` and `completion_tokens_details`, matching `normalizeOpenAIUsage`.
+
+  It used to check top-level keys only, so a token class a gateway added inside a details object, such as `image_tokens`, went unpriced with no warning.
+
 ## 1.2.0
 
 ### Minor Changes
