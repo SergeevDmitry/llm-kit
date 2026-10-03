@@ -41,18 +41,15 @@ describe('provider qualifier: request.provider vs options.provider equivalence',
     expect(viaOptions.provider).toBe('anthropic');
   });
 
-  it('match: the Azure/OpenAI 5x case prices identically on either channel (README headline claim)', () => {
-    // gpt-5.6-luna: $1.00/$6.00 on azure-openai vs $0.20/$1.20 on openai — a real 5x price difference for the identical model name.
-    const viaRequest = calculateCost({ model: 'gpt-5.6-luna', provider: 'azure-openai', usage });
-    const viaOptions = calculateCost(
-      { model: 'gpt-5.6-luna', usage },
-      { provider: 'azure-openai' },
-    );
+  it('match: the Together/Bedrock 2.5x case prices identically on either channel (README headline claim)', () => {
+    // gemma-4-31b: $0.39/$0.97 on together vs $0.14/$0.40 on aws-bedrock, a real price difference for the identical model name
+    const viaRequest = calculateCost({ model: 'gemma-4-31b', provider: 'together', usage });
+    const viaOptions = calculateCost({ model: 'gemma-4-31b', usage }, { provider: 'together' });
     expect(viaOptions).toEqual(viaRequest);
-    expect(viaOptions.provider).toBe('azure-openai');
+    expect(viaOptions.provider).toBe('together');
 
-    const openaiRate = calculateCost({ model: 'gpt-5.6-luna', usage }, { provider: 'openai' });
-    expect(openaiRate.totalUsdExact).not.toBe(viaOptions.totalUsdExact);
+    const bedrockRate = calculateCost({ model: 'gemma-4-31b', usage }, { provider: 'aws-bedrock' });
+    expect(bedrockRate.totalUsdExact).not.toBe(viaOptions.totalUsdExact);
   });
 
   it('qualified miss: a provider-qualified id that exists under a different provider throws UNKNOWN_MODEL on either channel, never a silent global match', () => {

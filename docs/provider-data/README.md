@@ -1,14 +1,13 @@
 # Provider pricing data
 
-Reviewed, hand-authored source data for `@llm-kit/model-registry`. One file per
-`ProviderId`, always present — even a provider with zero confidently-sourced
-models still ships a file, with `"models": []` and an `"omitted"` note
-explaining the gap. `scripts/generate-model-registry.ts` reads every file here
-and refuses to run if any is missing, since the generated registry must come
-only from these reviewed source files.
+These reviewed files are the source data for `@llm-kit/model-registry`. There
+must be one file per `ProviderId`. If no model has a confirmed price, the file
+still needs `"models": []` and an `"omitted"` note explaining why.
+`scripts/generate-model-registry.ts` reads these files and fails if one is
+missing.
 
-**Never hand-edit `internal/model-registry/src/generated/registry.ts`.** It is
-produced from these files and only from these files.
+Do not edit `internal/model-registry/src/generated/registry.ts` by hand. The
+generator produces it from these files.
 
 ## File shape
 
@@ -48,69 +47,112 @@ produced from these files and only from these files.
 }
 ```
 
-Rates are decimal strings on purpose: a price must never pass through a
-JavaScript `number` on its authoritative path.
-`scripts/verify-pricing-data.ts` rejects a JSON number in a rate field.
+Rates are decimal strings so the source price does not pass through a
+JavaScript `number`. `scripts/verify-pricing-data.ts` rejects numeric rate
+fields.
 
 ## Update workflow
 
-1. **Update the provider source file** with the new/corrected price, its
-   `sourceUrl`, the date you observed it (`observedAt`), and the date it takes
-   effect (`effectiveFrom`). A price correction that applies retroactively is
-   representable: add a new `PricingPeriod` with an `effectiveFrom` earlier
-   than an existing one's — `selectPricingPeriod` always picks the period with
-   the latest `effectiveFrom` that still covers the lookup date, regardless of
-   the order periods appear in the file.
-2. **Run schema validation**: `pnpm exec tsx scripts/verify-pricing-data.ts`.
-   Fast, no generation, reports every issue across every provider file in one
-   pass.
-3. **Generate the sorted registry output**:
-   `pnpm exec tsx scripts/generate-model-registry.ts`. This re-validates (so it
-   can never silently generate from bad data) and writes
+1. Update the provider file with the price, `sourceUrl`, observation date
+   (`observedAt`), and effective date (`effectiveFrom`). For a retroactive
+   correction, add a `PricingPeriod` with an earlier `effectiveFrom`.
+   `selectPricingPeriod` chooses the qualifying period with the latest
+   `effectiveFrom`, regardless of file order.
+2. Validate all provider files with
+   `pnpm exec tsx scripts/verify-pricing-data.ts`. This reports validation
+   issues without generating the registry.
+3. Run `pnpm exec tsx scripts/generate-model-registry.ts`. It validates the
+   data again and writes the sorted
    `internal/model-registry/src/generated/registry.ts`.
-4. **Run the golden cost fixtures** — `pnpm --filter @llm-kit/model-registry run test`
-   at minimum; once `usage-tab` consumes this data, its own golden fixtures
-   too (`pnpm --filter usage-tab run test`).
-5. **Review the data diff separately from any engine code.** A provider-data
-   change and a `src/*.ts` change are different commits and, ideally, different
-   pull requests — this is a repository working agreement, not just a
-   suggestion, because a reviewer checking a price against a source URL should
-   not also be reviewing resolution logic in the same diff.
-6. **Add a changeset** noting the price change (owned by the consuming public
-   package, e.g. `usage-tab`, once it exists — `@llm-kit/model-registry` itself
-   is never published, so it has no changeset of its own).
-7. **Publish a release even when only data changes.** A stale committed price
-   is a silent correctness bug; there is no "data-only, skip the release" path
-   in this repository. Runtime remote updates are prohibited in v1 (no
-   network fetch, ever) specifically so that "the data is wrong" always has a
-   release as its fix.
+4. Run `pnpm --filter @llm-kit/model-registry run test` and
+   `pnpm --filter usage-tab run test` for the cost fixtures.
+5. Review price changes separately from engine changes. Keep provider-data
+   and `src/*.ts` changes in separate commits and, preferably, separate pull
+   requests so reviewers can check each price against its source.
+6. Add a changeset for the consuming public package, such as `usage-tab`.
+   `@llm-kit/model-registry` is not published and has no changeset of its own.
+7. Release data changes. Version 1 has no runtime price fetch, so a corrected
+   price reaches users through a release.
 
-`scripts/generate-model-registry.ts --check` (no write, exit non-zero on any
-diff) is what CI runs; a stale `generated/registry.ts` fails the build.
+CI runs `scripts/generate-model-registry.ts --check`. It does not write files
+and fails if `generated/registry.ts` is stale.
 
 ## What is included
 
-As of the 2026-09-07 refresh, the registry carries **152 models across all 10
-providers** (123 before it). Every price was fetched from the provider's own
-current pricing page (or, for Azure OpenAI, its retail pricing API); none was
-recalled from training data.
+The 2026-10-03 refresh brought the registry from 152 to 172 models across 10
+providers. Prices were fetched from provider pricing pages or, for Azure
+OpenAI, its Retail Prices API. None were filled in from memory.
 
-**Read the 2026-09-07 refresh section below before the per-provider notes**,
-which describe the 2026-08-05 pass and are only amended where the refresh
-changed something.
+Read the refresh notes before the per-provider notes, which describe the
+2026-08-05 pass except where a later refresh changed them.
+
+### The 2026-10-03 refresh
+
+Pricing sources for every provider were fetched again. The changes were:
+
+- Azure's `gpt-5.6-sol`, `-terra`, and `-luna` rates now match OpenAI's:
+  sol fell from $5.00 / $30.00 to $4.00 / $20.00, terra from $2.50 / $15.00
+  to $2.00 / $12.00, and luna from $1.00 / $6.00 to $0.20 / $1.20. The
+  Retail Prices API lists 2026-09-01 for sol and 2026-08-01 for terra and
+  luna, but the older prices were observed after those dates (2026-09-07
+  and 2026-08-05). The new periods therefore begin on the 2026-10-03
+  observation date. A 2026-08-05 lookup for `gpt-5.6-luna` still shows the
+  fivefold difference. The `usage-tab` headline example uses `gemma-4-31b`
+  on Together and Bedrock, whose rates still differ.
+- Together changed two rates: `qwen3.7-max` rose from $1.25 / $3.75 to
+  $1.50 / $4.50 (cached input from $0.13 to $0.30), while `qwen3.8-flash`
+  fell from $0.15 / $0.47 to $0.09 / $0.28. No other input or output rate
+  changed in this refresh.
+- Thirty-one models were added. Anthropic: `claude-opus-5-5`, `claude-sonnet-5-5`.
+  OpenAI: `gpt-6.1-sol`, `gpt-6-sol`, `gpt-6-luna`, and from the page's
+  Specialized and Cyber tables `chat-latest`, `gpt-5.3-codex`,
+  `gpt-5-search-api`, `gpt-rosalind-research` (billed from 2026-10-05),
+  `gpt-5.6-cyber` and `gpt-5.5-cyber`; the last three need approved access.
+  Google: `gemini-3-flash-preview`, `gemini-omni-1.1-flash` and
+  `gemini-omni-flash-preview` (flagged `cheapestTier`: video output costs
+  $17.50 against the recorded $9.00 text rate), `gemini-robotics-er-2-preview`
+  and its streaming variant (promotional until 2026-12-31, both periods
+  recorded). Google's API docs did not list Gemini 4 on 2026-10-03.
+  Azure: `gpt-6-astra`. Bedrock: `gemma-4-26b-a4b`,
+  `gemma-4-e2b`, `gemma-3-4b`, `nemotron-3-nano-30b`. Cohere:
+  `command-r7b-12-2024`, `command-r-08-2024` (the pricing page says only
+  "Command R"; the docs list `command-r-08-2024` as the only live one).
+  Mistral: `zai-glm-5-3`. Together: `deepseek-v4.1-flash`, `minimax-m2.7`,
+  `qwen3-235b-a22b-instruct-2507-fp8`, `muse-glimmer-30b`, `inkling`,
+  `cogito-v2.1-671b`, `rnj-1-instruct`.
+- Cache and batch rates published since the earlier pass were added to the
+  existing periods: `cacheWrite` on four OpenAI models (`gpt-6-astra`,
+  `gpt-5.6-sol`/`-terra`/`-luna`) and on OpenRouter's Gemini entry;
+  `cachedInput` on `gemini-3.5-flash-lite`, five Together models,
+  `codestral` and the three `ministral-3` models; `batchMultiplier` on
+  `codestral`, the `ministral-3` models, `zai-glm-5-2`, and Azure's
+  `gpt-4-turbo` and `gpt-4`, whose Batch meters the 2026-08-05 pass missed.
+- Eleven retired models were removed because they can no longer be called:
+  Mistral's `devstral-2`, `devstral-small-2`, `magistral-medium`,
+  `magistral-small`, `mistral-nemo`, `mixtral-8x7b` and `mixtral-8x22b`;
+  Groq's `llama-3.1-8b-instant`, `llama-3.3-70b-versatile` and `qwen3.6-27b`
+  (shut down per Groq's deprecations page); Cohere's `aya-expanse-8b`. Each
+  file's `omitted` notes record the retirement dates. A lookup for these ids
+  returns `UNKNOWN_MODEL` for any date when no override or fallback is
+  supplied, so historical usage needs an override. `deepseek-v4-pro` and `gpt-oss-20b` (Together) and the three Nova
+  models (Bedrock) were not on the fetched pages but are not known to be
+  retired, so they are unchanged.
+- `gpt-3.5-turbo` loses its `batchMultiplier`: OpenAI's Batch table no longer
+  lists it.
+- All 32 existing Azure models were re-queried this time, but most in
+  `eastus2` only rather than across every region; each entry's notes say
+  which regions were checked.
 
 ### The 2026-09-07 refresh
 
-Every provider page was re-fetched. What changed:
+Pricing pages for all providers were fetched again. Changes from this pass:
 
-- **Anthropic's `claude-sonnet-5` scheduled increase was cancelled.** The
-  pricing page now states the $2.00 / $10.00 launch rate "is now the standard
-  price" and "the previously scheduled increase to $3/$15 per million
-  input/output tokens on September 1, 2026 will not occur". The 2026-08-05
-  data modelled that increase as a real period from 2026-09-01, so **every
-  lookup dated on or after 2026-09-01 was over-reporting this model by 50%**.
-  The second period is removed, not closed: a rate that never took effect must
-  not be reachable at any date.
+- Anthropic cancelled the planned `claude-sonnet-5` increase. Its pricing
+  page says the $2.00 / $10.00 launch rate is the standard rate and that the
+  planned $3.00 / $15.00 rate would not take effect on 2026-09-01. The
+  2026-08-05 data had included that higher rate, so lookups dated from
+  2026-09-01 overreported the price by 50%. The unused period was removed
+  because it never took effect.
 - **New models.** Anthropic: `claude-fable-5-1`, `claude-mythos-5-1`,
   `claude-mythos-5`, plus the legacy models the pricing page still publishes
   rates for (`claude-opus-4-5`, `claude-opus-4-1`, `claude-opus-4`,
@@ -132,32 +174,26 @@ Every provider page was re-fetched. What changed:
   rates. OpenAI's Batch section now states the 50% saving covers **all** text
   models in the standard table, so the `-pro` tiers no longer omit
   `batchMultiplier`.
-- **The `UNCERTAIN` flag on `openrouter:anthropic/claude-sonnet-5` is
-  withdrawn.** It was flagged because $2.00 / $10.00 matched Anthropic's
-  introductory rate; that rate turned out to be the standard one, so the
-  listing was right all along. The note recording why the flag existed stays.
-- **`azure-openai:gpt-5.6-sol` is now a price divergence, not a match.** Azure
-  did not follow OpenAI's cut: its meters still read $5.00 / $30.00 / $0.50,
-  re-observed 2026-09-07. It joins `gpt-5.6-terra` and `gpt-5.6-luna` as a
-  confirmed same-id, different-price pair.
-- **What was _not_ re-observed keeps its 2026-08-05 `observedAt`.** Some
-  models in this file did not appear in the 2026-09-07 fetch of the same page
-  (two Groq Llama models, several Mistral and Together entries, the Bedrock
-  Nova models), and 31 of Azure's 32 models were not re-queried. Their rates
-  are unchanged and their per-period notes say why. An absence from one page
-  fetch is not evidence of a withdrawal, and stamping a fresh observation date
-  on a rate nobody looked at is the exact failure these provenance fields
-  exist to prevent.
+- The `UNCERTAIN` flag was removed from
+  `openrouter:anthropic/claude-sonnet-5`. Its $2.00 / $10.00 rate had matched
+  Anthropic's introductory price, which became the standard price. The note
+  explaining the original flag remains.
+- On 2026-09-07, Azure's `gpt-5.6-sol` still cost $5.00 / $30.00 /
+  $0.50 after OpenAI cut its rate. That made it a third same-ID price
+  divergence alongside `gpt-5.6-terra` and `gpt-5.6-luna`. Azure matched
+  OpenAI's rates by the 2026-10-03 observation described above.
+- Rates not checked on 2026-09-07 kept their 2026-08-05 `observedAt`.
+  This includes two Groq Llama models, several Mistral and Together entries,
+  the Bedrock Nova models, and 31 of Azure's 32 models. Their per-period
+  notes explain the gap. A model missing from one page fetch was not treated
+  as withdrawn, and its rate was not given a new observation date.
 
-**The effective-date golden fixture moved.** With `claude-sonnet-5` down to a
-single period, the real-data multi-period fixture is now
-`google:gemini-3.6-flash`, better suited to the role since Google publishes
-both boundary dates rather than leaving them to be inferred.
-`openai:gpt-5.6-sol` gives a second, two-period case.
-`internal/model-registry/test/pricing-period.test.ts` keeps the old
-sonnet-5 shape as a synthetic fixture, and
-`packages/usage-tab/test/effective-date.test.ts` pins the cancellation
-end to end.
+The real-data effective-date fixture now uses `google:gemini-3.6-flash`.
+Google publishes both period boundaries, and `claude-sonnet-5` now has one
+period. `openai:gpt-5.6-sol` provides another two-period case.
+`internal/model-registry/test/pricing-period.test.ts` retains the earlier
+sonnet-5 shape as a synthetic fixture. The cancellation is also covered in
+`packages/usage-tab/test/effective-date.test.ts`.
 
 ### The 2026-08-05 pass
 
@@ -165,7 +201,7 @@ end to end.
 `claude-opus-4-8`, `claude-opus-4-7`, `claude-opus-4-6`, `claude-sonnet-5`,
 `claude-sonnet-4-6`, `claude-haiku-4-5`), sourced from
 <https://platform.claude.com/docs/en/about-claude/models/overview>, observed
-2026-08-05, and checked against that page directly. Notable shape:
+2026-08-05. The entries record:
 
 - `claude-sonnet-5` carried **two** pricing periods: an introductory rate
   ($2.00 / $10.00 input/output per million tokens) active through 2026-08-31,
@@ -233,12 +269,12 @@ excluded — priced in units this per-million-tokens schema does not model.
 **Cohere** — 7 models: `command`, `command-light`, `command-r-03-2024`,
 `command-r-plus-04-2024`, `command-r-plus-08-2024`, `aya-expanse-8b`,
 `aya-expanse-32b`, sourced from <https://cohere.com/pricing>, observed
-2026-08-05. **Notable gap**: Cohere's current model catalogue (confirmed via
-<https://docs.cohere.com/docs/models>) includes newer flagship models —
-Command A+, Command A, Command R7B, Command A Translate/Reasoning/Vision —
-none of which have a published per-token price on the pricing page as
-fetched, so none are included. Only the older Command/Command R/Command
-R+/Aya Expanse models with an explicit published price made it in.
+2026-08-05. The model catalogue checked at
+<https://docs.cohere.com/docs/models> included Command A+, Command A,
+Command R7B, and Command A Translate/Reasoning/Vision, but the pricing page
+fetch did not publish per-token prices for them. The 2026-08-05 file included
+only Command, Command R, Command R+, and Aya Expanse models with explicit
+prices.
 
 **Together AI** — 10 models, a representative slice of ~30 fetched from
 <https://www.together.ai/pricing> spanning DeepSeek, Kimi (Moonshot), Qwen
@@ -307,8 +343,7 @@ per-model in `azure-openai.json`'s `notes`:
   page left unconfirmed). The 8 models with no Batch-API meter found
   (`gpt-5.6-sol`/`-terra`/`-luna`, `gpt-4-turbo`, `gpt-4`, `gpt-4-32k`,
   `o1-preview`, `gpt-3.5-turbo`) omit `batchMultiplier` rather than guessing.
-- **Region-independence spot-checked programmatically, not just a couple of
-  regions.** Every Global-tier rate was confirmed identical across all
+- **Regional consistency.** Every Global-tier rate was confirmed identical across all
   ~24–28 Azure regions the API returned for that meter (not merely 2–3
   samples). Three legacy SKUs (`gpt-4`, `gpt-4-32k`, `gpt-3.5-turbo`)
   returned exactly one row each (a single primary-meter-region list price,
@@ -348,11 +383,12 @@ per-model in `azure-openai.json`'s `notes`:
   billing model, not per-token). Full reasoning for each exclusion is in
   `azure-openai.json`'s `omitted` array.
 
-## Cross-provider alias/canonicalId collisions (deliberate, not errors)
+## Shared model IDs across providers
 
-Because several providers publish the _same_ open-weight or resold model
-under the _same_ name, a handful of canonicalIds are intentionally reused
-across provider files — always noted in both files' `notes`:
+Providers sometimes publish the same open-weight or resold model under
+the same name. The following `canonicalId`s are shared across provider files.
+The Azure entries document their collisions in `azure-openai.json`; matching
+notes have not yet been added to `openai.json`:
 
 - `gpt-oss-120b` / `gpt-oss-20b`: Groq and Together AI both host these
   OpenAI open-weight models, at different (in one case, coincidentally
@@ -362,28 +398,28 @@ across provider files — always noted in both files' `notes`:
 - `mistral-large-3`: Mistral's own first-party file and AWS Bedrock's resale
   file both list it, at (coincidentally) matching rates, independently
   fetched from each provider's own page.
-- `llama-3.3-70b` (in various forms): hosted independently by Groq,
-  Together AI, and (as `meta-llama/llama-3.3-70b-instruct`) OpenRouter, at
-  three different rates — Meta has no first-party API, so no fourth entry
-  exists to compare against.
-- **Azure OpenAI ↔ OpenAI (27 of Azure's 32 models)**: Azure genuinely
+- `llama-3.3-70b` (in various forms): hosted independently by Together AI
+  and (as `meta-llama/llama-3.3-70b-instruct`) OpenRouter, at different
+  rates. Groq's `llama-3.3-70b-versatile` was removed on 2026-10-03 after its
+  shutdown there. Meta has no first-party API, so no further entry exists to
+  compare against.
+- **Azure OpenAI ↔ OpenAI (28 of Azure's 33 models as of 2026-10-03)**: Azure genuinely
   resells the identical first-party OpenAI models, so `azure-openai.json`
   intentionally reuses `openai.json`'s exact `canonicalId`s (`gpt-5`,
   `gpt-4o`, `o1`, etc.) — following the aws-bedrock.json precedent (same-id
   reuse) rather than openrouter.json's provider-prefixed-slug convention,
   since unlike OpenRouter's proxy catalogue, Azure has no distinct slug
-  scheme of its own for the same model. 25 of these 27 collisions are
-  matching-price ("no markup") pairs; 2 (`gpt-5.6-terra`, `gpt-5.6-luna`)
-  are same-id pairs with **different, independently-confirmed** prices — see
-  the Azure OpenAI entry above. Each Azure model's `notes` documents the
+  scheme of its own for the same model. As of 2026-10-03 all 28 match
+  OpenAI's current first-party price. `gpt-5.6-sol`, `-terra` and `-luna`
+  were **different, independently-confirmed** prices until Azure cut them;
+  those rates stay as closed periods, so lookups dated before 2026-10-03
+  still show the divergence. Each Azure model's `notes` documents the
   collision; per this pass's ownership boundary, `openai.json` itself was
   not edited to add a mirroring note — a follow-up pass should add one.
 
-By the resolver's design, a lookup without a provider
-qualifier for any of these names is ambiguous by design and must fail
-`UNKNOWN_MODEL`/ambiguity resolution rather than silently pick one —
-`usage-tab` users who look up e.g. `"gpt-oss-120b"` without specifying
-`provider: 'groq'` or `provider: 'together'` will hit this.
+An unqualified lookup for a shared ID fails with `AMBIGUOUS_ALIAS`.
+For example, `usage-tab` needs `provider: 'groq'` or
+`provider: 'together'` to resolve `"gpt-oss-120b"`.
 
 ## What is deliberately omitted, and why
 
@@ -400,22 +436,19 @@ qualifier for any of these names is ambiguous by design and must fail
   unit for this schema, no published price found, catalogue too large for
   exhaustive coverage, etc.). Read the file directly for specifics; this
   README summarizes, it does not duplicate, each file's reasoning.
-- **General principle**: a wrong or stale price is the single worst defect
-  this package can ship — accuracy matters more than breadth. Every model
-  above was fetched and observed on 2026-08-05 against the cited `sourceUrl`;
-  nothing was filled in from memory, and no model's price was inferred from a
-  different model's price.
+- Prices need a provider source. The initial entries were checked against
+  their cited `sourceUrl` on 2026-08-05; later observations are dated in each
+  period. No price was filled in from memory or inferred from another model.
 
 ## Adding a new provider or model
 
-1. Confirm the price against the provider's own current pricing page — not a
-   secondary source, not a cached memory of what it used to be.
+1. Confirm the price against the provider's pricing page or API.
 2. Add or edit the model entry in `docs/provider-data/<provider>.json`,
    filling in `sourceUrl` and `observedAt` for every pricing period you touch.
-3. Run `pnpm exec tsx scripts/verify-pricing-data.ts` and fix every reported
-   issue — the messages name the exact field and what was expected.
+3. Run `pnpm exec tsx scripts/verify-pricing-data.ts` and fix the reported
+   issues. Each message names the field and expected value.
 4. Run `pnpm exec tsx scripts/generate-model-registry.ts` and commit the
    resulting diff in `internal/model-registry/src/generated/registry.ts`
    alongside the source-data diff, in a commit separate from any engine code.
-5. If you cannot confirm a price with confidence, do not add the model —
-   add or extend an `omitted` note instead.
+5. If you cannot confirm a price, leave out the model and explain why in
+   `omitted`.

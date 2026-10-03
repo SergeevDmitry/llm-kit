@@ -17,12 +17,12 @@
           "cachedInput": "0.075",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
             "New model: absent from the pricing page on 2026-08-05, present on 2026-09-07. effectiveFrom is the observation date rather than a backdated guess.",
             "Promotional rate published as running through 2026-12-31, with the standard rate resuming 2027-01-01 - both dates are stated on the page, so this period's effectiveTo and the next period's effectiveFrom are sourced, not conservative placeholders.",
-            "batchMultiplier of 0.5 was verified from this model's own Batch rows ($0.375 / $1.875 promo, $0.75 / $3.75 standard), not from a blanket statement.",
-            "cachedInput is this model's own published context-caching rate. The page also charges a separate per-hour cache storage fee, which this per-token schema does not model."
+            "This model's Batch rows ($0.375 / $1.875 promo, $0.75 / $3.75 standard) confirm batchMultiplier 0.5.",
+            "cachedInput records this model's published context-caching rate. The schema does not cover the separate per-hour cache storage fee."
           ]
         },
         {
@@ -34,17 +34,17 @@
           "cachedInput": "0.15",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
             "Standard rate resuming 2027-01-01, the date the page publishes for the end of the promotional rate.",
-            "batchMultiplier of 0.5 was verified from this model's own Batch rows ($0.375 / $1.875 promo, $0.75 / $3.75 standard), not from a blanket statement.",
-            "cachedInput is this model's own published context-caching rate. The page also charges a separate per-hour cache storage fee, which this per-token schema does not model."
+            "This model's Batch rows ($0.375 / $1.875 promo, $0.75 / $3.75 standard) confirm batchMultiplier 0.5.",
+            "cachedInput records this model's published context-caching rate. The schema does not cover the separate per-hour cache storage fee."
           ]
         }
       ],
       "source": {
         "url": "https://ai.google.dev/gemini-api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -63,12 +63,12 @@
           "cachedInput": "0.075",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
             "New model: absent from the pricing page on 2026-08-05, present on 2026-09-07. effectiveFrom is the observation date rather than a backdated guess.",
             "Promotional rate published as running through 2026-12-31, with the standard rate resuming 2027-01-01 - both dates are stated on the page, so this period's effectiveTo and the next period's effectiveFrom are sourced, not conservative placeholders.",
-            "batchMultiplier of 0.5 was verified from this model's own Batch rows ($0.375 / $1.875 promo, $0.75 / $3.75 standard), not from a blanket statement.",
-            "cachedInput is this model's own published context-caching rate. The page also charges a separate per-hour cache storage fee, which this per-token schema does not model."
+            "This model's Batch rows ($0.375 / $1.875 promo, $0.75 / $3.75 standard) confirm batchMultiplier 0.5.",
+            "cachedInput records this model's published context-caching rate. The schema does not cover the separate per-hour cache storage fee."
           ]
         },
         {
@@ -80,17 +80,17 @@
           "cachedInput": "0.15",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
             "Standard rate resuming 2027-01-01, the date the page publishes for the end of the promotional rate.",
-            "batchMultiplier of 0.5 was verified from this model's own Batch rows ($0.375 / $1.875 promo, $0.75 / $3.75 standard), not from a blanket statement.",
-            "cachedInput is this model's own published context-caching rate. The page also charges a separate per-hour cache storage fee, which this per-token schema does not model."
+            "This model's Batch rows ($0.375 / $1.875 promo, $0.75 / $3.75 standard) confirm batchMultiplier 0.5.",
+            "cachedInput records this model's published context-caching rate. The schema does not cover the separate per-hour cache storage fee."
           ]
         }
       ],
       "source": {
         "url": "https://ai.google.dev/gemini-api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -112,7 +112,7 @@
           "notes": [
             "Supersedes the single $1.50 / $7.50 period recorded on 2026-08-05. That rate was live then and is scheduled to return on 2027-01-01, so it is kept as a closed historical period rather than deleted.",
             "Recorded 2026-08-05 at $1.50 / $7.50 with no cachedInput; the page did not then publish a per-model context-caching rate. Closed at the 2026-09-07 observation date, the last date the promotional rate is known not to have applied being 2026-08-05.",
-            "Google's page does not state when this rate took effect; effectiveFrom is set conservatively to 2026-01-01."
+            "Google does not state when this rate took effect. effectiveFrom uses 2026-01-01 as a conservative placeholder."
           ]
         },
         {
@@ -125,11 +125,11 @@
           "cachedInput": "0.075",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
             "Promotional rate published as running through 2026-12-31, with the standard rate resuming 2027-01-01 - both dates are stated on the page, so this period's effectiveTo and the next period's effectiveFrom are sourced, not conservative placeholders.",
-            "batchMultiplier of 0.5 was verified from this model's own Batch rows ($0.375 / $1.875 promo, $0.75 / $3.75 standard), not from a blanket statement.",
-            "cachedInput is this model's own published context-caching rate. The page also charges a separate per-hour cache storage fee, which this per-token schema does not model."
+            "This model's Batch rows ($0.375 / $1.875 promo, $0.75 / $3.75 standard) confirm batchMultiplier 0.5.",
+            "cachedInput records this model's published context-caching rate. The schema does not cover the separate per-hour cache storage fee."
           ]
         },
         {
@@ -141,17 +141,17 @@
           "cachedInput": "0.15",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
             "Standard rate resuming 2027-01-01, the date the page publishes for the end of the promotional rate.",
-            "batchMultiplier of 0.5 was verified from this model's own Batch rows ($0.375 / $1.875 promo, $0.75 / $3.75 standard), not from a blanket statement.",
-            "cachedInput is this model's own published context-caching rate. The page also charges a separate per-hour cache storage fee, which this per-token schema does not model."
+            "This model's Batch rows ($0.375 / $1.875 promo, $0.75 / $3.75 standard) confirm batchMultiplier 0.5.",
+            "cachedInput records this model's published context-caching rate. The schema does not cover the separate per-hour cache storage fee."
           ]
         }
       ],
       "source": {
         "url": "https://ai.google.dev/gemini-api/docs/pricing",
-        "observedAt": "2026-09-07",
+        "observedAt": "2026-10-03",
         "notes": [
           "Three periods: the $1.50/$7.50 rate observed 2026-08-05, the $0.75/$3.75 promotional rate observed 2026-09-07 and published as running through 2026-12-31, then the standard rate resuming 2027-01-01."
         ]
@@ -172,18 +172,18 @@
           "cachedInput": "0.15",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Google's page does not state when this rate took effect; effectiveFrom is set conservatively to 2026-01-01.",
-            "batchMultiplier of 0.5 was verified from this model's own Batch rows ($0.75 / $4.50), not from a blanket statement.",
-            "cachedInput is this model's own published context-caching rate. The page also charges a separate per-hour cache storage fee, which this per-token schema does not model.",
+            "Google does not state when this rate took effect. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
+            "This model's Batch rows ($0.75 / $4.50) confirm batchMultiplier 0.5.",
+            "cachedInput records this model's published context-caching rate. The schema does not cover the separate per-hour cache storage fee.",
             "cachedInput added on 2026-09-07: the page now publishes a per-model context-caching rate, which it did not on 2026-08-05."
           ]
         }
       ],
       "source": {
         "url": "https://ai.google.dev/gemini-api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -198,19 +198,21 @@
           "unit": "per-million-tokens",
           "input": "0.30",
           "output": "2.50",
+          "cachedInput": "0.03",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Google's page does not state when this rate took effect; effectiveFrom is set conservatively to 2026-01-01.",
-            "batchMultiplier of 0.5 was verified from this model's own Batch rows ($0.15 / $1.25), not from a blanket statement.",
-            "No context-caching rate is published for this model; cachedInput is omitted rather than inferred from a sibling model."
+            "Google does not state when this rate took effect. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
+            "This model's Batch rows ($0.15 / $1.25) confirm batchMultiplier 0.5.",
+            "cachedInput records this model's published context-caching rate. The schema does not cover the separate per-hour cache storage fee.",
+            "cachedInput added on 2026-10-03: the page now publishes a per-model context-caching rate ($0.03) for this model, which it did not on 2026-09-07."
           ]
         }
       ],
       "source": {
         "url": "https://ai.google.dev/gemini-api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -228,18 +230,18 @@
           "cachedInput": "0.025",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
             "New model: absent from the pricing page on 2026-08-05, present on 2026-09-07. effectiveFrom is the observation date rather than a backdated guess.",
             "Input and context-caching rates are the text/image/video rates. The page prices audio input separately ($0.50 input, $0.05 context caching); this schema has no per-modality dimension, so the audio rate is not recorded.",
-            "batchMultiplier of 0.5 was verified from this model's own Batch rows ($0.125 / $0.75), not from a blanket statement.",
-            "cachedInput is this model's own published context-caching rate. The page also charges a separate per-hour cache storage fee, which this per-token schema does not model."
+            "This model's Batch rows ($0.125 / $0.75) confirm batchMultiplier 0.5.",
+            "cachedInput records this model's published context-caching rate. The schema does not cover the separate per-hour cache storage fee."
           ]
         }
       ],
       "source": {
         "url": "https://ai.google.dev/gemini-api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -258,19 +260,48 @@
           "cachedInput": "0.20",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Google's page does not state when this rate took effect; effectiveFrom is set conservatively to 2026-01-01.",
+            "Google does not state when this rate took effect. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
             "The page prices prompts >200k tokens higher ($4.00 input / $18.00 output / $0.40 context caching); only the <=200k tier is recorded, since this schema has no context-length dimension.",
-            "batchMultiplier of 0.5 was verified from this model's own Batch rows ($1.00 / $6.00), not from a blanket statement.",
-            "cachedInput is this model's own published context-caching rate. The page also charges a separate per-hour cache storage fee, which this per-token schema does not model.",
+            "This model's Batch rows ($1.00 / $6.00) confirm batchMultiplier 0.5.",
+            "cachedInput records this model's published context-caching rate. The schema does not cover the separate per-hour cache storage fee.",
             "batchMultiplier and cachedInput added on 2026-09-07: the page now publishes this model's own Batch and context-caching rows, which were not confirmed per-model on 2026-08-05."
           ]
         }
       ],
       "source": {
         "url": "https://ai.google.dev/gemini-api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "gemini-3-flash-preview",
+      "provider": "google",
+      "aliases": [],
+      "family": "gemini-3",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.50",
+          "output": "3.00",
+          "cachedInput": "0.05",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "New model: not recorded by the 2026-09-07 refresh, present on the page on 2026-10-03 (described there as \"Our legacy Flash model\"). effectiveFrom is the observation date rather than a backdated guess.",
+            "Input and context-caching rates are the text/image/video rates. The page prices audio input separately ($1.00 input, $0.10 context caching); this schema has no per-modality dimension, so the audio rate is not recorded.",
+            "This model's Batch rows ($0.25 / $1.50) confirm batchMultiplier 0.5.",
+            "cachedInput records this model's published context-caching rate. The schema does not cover the separate per-hour cache storage fee."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://ai.google.dev/gemini-api/docs/pricing",
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -289,19 +320,19 @@
           "cachedInput": "0.125",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Google's page does not state when this rate took effect; effectiveFrom is set conservatively to 2026-01-01.",
+            "Google does not state when this rate took effect. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
             "The page prices prompts >200k tokens higher ($2.50 input / $15.00 output / $0.25 context caching); only the <=200k tier is recorded, since this schema has no context-length dimension.",
-            "batchMultiplier of 0.5 was verified from this model's own Batch rows ($0.625 / $5.00), not from a blanket statement.",
-            "cachedInput is this model's own published context-caching rate. The page also charges a separate per-hour cache storage fee, which this per-token schema does not model.",
+            "This model's Batch rows ($0.625 / $5.00) confirm batchMultiplier 0.5.",
+            "cachedInput records this model's published context-caching rate. The schema does not cover the separate per-hour cache storage fee.",
             "batchMultiplier and cachedInput added on 2026-09-07: the page now publishes this model's own Batch and context-caching rows, which were not confirmed per-model on 2026-08-05."
           ]
         }
       ],
       "source": {
         "url": "https://ai.google.dev/gemini-api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -319,18 +350,18 @@
           "cachedInput": "0.03",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Google's page does not state when this rate took effect; effectiveFrom is set conservatively to 2026-01-01.",
+            "Google does not state when this rate took effect. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
             "Input and context-caching rates are the text/image/video rates. The page prices audio input separately ($1.00 input, $0.10 context caching); this schema has no per-modality dimension, so the audio rate is not recorded.",
-            "batchMultiplier of 0.5 was verified from this model's own Batch rows ($0.15 / $1.25), not from a blanket statement.",
-            "cachedInput is this model's own published context-caching rate. The page also charges a separate per-hour cache storage fee, which this per-token schema does not model."
+            "This model's Batch rows ($0.15 / $1.25) confirm batchMultiplier 0.5.",
+            "cachedInput records this model's published context-caching rate. The schema does not cover the separate per-hour cache storage fee."
           ]
         }
       ],
       "source": {
         "url": "https://ai.google.dev/gemini-api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -348,26 +379,168 @@
           "cachedInput": "0.01",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Google's page does not state when this rate took effect; effectiveFrom is set conservatively to 2026-01-01.",
+            "Google does not state when this rate took effect. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
             "Input and context-caching rates are the text/image/video rates. The page prices audio input separately ($0.30 input, $0.03 context caching); this schema has no per-modality dimension, so the audio rate is not recorded.",
-            "batchMultiplier of 0.5 was verified from this model's own Batch rows ($0.05 / $0.20), not from a blanket statement.",
-            "cachedInput is this model's own published context-caching rate. The page also charges a separate per-hour cache storage fee, which this per-token schema does not model."
+            "This model's Batch rows ($0.05 / $0.20) confirm batchMultiplier 0.5.",
+            "cachedInput records this model's published context-caching rate. The schema does not cover the separate per-hour cache storage fee."
           ]
         }
       ],
       "source": {
         "url": "https://ai.google.dev/gemini-api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "gemini-omni-1.1-flash",
+      "provider": "google",
+      "aliases": [],
+      "family": "gemini-omni",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.50",
+          "output": "9.00",
+          "cheapestTier": true,
+          "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "Added 2026-10-03. It is not known whether this model was on the page on 2026-09-07, so effectiveFrom is the observation date.",
+            "Quoted paid Standard rows for gemini-omni-1.1-flash: input \"$1.50 (text / image / video / audio)\", output \"$9.00 (text)\" and \"$17.50 (video)*\", with the footnote \"Billing is based on total output token consumption, calculated at a rate of 5,792 tokens per second of 720p video.\"",
+            "output is the text rate. Video output costs $17.50 per million tokens, so this period is flagged cheapestTier and every calculation carries a PARTIAL_TIER_PRICING warning: video generation costs more than reported.",
+            "The page publishes no context-caching or Batch rate for this model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://ai.google.dev/gemini-api/docs/pricing",
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "gemini-omni-flash-preview",
+      "provider": "google",
+      "aliases": [],
+      "family": "gemini-omni",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.50",
+          "output": "9.00",
+          "cheapestTier": true,
+          "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "Added 2026-10-03. It is not known whether this model was on the page on 2026-09-07, so effectiveFrom is the observation date.",
+            "Quoted paid Standard rows for gemini-omni-flash-preview: input \"$1.50 (text / image / video / audio)\", output \"$9.00 (text)\" and \"$17.50 (video)*\", with the footnote \"Billing is based on total output token consumption, calculated at a rate of 5,792 tokens per second of 720p video.\"",
+            "output is the text rate. Video output costs $17.50 per million tokens, so this period is flagged cheapestTier and every calculation carries a PARTIAL_TIER_PRICING warning: video generation costs more than reported.",
+            "The page publishes no context-caching or Batch rate for this model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://ai.google.dev/gemini-api/docs/pricing",
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "gemini-robotics-er-2-preview",
+      "provider": "google",
+      "aliases": [],
+      "family": "gemini-robotics",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "effectiveTo": "2027-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.00",
+          "output": "5.00",
+          "cachedInput": "0.10",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "Added 2026-10-03. It is not known whether this model was on the page on 2026-09-07, so effectiveFrom is the observation date.",
+            "Promotional rate for gemini-robotics-er-2-preview: input \"$1.00 (text / image / video / audio) through December 31, 2026\", output \"$5.00 through December 31, 2026\". The end date is published, so effectiveTo is sourced.",
+            "Batch rows ($0.50 / $2.50 through 2026-12-31, $1.00 / $5.00 from 2027-01-01) are exactly half the Standard rates, so batchMultiplier is 0.5.",
+            "cachedInput records this model's published context-caching rate. The separate per-hour cache storage fee is outside this schema."
+          ]
+        },
+        {
+          "effectiveFrom": "2027-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "2.00",
+          "output": "10.00",
+          "cachedInput": "0.20",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "Standard rate published as \"$2.00 starting January 1, 2027\" input and \"$10.00 starting January 1, 2027\" output.",
+            "Batch rows ($0.50 / $2.50 through 2026-12-31, $1.00 / $5.00 from 2027-01-01) are exactly half the Standard rates, so batchMultiplier is 0.5.",
+            "cachedInput records this model's published context-caching rate. The separate per-hour cache storage fee is outside this schema."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://ai.google.dev/gemini-api/docs/pricing",
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "gemini-robotics-er-2-streaming-preview",
+      "provider": "google",
+      "aliases": [],
+      "family": "gemini-robotics",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "effectiveTo": "2027-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.00",
+          "output": "5.00",
+          "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "Added 2026-10-03. It is not known whether this model was on the page on 2026-09-07, so effectiveFrom is the observation date.",
+            "Promotional rate for gemini-robotics-er-2-streaming-preview: input \"$1.00 (text / image / video / audio) through December 31, 2026\", output \"$5.00 through December 31, 2026\". The end date is published, so effectiveTo is sourced.",
+            "The page publishes no context-caching or Batch rate for this model."
+          ]
+        },
+        {
+          "effectiveFrom": "2027-01-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "2.00",
+          "output": "10.00",
+          "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "Standard rate published as \"$2.00 starting January 1, 2027\" input and \"$10.00 starting January 1, 2027\" output.",
+            "The page publishes no context-caching or Batch rate for this model."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://ai.google.dev/gemini-api/docs/pricing",
+        "observedAt": "2026-10-03"
       }
     }
   ],
   "omitted": [
     "Standard (paid) tier only. The page also lists Flex and Priority tiers; this schema models one rate per model per period, and Standard is the default tier.",
     "Free-tier rates are not modeled: they are rate-limited quotas, not a price.",
-    "Context-length tiering (>200k prompts) on the Pro models and per-modality tiering (audio input) on the Flash-Lite and 2.5 Flash models are recorded in notes only - this schema has neither dimension.",
+    "Context-length tiering (>200k prompts) on the Pro models and per-modality tiering (audio input) on the 3.1 Flash-Lite, 2.5 Flash, 2.5 Flash-Lite and 3 Flash Preview models are recorded in notes only - this schema has neither dimension.",
     "The separate per-hour context-cache storage fee is not modeled: it is priced per hour, not per token.",
-    "Embedding, image, video and audio-generation models are excluded - priced in units this per-million-tokens schema does not model."
+    "Embedding, image, video-only and audio-generation models (Veo, Lyria, Imagen, TTS, Live, Transcribe) are excluded - priced in units this per-million-tokens schema does not model. Gemini Omni Flash is included despite generating video, because the page prices its video output per token; see its notes."
   ]
 }

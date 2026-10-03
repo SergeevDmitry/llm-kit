@@ -13,19 +13,109 @@
           "unit": "per-million-tokens",
           "input": "10.00",
           "cachedInput": "1.00",
+          "cacheWrite": "12.50",
           "output": "50.00",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "New model: absent from the pricing page on 2026-08-05, present on 2026-09-07. effectiveFrom is the observation date rather than this file's usual conservative 2026-01-01 - the model demonstrably did not exist at that rate a month earlier, so backdating it would invent a period.",
-            "batchMultiplier is \"0.5\" per the pricing page's Batch API section, which states the 50% saving \"applies to all text models listed above in the Standard table\" - an explicit all-model statement, so the pro tiers are covered too."
+            "The pricing page did not list this model on 2026-08-05 and listed it on 2026-09-07. With no published effective date, effectiveFrom uses the latter observation date.",
+            "The 2026-10-03 Batch table lists gpt-6-astra at $5.00 input / $25.00 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07.",
+            "cacheWrite records the $12.50 rate from the 2026-10-03 \"Short context cache writes\" column. Earlier refreshes recorded no cache-write rate; whether the page published one then is unknown.",
+            "The schema has no context-length dimension, so this period records the page's short-context rate (<=272K input tokens). The published long-context rates (>272K) on 2026-10-03 were: $20.00 input / $2.00 cached input / $25.00 cache writes / $75.00 output."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "gpt-6.1-sol",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-6.1",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "2.00",
+          "cachedInput": "0.10",
+          "cacheWrite": "2.50",
+          "output": "10.00",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "The pricing page did not list this model on 2026-09-07 and listed it on 2026-10-03. With no published effective date, effectiveFrom uses the latter observation date.",
+            "The Batch table lists gpt-6.1-sol at $1.00 input / $5.00 output, half the Standard rates; batchMultiplier is \"0.5\".",
+            "The schema has no context-length dimension, so this period records the page's short-context rate (<=272K input tokens). The published long-context rates (>272K) on 2026-10-03 were: $4.00 input / $0.20 cached input / $5.00 cache writes / $15.00 output."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "gpt-6-sol",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-6",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "2.00",
+          "cachedInput": "0.20",
+          "cacheWrite": "2.50",
+          "output": "10.00",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "The pricing page did not list this model on 2026-09-07 and listed it on 2026-10-03. With no published effective date, effectiveFrom uses the latter observation date.",
+            "The Batch table lists gpt-6-sol at $1.00 input / $5.00 output, half the Standard rates; batchMultiplier is \"0.5\".",
+            "The schema has no context-length dimension, so this period records the page's short-context rate (<=272K input tokens). The published long-context rates (>272K) on 2026-10-03 were: $4.00 input / $0.40 cached input / $5.00 cache writes / $15.00 output."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "gpt-6-luna",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-6",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.10",
+          "cachedInput": "0.01",
+          "cacheWrite": "0.125",
+          "output": "0.50",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "The pricing page did not list this model on 2026-09-07 and listed it on 2026-10-03. With no published effective date, effectiveFrom uses the latter observation date.",
+            "The Batch table lists gpt-6-luna at $0.05 input / $0.25 output, half the Standard rates; batchMultiplier is \"0.5\".",
+            "The schema has no context-length dimension, so this period records the page's short-context rate (<=272K input tokens). The published long-context rates (>272K) on 2026-10-03 were: $0.20 input / $0.02 cached input / $0.25 cache writes / $0.75 output."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -58,18 +148,22 @@
           "input": "4.00",
           "output": "20.00",
           "cachedInput": "0.40",
+          "cacheWrite": "5.00",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
             "Price cut observed on 2026-09-07: input 5.00 -> 4.00, output 30.00 -> 20.00, cached input 0.50 -> 0.40. OpenAI publishes no effective date, so effectiveFrom is the observation date rather than a guess at when the cut actually landed.",
-            "batchMultiplier is \"0.5\" per the pricing page's Batch API section, which states the 50% saving \"applies to all text models listed above in the Standard table\" - an explicit all-model statement, so the pro tiers are covered too."
+            "The 2026-10-03 Batch table lists gpt-5.6-sol at $2.00 input / $10.00 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07.",
+            "cacheWrite records the $5.00 rate from the 2026-10-03 \"Short context cache writes\" column. Earlier refreshes recorded no cache-write rate; whether the page published one then is unknown.",
+            "The schema has no context-length dimension, so this period records the page's short-context rate (<=272K input tokens). The published long-context rates (>272K) on 2026-10-03 were: $8.00 input / $0.80 cached input / $10.00 cache writes / $30.00 output.",
+            "The 2026-10-03 page calls this rate promotional: \"GPT-5.6 Sol’s promotional pricing is available at least through November 21, 2026.\" No end date is published, so the period stays open; re-check after that date."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -85,18 +179,21 @@
           "input": "2.00",
           "output": "12.00",
           "cachedInput": "0.20",
+          "cacheWrite": "2.50",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists gpt-5.6-terra at $1.00 input / $6.00 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07.",
+            "cacheWrite records the $2.50 rate from the 2026-10-03 \"Short context cache writes\" column. Earlier refreshes recorded no cache-write rate; whether the page published one then is unknown.",
+            "The schema has no context-length dimension, so this period records the page's short-context rate (<=272K input tokens). The published long-context rates (>272K) on 2026-10-03 were: $4.00 input / $0.40 cached input / $5.00 cache writes / $18.00 output."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -112,18 +209,21 @@
           "input": "0.20",
           "output": "1.20",
           "cachedInput": "0.02",
+          "cacheWrite": "0.25",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists gpt-5.6-luna at $0.10 input / $0.60 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07.",
+            "cacheWrite records the $0.25 rate from the 2026-10-03 \"Short context cache writes\" column. Earlier refreshes recorded no cache-write rate; whether the page published one then is unknown.",
+            "The schema has no context-length dimension, so this period records the page's short-context rate (<=272K input tokens). The published long-context rates (>272K) on 2026-10-03 were: $0.40 input / $0.04 cached input / $0.50 cache writes / $1.80 output."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -141,17 +241,17 @@
           "cachedInput": "0.50",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model.",
-            "The pricing page qualifies this rate as the \"<272K\" context tier. A higher tier above 272K tokens is implied by that label but no rate for it was published in the fetched table, and this schema has no context-length dimension, so only the <272K rate is recorded."
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists gpt-5.5 at $2.50 input / $15.00 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07.",
+            "The schema has no context-length dimension, so this period records the page's short-context rate (<=272K input tokens). The published long-context rates (>272K) on 2026-10-03 were: $10.00 input / $1.00 cached input / no cache writes / $45.00 output."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -167,19 +267,19 @@
           "input": "30.00",
           "output": "180.00",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "No cached-input rate is published for gpt-5.5-pro (shown as \"—\" on the pricing page); cachedInput is intentionally omitted rather than guessed.",
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier is \"0.5\" per the pricing page's Batch API section, which states the 50% saving \"applies to all text models listed above in the Standard table\" - an explicit all-model statement, so the pro tiers are covered too.",
-            "The pricing page qualifies this rate as the \"<272K\" context tier. A higher tier above 272K tokens is implied by that label but no rate for it was published in the fetched table, and this schema has no context-length dimension, so only the <272K rate is recorded."
+            "The pricing page shows \"—\" for gpt-5.5-pro cached input, so cachedInput is omitted.",
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists gpt-5.5-pro at $15.00 input / $90.00 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07.",
+            "The schema has no context-length dimension, so this period records the page's short-context rate (<=272K input tokens). The published long-context rates (>272K) on 2026-10-03 were: $60.00 input / no cached input / no cache writes / $270.00 output."
           ],
           "batchMultiplier": "0.5"
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -197,17 +297,17 @@
           "cachedInput": "0.25",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model.",
-            "The pricing page qualifies this rate as the \"<272K\" context tier. A higher tier above 272K tokens is implied by that label but no rate for it was published in the fetched table, and this schema has no context-length dimension, so only the <272K rate is recorded."
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists gpt-5.4 at $1.25 input / $7.50 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07. Its Batch cached-input rate is shown as $0.13, half of $0.25 rounded to the cent.",
+            "The schema has no context-length dimension, so this period records the page's short-context rate (<=272K input tokens). The published long-context rates (>272K) on 2026-10-03 were: $5.00 input / $0.50 cached input / no cache writes / $22.50 output."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -225,16 +325,16 @@
           "cachedInput": "0.075",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists gpt-5.4-mini at $0.375 input / $2.25 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -252,16 +352,16 @@
           "cachedInput": "0.02",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists gpt-5.4-nano at $0.10 input / $0.625 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -277,19 +377,19 @@
           "input": "30.00",
           "output": "180.00",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "No cached-input rate is published for gpt-5.4-pro (shown as \"—\"); cachedInput is intentionally omitted rather than guessed.",
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier is \"0.5\" per the pricing page's Batch API section, which states the 50% saving \"applies to all text models listed above in the Standard table\" - an explicit all-model statement, so the pro tiers are covered too.",
-            "The pricing page qualifies this rate as the \"<272K\" context tier. A higher tier above 272K tokens is implied by that label but no rate for it was published in the fetched table, and this schema has no context-length dimension, so only the <272K rate is recorded."
+            "The pricing page shows \"—\" for gpt-5.4-pro cached input, so cachedInput is omitted.",
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists gpt-5.4-pro at $15.00 input / $90.00 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07.",
+            "The schema has no context-length dimension, so this period records the page's short-context rate (<=272K input tokens). The published long-context rates (>272K) on 2026-10-03 were: $60.00 input / no cached input / no cache writes / $270.00 output."
           ],
           "batchMultiplier": "0.5"
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -307,16 +407,16 @@
           "cachedInput": "0.175",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists gpt-5.2 at $0.875 input / $7.00 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -332,18 +432,18 @@
           "input": "21.00",
           "output": "168.00",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "No cached-input rate is published for gpt-5.2-pro (shown as \"—\"); cachedInput is intentionally omitted rather than guessed.",
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier is \"0.5\" per the pricing page's Batch API section, which states the 50% saving \"applies to all text models listed above in the Standard table\" - an explicit all-model statement, so the pro tiers are covered too."
+            "The pricing page shows \"—\" for gpt-5.2-pro cached input, so cachedInput is omitted.",
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists gpt-5.2-pro at $10.50 input / $84.00 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07."
           ],
           "batchMultiplier": "0.5"
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -361,16 +461,16 @@
           "cachedInput": "0.125",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists gpt-5.1 at $0.625 input / $5.00 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -388,17 +488,17 @@
           "cachedInput": "0.125",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model.",
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists gpt-5 at $0.625 input / $5.00 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07.",
             "Lead-supplied verified table (observed 2026-08-05) matches this rate exactly; independently re-confirmed against https://developers.openai.com/api/docs/pricing on the same date."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -416,16 +516,16 @@
           "cachedInput": "0.025",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists gpt-5-mini at $0.125 input / $1.00 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -443,16 +543,16 @@
           "cachedInput": "0.005",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists gpt-5-nano at $0.025 input / $0.20 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -468,18 +568,18 @@
           "input": "15.00",
           "output": "120.00",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "No cached-input rate is published for gpt-5-pro (shown as \"—\"); cachedInput is intentionally omitted rather than guessed.",
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier is \"0.5\" per the pricing page's Batch API section, which states the 50% saving \"applies to all text models listed above in the Standard table\" - an explicit all-model statement, so the pro tiers are covered too."
+            "The pricing page shows \"—\" for gpt-5-pro cached input, so cachedInput is omitted.",
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists gpt-5-pro at $7.50 input / $60.00 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07."
           ],
           "batchMultiplier": "0.5"
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -497,16 +597,16 @@
           "cachedInput": "0.50",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists gpt-4.1 at $1.00 input / $4.00 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07. The Batch table publishes no cached-input rate for this model, so a batch request's cached tokens are priced here at half the Standard cached rate, which the page neither confirms nor contradicts."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -524,16 +624,16 @@
           "cachedInput": "0.10",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists gpt-4.1-mini at $0.20 input / $0.80 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07. The Batch table publishes no cached-input rate for this model, so a batch request's cached tokens are priced here at half the Standard cached rate, which the page neither confirms nor contradicts."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -551,16 +651,16 @@
           "cachedInput": "0.025",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists gpt-4.1-nano at $0.05 input / $0.20 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07. The Batch table publishes no cached-input rate for this model, so a batch request's cached tokens are priced here at half the Standard cached rate, which the page neither confirms nor contradicts."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -578,16 +678,16 @@
           "cachedInput": "1.25",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists gpt-4o at $1.25 input / $5.00 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07. The Batch table publishes no cached-input rate for this model, so a batch request's cached tokens are priced here at half the Standard cached rate, which the page neither confirms nor contradicts."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -605,16 +705,16 @@
           "cachedInput": "0.075",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists gpt-4o-mini at $0.075 input / $0.30 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07. The Batch table publishes no cached-input rate for this model, so a batch request's cached tokens are priced here at half the Standard cached rate, which the page neither confirms nor contradicts."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -632,16 +732,16 @@
           "cachedInput": "0.50",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists o3 at $1.00 input / $4.00 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07. The Batch table publishes no cached-input rate for this model, so a batch request's cached tokens are priced here at half the Standard cached rate, which the page neither confirms nor contradicts."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -657,18 +757,18 @@
           "input": "20.00",
           "output": "80.00",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "No cached-input rate is published for o3-pro (shown as \"—\"); cachedInput is intentionally omitted rather than guessed.",
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier is \"0.5\" per the pricing page's Batch API section, which states the 50% saving \"applies to all text models listed above in the Standard table\" - an explicit all-model statement, so the pro tiers are covered too."
+            "The pricing page shows \"—\" for o3-pro cached input, so cachedInput is omitted.",
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists o3-pro at $10.00 input / $40.00 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07."
           ],
           "batchMultiplier": "0.5"
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -686,16 +786,16 @@
           "cachedInput": "0.275",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists o4-mini at $0.55 input / $2.20 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07. The Batch table publishes no cached-input rate for this model, so a batch request's cached tokens are priced here at half the Standard cached rate, which the page neither confirms nor contradicts."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -713,16 +813,16 @@
           "cachedInput": "0.55",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists o3-mini at $0.55 input / $2.20 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07. The Batch table publishes no cached-input rate for this model, so a batch request's cached tokens are priced here at half the Standard cached rate, which the page neither confirms nor contradicts."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -740,16 +840,16 @@
           "cachedInput": "7.50",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier reflects OpenAI's general Batch API policy as stated on the pricing page; not independently confirmed per-model."
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists o1 at $7.50 input / $30.00 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07. The Batch table publishes no cached-input rate for this model, so a batch request's cached tokens are priced here at half the Standard cached rate, which the page neither confirms nor contradicts."
           ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -765,19 +865,19 @@
           "input": "150.00",
           "output": "600.00",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
             "Found on https://developers.openai.com/api/docs/pricing during a second confirmation pass.",
-            "No cached-input rate is published for o1-pro (shown as \"—\"); cachedInput is intentionally omitted rather than guessed.",
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier is \"0.5\" per the pricing page's Batch API section, which states the 50% saving \"applies to all text models listed above in the Standard table\" - an explicit all-model statement, so the pro tiers are covered too."
+            "The pricing page shows \"—\" for o1-pro cached input, so cachedInput is omitted.",
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "The 2026-10-03 Batch table lists o1-pro at $75.00 input / $300.00 output, half the Standard rates. This per-model table replaced the all-models Batch statement quoted on 2026-09-07."
           ],
           "batchMultiplier": "0.5"
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -793,25 +893,198 @@
           "input": "0.50",
           "output": "1.50",
           "sourceUrl": "https://developers.openai.com/api/docs/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
             "Found on https://developers.openai.com/api/docs/pricing during a second confirmation pass.",
-            "No cached-input rate is published for gpt-3.5-turbo on the current pricing page; cachedInput is intentionally omitted rather than guessed.",
-            "OpenAI's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01 pending confirmation of the true rollout date.",
-            "batchMultiplier is \"0.5\" per the pricing page's Batch API section, which states the 50% saving \"applies to all text models listed above in the Standard table\" - an explicit all-model statement, so the pro tiers are covered too."
-          ],
-          "batchMultiplier": "0.5"
+            "The pricing page publishes no cached-input rate for gpt-3.5-turbo, so cachedInput is omitted.",
+            "OpenAI does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder until the rollout date is confirmed.",
+            "batchMultiplier removed on 2026-10-03: the Batch table no longer lists gpt-3.5-turbo (only the dated gpt-3.5-turbo-0125 snapshot), and the all-models Batch statement is gone from the page. A batch request for this model now falls back to Standard rates with a BATCH_PRICING_UNAVAILABLE warning, which never under-reports."
+          ]
         }
       ],
       "source": {
         "url": "https://developers.openai.com/api/docs/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "chat-latest",
+      "provider": "openai",
+      "aliases": [],
+      "family": "chat",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "5.00",
+          "cachedInput": "0.50",
+          "output": "30.00",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "Added 2026-10-03 from the page's \"Specialized models\" table. It is not known whether that table was on the page on 2026-09-07, so effectiveFrom is the observation date.",
+            "Quoted row: \"| ChatGPT | chat-latest | $5.00 | $0.50 | $30.00 |\".",
+            "chat-latest is a moving alias for the model currently used in ChatGPT; OpenAI may repoint it, so a later refresh can change this rate without a model rename.",
+            "No cache-write rate is published for this model.",
+            "The page has no Batch row for this model, so batchMultiplier is omitted."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "gpt-5.3-codex",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-5.3",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.75",
+          "cachedInput": "0.175",
+          "output": "14.00",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "Added 2026-10-03 from the page's \"Specialized models\" table. It is not known whether that table was on the page on 2026-09-07, so effectiveFrom is the observation date.",
+            "Quoted row: \"| Codex | gpt-5.3-codex | $1.75 | $0.175 | $14.00 |\".",
+            "The page also prices a Fast tier for this model ($3.50 input / $0.35 cached input / $28.00 output); only the Standard tier is recorded.",
+            "No cache-write rate is published for this model.",
+            "The page has no Batch row for this model, so batchMultiplier is omitted."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "gpt-5-search-api",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-5",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.25",
+          "cachedInput": "0.125",
+          "output": "10.00",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "Added 2026-10-03 from the page's \"Specialized models\" table. It is not known whether that table was on the page on 2026-09-07, so effectiveFrom is the observation date.",
+            "Quoted row: \"| Search | gpt-5-search-api | $1.25 | $0.125 | $10.00 |\".",
+            "Token rates only: any per-call web search charge is not modelled by this schema.",
+            "No cache-write rate is published for this model.",
+            "The page has no Batch row for this model, so batchMultiplier is omitted."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "gpt-rosalind-research",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-rosalind",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-05",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "5.00",
+          "cachedInput": "0.50",
+          "output": "25.00",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "Added 2026-10-03 from the page's \"Specialized models\" table. effectiveFrom is the published billing start: \"Billing for gpt-rosalind-research begins on October 5, 2026.\"",
+            "Quoted row: \"| Life Sciences | gpt-rosalind-research | $5.00 | $0.50 | $25.00 |\".",
+            "Access-limited: \"Access is limited to approved internal research through the trusted-access program.\"",
+            "No cache-write rate: \"Cache-write pricing does not apply to this model.\"",
+            "The page has no Batch row for this model, so batchMultiplier is omitted."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "gpt-5.6-cyber",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-5.6",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "12.50",
+          "cachedInput": "1.25",
+          "cacheWrite": "15.625",
+          "output": "75.00",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "Added 2026-10-03 from the page's \"Cyber models\" table. It is not known whether that table was on the page on 2026-09-07, so effectiveFrom is the observation date.",
+            "Quoted row: \"| gpt-5.6-cyber | $12.50 | $1.25 | $15.625 | $75.00 | - | - | - | - |\". No long-context tier is published.",
+            "Access-limited: the model page (https://developers.openai.com/api/docs/models/gpt-5.6-cyber) says \"This model requires separate approval and provisioning\" through the Daybreak program, and supports the Responses API only.",
+            "The page has no Batch row for this model, so batchMultiplier is omitted."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "gpt-5.5-cyber",
+      "provider": "openai",
+      "aliases": [],
+      "family": "gpt-5.5",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "12.50",
+          "cachedInput": "1.25",
+          "output": "75.00",
+          "sourceUrl": "https://developers.openai.com/api/docs/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "Added 2026-10-03 from the page's \"Cyber models\" table. It is not known whether that table was on the page on 2026-09-07, so effectiveFrom is the observation date.",
+            "Quoted row: \"| gpt-5.5-cyber | $12.50 | $1.25 | - | $75.00 | - | - | - | - |\". No cache-write or long-context rate is published.",
+            "Listed beside gpt-5.6-cyber, which requires separate approval; this model's own access terms were not fetched.",
+            "The page has no Batch row for this model, so batchMultiplier is omitted."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://developers.openai.com/api/docs/pricing",
+        "observedAt": "2026-10-03"
       }
     }
   ],
   "omitted": [
-    "This snapshot covers the models listed on https://developers.openai.com/api/docs/pricing as of 2026-09-07. Any OpenAI model not on that page (fine-tuning surcharges, embeddings, image/audio/moderation endpoints) is not included - those are priced per-unit or per-token in ways this per-million-tokens text schema does not model.",
+    "This snapshot covers the models in the Standard, Specialized and Cyber tables on https://developers.openai.com/api/docs/pricing as of 2026-10-03. Embeddings (text-embedding-3-small/-large, text-embedding-ada-002: input-only rates), omni-moderation-latest (free), fine-tuning surcharges and image/audio endpoints are not included - this per-million-tokens text schema does not model them.",
     "Dated legacy snapshot ids on the page (gpt-4o-2024-05-13, gpt-4-turbo-2024-04-09, gpt-4-0613, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-instruct) and the base completion models davinci-002 and babbage-002 are not included: this file records undated model ids, and adding pinned snapshots is a scope change rather than a price refresh. Note gpt-4-turbo-2024-04-09 and gpt-4-0613 would give azure-openai.json's gpt-4-turbo and gpt-4 entries a first-party cross-check they currently lack.",
-    "Exact effective dates are still not published for any rate. Periods first recorded on 2026-08-05 keep their conservative effectiveFrom of 2026-01-01; periods that changed or appeared since use the observation date, since the earlier observation proves they did not hold before it."
+    "Exact effective dates are still not published for any rate. Periods first recorded on 2026-08-05 keep their conservative effectiveFrom of 2026-01-01; periods that changed or appeared since use the observation date, since the earlier observation proves they did not hold before it.",
+    "Only the Standard tier is recorded, plus batchMultiplier for Batch. The page's Flex, Fast (\"Priority processing was renamed Fast mode on July 30, 2026\") and Ultrafast tiers, the >272K long-context tier, and the 10% uplift for Regional processing (data residency) and FedRAMP endpoints are not modelled by this schema."
   ]
 }

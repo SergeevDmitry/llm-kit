@@ -39,34 +39,33 @@ console.log(
 );
 console.log(`total: $${everyday.totalUsd} (exact: $${everyday.totalUsdExact})`);
 
-// --- 2. The headline example: Azure resells the identical OpenAI model at a genuinely different price ---
+// --- 2. The headline example: two providers host the same model at different prices ---
 
 const sameUsage = { inputTokens: 1_000_000, outputTokens: 1_000_000 };
 
-const onAzure = calculateCost({
-  model: 'gpt-5.6-luna',
-  provider: 'azure-openai',
+const onTogether = calculateCost({
+  model: 'gemma-4-31b',
+  provider: 'together',
   usage: sameUsage,
-  at: '2026-08-05',
+  at: '2026-10-03',
 });
-const onOpenAI = calculateCost({
-  model: 'gpt-5.6-luna',
-  provider: 'openai',
+const onBedrock = calculateCost({
+  model: 'gemma-4-31b',
+  provider: 'aws-bedrock',
   usage: sameUsage,
-  at: '2026-08-05',
+  at: '2026-10-03',
 });
 
-console.log('\n--- gpt-5.6-luna: Azure vs. OpenAI first-party (5x apart) ---');
-console.log(`Azure:  $${onAzure.totalUsdExact} for 1M+1M tokens`);
-console.log(`OpenAI: $${onOpenAI.totalUsdExact} for 1M+1M tokens`);
-console.log(`Azure's rate carries a warning: ${onAzure.warnings.map((w) => w.code).join(', ')}`);
+console.log('\n--- gemma-4-31b: Together vs. AWS Bedrock (2.5x apart) ---');
+console.log(`Together: $${onTogether.totalUsdExact} for 1M+1M tokens`);
+console.log(`Bedrock:  $${onBedrock.totalUsdExact} for 1M+1M tokens`);
 
 // Pricing the same id *without* a provider qualifier never silently picks one:
 try {
-  calculateCost({ model: 'gpt-5.6-luna', usage: sameUsage, at: '2026-08-05' });
+  calculateCost({ model: 'gemma-4-31b', usage: sameUsage, at: '2026-10-03' });
 } catch (error) {
   if (error instanceof AmbiguousAliasError) {
-    console.log(`unqualified lookup correctly throws: ${error.code} — ${error.message}`);
+    console.log(`unqualified lookup correctly throws: ${error.code} - ${error.message}`);
   } else {
     throw error;
   }

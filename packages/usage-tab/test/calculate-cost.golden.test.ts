@@ -111,8 +111,9 @@ describe('golden calculation - cache-write tokens (anthropic:claude-sonnet-4-6)'
   });
 });
 
-describe("the package's headline example — Azure resells OpenAI models at genuinely different prices", () => {
-  it('gpt-5.6-luna is $1.00/$6.00 on Azure but $0.20/$1.20 on OpenAI — 5x apart for the identical model name', () => {
+// Azure matched OpenAI's luna price on 2026-10-03; on 2026-08-05 the two were 5x apart
+describe('a historical Azure/OpenAI price divergence stays reproducible at its date', () => {
+  it('gpt-5.6-luna was $1.00/$6.00 on Azure but $0.20/$1.20 on OpenAI on 2026-08-05 - 5x apart for the identical model name', () => {
     const azure = calculateCost({
       model: 'gpt-5.6-luna',
       provider: 'azure-openai',

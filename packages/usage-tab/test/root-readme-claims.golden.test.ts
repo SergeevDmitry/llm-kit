@@ -3,7 +3,7 @@
  *
  * `validate:readme` compiles every README snippet, which proves the API
  * exists and is used correctly. It does not execute anything, so a
- * `// → "1.40"` comment on its own is never actually checked against the
+ * `// → "0.54"` comment on its own is never actually checked against the
  * real output. A price restatement in `docs/provider-data/` can regenerate
  * the registry, pass `verify:registry`, and still leave the repository's
  * headline claim silently wrong on the page every reader sees first.
@@ -19,20 +19,20 @@ import { calculateCost } from '../src/index.js';
 const usage = { inputTokens: 1_000_000, outputTokens: 1_000_000 };
 
 describe('root README pricing example', () => {
-  it('prices gpt-5.6-luna at "1.40" on openai', () => {
-    expect(calculateCost({ model: 'gpt-5.6-luna', provider: 'openai', usage }).totalUsdExact).toBe(
-      '1.40',
+  it('prices gemma-4-31b at "0.54" on aws-bedrock', () => {
+    expect(
+      calculateCost({ model: 'gemma-4-31b', provider: 'aws-bedrock', usage }).totalUsdExact,
+    ).toBe('0.54');
+  });
+
+  it('prices the same model at "1.36" on together - the 2.5x claim', () => {
+    expect(calculateCost({ model: 'gemma-4-31b', provider: 'together', usage }).totalUsdExact).toBe(
+      '1.36',
     );
   });
 
-  it('prices the same model at "7.00" on azure-openai — the 5x claim', () => {
-    expect(
-      calculateCost({ model: 'gpt-5.6-luna', provider: 'azure-openai', usage }).totalUsdExact,
-    ).toBe('7.00');
-  });
-
   it('refuses to guess when the provider is omitted', () => {
-    expect(() => calculateCost({ model: 'gpt-5.6-luna', usage })).toThrowError(
+    expect(() => calculateCost({ model: 'gemma-4-31b', usage })).toThrowError(
       expect.objectContaining({ code: 'AMBIGUOUS_ALIAS' }),
     );
   });

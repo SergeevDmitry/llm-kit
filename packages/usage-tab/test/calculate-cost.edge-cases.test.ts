@@ -246,7 +246,7 @@ describe('reasoning tokens with no dedicated reasoning rate', () => {
 describe('cached/cache-write tokens with no dedicated rate (groq has neither)', () => {
   it('bills both at the input rate and warns for each', () => {
     const result = calculateCost({
-      model: 'llama-3.3-70b-versatile',
+      model: 'gpt-oss-120b',
       provider: 'groq',
       usage: {
         inputTokens: 1000,
@@ -359,7 +359,7 @@ describe('a provider-qualified lookup does not silently fall through to a differ
     expect(result.requestedProvider).toBe('groq');
   });
 
-  it('a genuine cross-provider Azure/OpenAI price divergence stays qualifier-sensitive (gpt-5.6-luna, 5x)', () => {
+  it('a historical cross-provider Azure/OpenAI price divergence stays qualifier-sensitive (gpt-5.6-luna, 5x on 2026-08-05)', () => {
     const onOpenAI = calculateCost({
       model: 'gpt-5.6-luna',
       provider: 'openai',

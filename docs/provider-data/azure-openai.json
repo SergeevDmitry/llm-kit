@@ -17,18 +17,19 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "retailPrice confirmed identical across all 24 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"gpt-5\" in openai.json exactly as observed ($1.25/$10.00/$0.125 cached) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"gpt-5\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "A programmatic check found the same retailPrice in all 24 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"gpt-5\" in openai.json ($1.25/$10.00/$0.125 cached); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-5\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"GPT 5 Inpt Glbl\" 1.25 per 1M, \"GPT 5 outpt Glbl\" 10.0 per 1M, \"GPT 5 cchd Inpt Glbl\" 0.125 per 1M. Global Batch meters \"GPT 5 Batch Inpt Glbl\" 0.625 per 1M and \"GPT 5 Batch outpt Glbl\" 5.0 per 1M are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -47,18 +48,19 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "retailPrice confirmed identical across all 27 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"gpt-5-mini\" in openai.json exactly as observed ($0.25/$2.00/$0.025 cached) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"gpt-5-mini\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "A programmatic check found the same retailPrice in all 27 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"gpt-5-mini\" in openai.json ($0.25/$2.00/$0.025 cached); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-5-mini\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"GPT 5 Mini Inpt Glbl\" 0.25 per 1M, \"GPT 5 Mini outpt Glbl\" 2.0 per 1M, \"GPT 5 Mini cchd Inpt Glbl\" 0.025 per 1M. Global Batch meters \"GPT 5 Mini Batch Inpt Glbl\" 0.125 per 1M and \"GPT 5 Mini Batch outpt Glbl\" 1.0 per 1M are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -77,18 +79,19 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "retailPrice confirmed identical across all 27 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"gpt-5-nano\" in openai.json exactly as observed ($0.05/$0.40/$0.005 cached) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"gpt-5-nano\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "A programmatic check found the same retailPrice in all 27 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"gpt-5-nano\" in openai.json ($0.05/$0.40/$0.005 cached); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-5-nano\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"GPT 5 Nano Inpt Glbl\" 0.05 per 1M, \"GPT 5 Nano outpt Glbl\" 0.4 per 1M, \"GPT 5 Nano cchd Inpt Glbl\" 0.005 per 1M. Global Batch meters \"GPT 5 Nano Batch Inpt Glbl\" 0.025 per 1M and \"GPT 5 Nano Batch outpt Glbl\" 0.2 per 1M are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -106,19 +109,20 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Azure's Retail Prices API quotes this meter per 1K tokens; converted to per-million-tokens by shifting the decimal point 3 places as exact string manipulation (never float multiplication).",
-            "retailPrice confirmed identical across all 24 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"gpt-5-pro\" in openai.json exactly as observed ($15.00/$120.00) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"gpt-5-pro\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "The Azure Retail Prices API quotes this meter per 1K tokens. Its per-million-token rate was calculated by shifting the decimal point three places in a string, without floating-point multiplication.",
+            "A programmatic check found the same retailPrice in all 24 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"gpt-5-pro\" in openai.json ($15.00/$120.00); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-5-pro\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"gpt 5 pro inp glbl\" 0.015 per 1K, \"gpt 5 pro out glbl\" 0.12 per 1K. Per-1K values converted by shifting the decimal point 3 places. Global Batch meters \"gpt 5 pro batch inp glbl\" 0.0075 per 1K and \"gpt 5 pro batch out glbl\" 0.06 per 1K are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -137,18 +141,19 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "retailPrice confirmed identical across all 25 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"gpt-5.1\" in openai.json exactly as observed ($1.25/$10.00/$0.125 cached) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"gpt-5.1\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "A programmatic check found the same retailPrice in all 25 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"gpt-5.1\" in openai.json ($1.25/$10.00/$0.125 cached); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-5.1\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"GPT 5.1 inp Gl\" 1.25 per 1M, \"GPT 5.1 opt Gl\" 10.0 per 1M, \"GPT 5.1 cd inp Gl\" 0.125 per 1M. Global Batch meters \"GPT 5.1 Batch inp Gl\" 0.625 per 1M and \"GPT 5.1 Batch opt Gl\" 5.0 per 1M are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -167,18 +172,19 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "retailPrice confirmed identical across all 24 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"gpt-5.2\" in openai.json exactly as observed ($1.75/$14.00/$0.175 cached) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"gpt-5.2\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "A programmatic check found the same retailPrice in all 24 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"gpt-5.2\" in openai.json ($1.75/$14.00/$0.175 cached); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-5.2\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"GPT 5.2 inp Gl\" 1.75 per 1M, \"GPT 5.2 opt Gl\" 14.0 per 1M, \"GPT 5.2 cd inp Gl\" 0.175 per 1M. Global Batch meters \"GPT 5.2 Batch inp Gl\" 0.875 per 1M and \"GPT 5.2 Batch opt Gl\" 7.0 per 1M are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -196,18 +202,19 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "retailPrice confirmed identical across all 24 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"gpt-5.2-pro\" in openai.json exactly as observed ($21.00/$168.00) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"gpt-5.2-pro\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "A programmatic check found the same retailPrice in all 24 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"gpt-5.2-pro\" in openai.json ($21.00/$168.00); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-5.2-pro\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"GPT 5.2 pro inp Gl\" 21.0 per 1M, \"GPT 5.2 pro opt Gl\" 168.0 per 1M. Global Batch meters \"GPT 5.2 pro Batch inp Gl\" 10.5 per 1M and \"GPT 5.2 pro Batch opt Gl\" 84.0 per 1M are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -226,18 +233,19 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "retailPrice confirmed identical across all 25 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"gpt-5.4\" in openai.json exactly as observed ($2.50/$15.00/$0.25 cached) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"gpt-5.4\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "A programmatic check found the same retailPrice in all 25 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"gpt-5.4\" in openai.json ($2.50/$15.00/$0.25 cached); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-5.4\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"5.4 inp Gl\" 2.5 per 1M, \"5.4 opt Gl\" 15.0 per 1M, \"5.4 cd inp Gl\" 0.25 per 1M. Global Batch meters \"5.4 Batch inp Gl\" 1.25 per 1M and \"5.4 Batch opt Gl\" 7.5 per 1M are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -256,18 +264,19 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "retailPrice confirmed identical across all 25 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"gpt-5.4-mini\" in openai.json exactly as observed ($0.75/$4.50/$0.075 cached) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"gpt-5.4-mini\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "A programmatic check found the same retailPrice in all 25 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"gpt-5.4-mini\" in openai.json ($0.75/$4.50/$0.075 cached); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-5.4-mini\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"5.4 mini Inp Gl\" 0.75 per 1M, \"5.4 mini Opt Gl\" 4.5 per 1M, \"5.4 mini cd Inp Gl\" 0.075 per 1M. Global Batch meters \"5.4 mini Batch Inp Gl\" 0.375 per 1M and \"5.4 mini Batch Opt Gl\" 2.25 per 1M are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -286,18 +295,19 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "retailPrice confirmed identical across all 25 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"gpt-5.4-nano\" in openai.json exactly as observed ($0.20/$1.25/$0.02 cached) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"gpt-5.4-nano\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "A programmatic check found the same retailPrice in all 25 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"gpt-5.4-nano\" in openai.json ($0.20/$1.25/$0.02 cached); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-5.4-nano\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"5.4 nano Inp Gl\" 0.2 per 1M, \"5.4 nano Opt Gl\" 1.25 per 1M, \"5.4 nano cd Inp Gl\" 0.02 per 1M. Global Batch meters \"5.4 nano Batch Inp Gl\" 0.1 per 1M and \"5.4 nano Batch Opt Gl\" 0.625 per 1M are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -315,18 +325,19 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "retailPrice confirmed identical across all 25 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"gpt-5.4-pro\" in openai.json exactly as observed ($30.00/$180.00) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"gpt-5.4-pro\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "A programmatic check found the same retailPrice in all 25 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"gpt-5.4-pro\" in openai.json ($30.00/$180.00); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-5.4-pro\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"5.4 pro inp Gl\" 30.0 per 1M, \"5.4 pro opt Gl\" 180.0 per 1M. Global Batch meters \"5.4 pro Batch inp Gl\" 15.0 per 1M and \"5.4 pro Batch opt Gl\" 90.0 per 1M are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -345,18 +356,19 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "retailPrice confirmed identical across all 25 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"gpt-5.5\" in openai.json exactly as observed ($5.00/$30.00/$0.50 cached) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"gpt-5.5\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "A programmatic check found the same retailPrice in all 25 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"gpt-5.5\" in openai.json ($5.00/$30.00/$0.50 cached); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-5.5\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"5.5 ShortCo inp Gl\" 5.0 per 1M, \"5.5 ShortCo opt Gl\" 30.0 per 1M, \"5.5 ShortCo cd inp Gl\" 0.5 per 1M. Global Batch meters \"5.5 ShortCo Batch inp Gl\" 2.5 per 1M and \"5.5 ShortCo Batch opt Gl\" 15.0 per 1M are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -377,18 +389,40 @@
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
           "observedAt": "2026-09-07",
           "notes": [
-            "retailPrice confirmed identical across all 24 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "No Batch API meter was found for this model/SKU in the Retail Prices API response; batchMultiplier is intentionally omitted rather than assumed.",
-            "canonicalId \"gpt-5.6-sol\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there.",
+            "A programmatic check found the same retailPrice in all 24 Azure regions returned for this Global SKU, with no regional variation.",
+            "The Retail Prices API response had no Batch API meter for this model/SKU, so batchMultiplier is omitted.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-5.6-sol\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
             "Re-observed 2026-09-07 via the Retail Prices API filtered to this model's meters (\"5.6 sol ShortCo Inp Std Gl\" $5.00, \"5.6 sol ShortCo Opt Std Gl\" $30.00, \"5.6 sol ShortCo Cd Inp Std Gl\" $0.50): unchanged.",
             "NOW DIFFERS from OpenAI's own first-party rate in openai.json for the same canonicalId \"gpt-5.6-sol\". Both files recorded $5.00/$30.00/$0.50 on 2026-08-05; on 2026-09-07 OpenAI's pricing page published $4.00/$20.00/$0.40 while Azure's meters stayed at $5.00/$30.00/$0.50. Azure did not follow the first-party cut, so this joins gpt-5.6-terra and gpt-5.6-luna as a confirmed same-id price divergence rather than a transcription error.",
-            "The API also exposes \"LongCo\" (long-context) meters for this model at $10.00 input / $45.00 output Global Standard, alongside the \"ShortCo\" rates recorded here - the same context tiering OpenAI's page labels \"<272K\". This schema has no context-length dimension, so only the ShortCo tier is recorded."
+            "The API also exposes \"LongCo\" (long-context) meters for this model at $10.00 input / $45.00 output Global Standard, alongside the \"ShortCo\" rates recorded here - the same context tiering OpenAI's page labels \"<272K\". This schema has no context-length dimension, so only the ShortCo tier is recorded.",
+            "Closed on 2026-10-03: the Retail Prices API now returns lower Global Standard ShortCo meters for this model (4.00 input / 20.00 output / 0.40 cached input / 5.00 cache write, was 5.00 / 30.00 / 0.50 / 6.25) and an effectiveStartDate of 2026-09-01. This rate was last observed on 2026-09-07, after that date, so Azure dated the change earlier than its API first showed it. effectiveTo is the 2026-10-03 observation date instead, which keeps every confirmed observation correct and approximates only the unobserved gap, toward the last confirmed value."
+          ],
+          "effectiveTo": "2026-10-03"
+        },
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "4.00",
+          "output": "20.00",
+          "cachedInput": "0.40",
+          "cacheWrite": "5.00",
+          "cheapestTier": true,
+          "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "Observed 2026-10-03 via a Retail Prices API query filtered to meterName containing \"5.6\": \"5.6 sol ShortCo Inp Std Gl\" 4.0, \"5.6 sol ShortCo Opt Std Gl\" 20.0, \"5.6 sol ShortCo Cd Inp Std Gl\" 0.4, \"5.6 sol ShortCo Cd Wr Std Gl\" 5.0 (all per 1M tokens, effectiveStartDate 2026-09-01T00:00:00Z). effectiveFrom is the 2026-10-03 observation date, not that effectiveStartDate: the old rate was still observed on 2026-09-07, after 2026-09-01.",
+            "retailPrice identical in the two regions queried on 2026-10-03 (eastus2, swedencentral); not re-checked across every region.",
+            "The Retail Prices API returned no Batch API meter for this model, so batchMultiplier is omitted.",
+            "Matches OpenAI's own first-party rate for \"gpt-5.6-sol\" in openai.json exactly as observed on 2026-10-03 ($4.00/$20.00/$0.40 cached/$5.00 cache write). The same-id price divergence recorded in the previous period is gone: Azure now charges the first-party rate.",
+            "The API also exposes \"LongCo\" (long-context) Global Standard meters at $8.0 input / $30.0 output / $0.8 cached input / $10.0 cache write. This schema has no context-length dimension, so only the ShortCo tier is recorded.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-5.6-sol\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -409,16 +443,38 @@
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
           "observedAt": "2026-08-05",
           "notes": [
-            "retailPrice confirmed identical across all 24 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "No Batch API meter was found for this model/SKU in the Retail Prices API response; batchMultiplier is intentionally omitted rather than assumed.",
+            "A programmatic check found the same retailPrice in all 24 Azure regions returned for this Global SKU, with no regional variation.",
+            "The Retail Prices API response had no Batch API meter for this model/SKU, so batchMultiplier is omitted.",
             "DIFFERS from OpenAI's own first-party rate recorded in openai.json for the same canonicalId \"gpt-5.6-terra\": OpenAI first-party is $2.00/$12.00 input/output (cached $0.20), Azure Global is $2.50/$15.00 (cached $0.25). Both independently observed on 2026-08-05; this is a genuine, confirmed pricing divergence between the two channels for the same named model, not a transcription error — this is exactly the kind of difference this provider file exists to capture.",
-            "canonicalId \"gpt-5.6-terra\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-5.6-terra\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "Closed on 2026-10-03: the Retail Prices API now returns lower Global Standard ShortCo meters for this model (2.00 input / 12.00 output / 0.20 cached input / 2.50 cache write, was 2.50 / 15.00 / 0.25 / 3.125) and an effectiveStartDate of 2026-08-01. This rate was last observed on 2026-08-05, after that date, so Azure dated the change earlier than its API first showed it. effectiveTo is the 2026-10-03 observation date instead, which keeps every confirmed observation correct and approximates only the unobserved gap, toward the last confirmed value."
+          ],
+          "effectiveTo": "2026-10-03"
+        },
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "2.00",
+          "output": "12.00",
+          "cachedInput": "0.20",
+          "cacheWrite": "2.50",
+          "cheapestTier": true,
+          "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "Observed 2026-10-03 via a Retail Prices API query filtered to meterName containing \"5.6\": \"5.6 terra ShortCo Inp Std Gl\" 2.0, \"5.6 terra ShortCo Opt Std Gl\" 12.0, \"5.6 terra ShortCo Cd Inp Std Gl\" 0.2, \"5.6 terra ShortCo Cd Wr Std Gl\" 2.5 (all per 1M tokens, effectiveStartDate 2026-08-01T00:00:00Z). effectiveFrom is the 2026-10-03 observation date, not that effectiveStartDate: the old rate was still observed on 2026-08-05, after 2026-08-01.",
+            "retailPrice identical in the two regions queried on 2026-10-03 (eastus2, swedencentral); not re-checked across every region.",
+            "The Retail Prices API returned no Batch API meter for this model, so batchMultiplier is omitted.",
+            "Matches OpenAI's own first-party rate for \"gpt-5.6-terra\" in openai.json exactly as observed on 2026-10-03 ($2.00/$12.00/$0.20 cached/$2.50 cache write). The same-id price divergence recorded in the previous period is gone: Azure now charges the first-party rate.",
+            "The API also exposes \"LongCo\" (long-context) Global Standard meters at $4.0 input / $18.0 output / $0.4 cached input / $5.0 cache write. This schema has no context-length dimension, so only the ShortCo tier is recorded.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-5.6-terra\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -439,16 +495,70 @@
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
           "observedAt": "2026-08-05",
           "notes": [
-            "retailPrice confirmed identical across all 24 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "No Batch API meter was found for this model/SKU in the Retail Prices API response; batchMultiplier is intentionally omitted rather than assumed.",
+            "A programmatic check found the same retailPrice in all 24 Azure regions returned for this Global SKU, with no regional variation.",
+            "The Retail Prices API response had no Batch API meter for this model/SKU, so batchMultiplier is omitted.",
             "DIFFERS from OpenAI's own first-party rate recorded in openai.json for the same canonicalId \"gpt-5.6-luna\": OpenAI first-party is $0.20/$1.20 input/output (cached $0.02), Azure Global is $1.00/$6.00 (cached $0.10). Both independently observed on 2026-08-05; this is a genuine, confirmed pricing divergence between the two channels for the same named model, not a transcription error — this is exactly the kind of difference this provider file exists to capture.",
-            "canonicalId \"gpt-5.6-luna\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-5.6-luna\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "Closed on 2026-10-03: the Retail Prices API now returns lower Global Standard ShortCo meters for this model (0.20 input / 1.20 output / 0.02 cached input / 0.25 cache write, was 1.00 / 6.00 / 0.10 / 1.25) and an effectiveStartDate of 2026-08-01. This rate was last observed on 2026-08-05, after that date, so Azure dated the change earlier than its API first showed it. effectiveTo is the 2026-10-03 observation date instead, which keeps every confirmed observation correct and approximates only the unobserved gap, toward the last confirmed value."
+          ],
+          "effectiveTo": "2026-10-03"
+        },
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.20",
+          "output": "1.20",
+          "cachedInput": "0.02",
+          "cacheWrite": "0.25",
+          "cheapestTier": true,
+          "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "Observed 2026-10-03 via a Retail Prices API query filtered to meterName containing \"5.6\": \"5.6 luna ShortCo Inp Std Gl\" 0.2, \"5.6 luna ShortCo Opt Std Gl\" 1.2, \"5.6 luna ShortCo Cd Inp Std Gl\" 0.02, \"5.6 luna ShortCo Cd Wr Std Gl\" 0.25 (all per 1M tokens, effectiveStartDate 2026-08-01T00:00:00Z). effectiveFrom is the 2026-10-03 observation date, not that effectiveStartDate: the old rate was still observed on 2026-08-05, after 2026-08-01.",
+            "retailPrice identical in the two regions queried on 2026-10-03 (eastus2, swedencentral); not re-checked across every region.",
+            "The Retail Prices API returned no Batch API meter for this model, so batchMultiplier is omitted.",
+            "Matches OpenAI's own first-party rate for \"gpt-5.6-luna\" in openai.json exactly as observed on 2026-10-03 ($0.20/$1.20/$0.02 cached/$0.25 cache write). The same-id price divergence recorded in the previous period is gone: Azure now charges the first-party rate.",
+            "The API also exposes \"LongCo\" (long-context) Global Standard meters at $0.4 input / $1.8 output / $0.04 cached input / $0.5 cache write. This schema has no context-length dimension, so only the ShortCo tier is recorded.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-5.6-luna\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "gpt-6-astra",
+      "provider": "azure-openai",
+      "aliases": [],
+      "family": "gpt-6",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-09-01",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "10.00",
+          "output": "50.00",
+          "cachedInput": "1.00",
+          "cacheWrite": "12.50",
+          "cheapestTier": true,
+          "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "New model, observed 2026-10-03 under the Retail Prices API product \"Azure OpenAI GPT6\" (absent on 2026-09-07): \"6-astra ShortCo Inp Std Gl\" 10.0, \"6-astra ShortCo Opt Std Gl\" 50.0, \"6-astra ShortCo Cd Inp Std Gl\" 1.0, \"6-astra ShortCo Cd Wr Std Gl\" 12.5 (all per 1M tokens, effectiveStartDate 2026-09-01T00:00:00Z). effectiveFrom is that effectiveStartDate.",
+            "retailPrice identical in the two regions queried on 2026-10-03 (eastus2, swedencentral); not checked across every region.",
+            "The Retail Prices API returned no Batch API meter for this model, so batchMultiplier is omitted.",
+            "Matches OpenAI's own first-party rate for \"gpt-6-astra\" in openai.json exactly as observed on 2026-10-03 ($10.00/$50.00/$1.00 cached/$12.50 cache write). openai.json's effectiveFrom for this model (2026-09-07) is its own observation date; Azure's 2026-09-01 is the meter's published start date.",
+            "The API also exposes \"LongCo\" (long-context) Global Standard meters at $20.00 input / $75.00 output / $2.00 cached input / $25.00 cache write, the same long-context rates openai.json records in its notes. This schema has no context-length dimension, so only the ShortCo tier is recorded.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-6-astra\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -467,19 +577,20 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Azure's Retail Prices API quotes this meter per 1K tokens; converted to per-million-tokens by shifting the decimal point 3 places as exact string manipulation (never float multiplication).",
-            "retailPrice confirmed identical across all 28 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"gpt-4.1\" in openai.json exactly as observed ($2.00/$8.00/$0.50 cached) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"gpt-4.1\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "The Azure Retail Prices API quotes this meter per 1K tokens. Its per-million-token rate was calculated by shifting the decimal point three places in a string, without floating-point multiplication.",
+            "A programmatic check found the same retailPrice in all 28 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"gpt-4.1\" in openai.json ($2.00/$8.00/$0.50 cached); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-4.1\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"gpt 4.1 Inp glbl\" 0.002 per 1K, \"gpt 4.1 Outp glbl\" 0.008 per 1K, \"gpt 4.1 cached Inp glbl\" 0.0005 per 1K. Per-1K values converted by shifting the decimal point 3 places. Global Batch meters \"gpt 4.1 Batch Inp glbl\" 0.001 per 1K and \"gpt 4.1 Batch Outp glbl\" 0.004 per 1K are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -498,19 +609,20 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Azure's Retail Prices API quotes this meter per 1K tokens; converted to per-million-tokens by shifting the decimal point 3 places as exact string manipulation (never float multiplication).",
-            "retailPrice confirmed identical across all 28 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"gpt-4.1-mini\" in openai.json exactly as observed ($0.40/$1.60/$0.10 cached) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"gpt-4.1-mini\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "The Azure Retail Prices API quotes this meter per 1K tokens. Its per-million-token rate was calculated by shifting the decimal point three places in a string, without floating-point multiplication.",
+            "A programmatic check found the same retailPrice in all 28 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"gpt-4.1-mini\" in openai.json ($0.40/$1.60/$0.10 cached); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-4.1-mini\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"gpt 4.1 mini Inp glbl\" 0.0004 per 1K, \"gpt 4.1 mini Outp glbl\" 0.0016 per 1K, \"gpt 4.1 mini cached Inp glbl\" 0.0001 per 1K. Per-1K values converted by shifting the decimal point 3 places. Global Batch meters \"gpt 4.1 mini Batch Inp glbl\" 0.0002 per 1K and \"gpt 4.1 mini Batch Outp glbl\" 0.0008 per 1K are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -529,19 +641,20 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Azure's Retail Prices API quotes this meter per 1K tokens; converted to per-million-tokens by shifting the decimal point 3 places as exact string manipulation (never float multiplication).",
-            "retailPrice confirmed identical across all 28 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"gpt-4.1-nano\" in openai.json exactly as observed ($0.10/$0.40/$0.025 cached) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"gpt-4.1-nano\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "The Azure Retail Prices API quotes this meter per 1K tokens. Its per-million-token rate was calculated by shifting the decimal point three places in a string, without floating-point multiplication.",
+            "A programmatic check found the same retailPrice in all 28 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"gpt-4.1-nano\" in openai.json ($0.10/$0.40/$0.025 cached); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-4.1-nano\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"gpt 4.1 nano Inp glbl\" 0.0001 per 1K, \"gpt 4.1 nano Outp glbl\" 0.0004 per 1K, \"gpt 4.1 nano cached Inp glbl\" 0.000025 per 1K. Per-1K values converted by shifting the decimal point 3 places. Global Batch meters \"gpt 4.1 nano Batch Inp glbl\" 0.00005 per 1K and \"gpt 4.1 nano Batch Outp glbl\" 0.0002 per 1K are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -560,19 +673,20 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Azure's Retail Prices API quotes this meter per 1K tokens; converted to per-million-tokens by shifting the decimal point 3 places as exact string manipulation (never float multiplication).",
-            "retailPrice confirmed identical across all 27 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"gpt-4o\" in openai.json exactly as observed ($2.50/$10.00/$1.25 cached) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"gpt-4o\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "The Azure Retail Prices API quotes this meter per 1K tokens. Its per-million-token rate was calculated by shifting the decimal point three places in a string, without floating-point multiplication.",
+            "A programmatic check found the same retailPrice in all 27 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"gpt-4o\" in openai.json ($2.50/$10.00/$1.25 cached); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-4o\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"gpt 4o 1120 Inp glbl\" 0.0025 per 1K, \"gpt 4o 1120 Outp glbl\" 0.01 per 1K, \"gpt 4o 1120 cached Inp glbl\" 0.00125 per 1K. Per-1K values converted by shifting the decimal point 3 places. Global Batch meters \"gpt 4o 1120 Batch Inp glbl\" 0.00125 per 1K and \"gpt 4o 1120 Batch Outp glbl\" 0.005 per 1K are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -591,19 +705,20 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Azure's Retail Prices API quotes this meter per 1K tokens; converted to per-million-tokens by shifting the decimal point 3 places as exact string manipulation (never float multiplication).",
-            "retailPrice confirmed identical across all 28 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"gpt-4o-mini\" in openai.json exactly as observed ($0.15/$0.60/$0.075 cached) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"gpt-4o-mini\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "The Azure Retail Prices API quotes this meter per 1K tokens. Its per-million-token rate was calculated by shifting the decimal point three places in a string, without floating-point multiplication.",
+            "A programmatic check found the same retailPrice in all 28 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"gpt-4o-mini\" in openai.json ($0.15/$0.60/$0.075 cached); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-4o-mini\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"gpt-4o-mini-0718-Inp-glbl\" 0.00015 per 1K, \"gpt-4o-mini-0718-Outp-glbl\" 0.0006 per 1K, \"gpt 4o mini 0718 cached Inp glbl\" 0.000075 per 1K. Per-1K values converted by shifting the decimal point 3 places. Global Batch meters \"gpt-4o-mini-0718-Batch-Inp-glbl\" 0.000075 per 1K and \"gpt-4o-mini-0718-Batch-Outp-glbl\" 0.0003 per 1K are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -620,18 +735,20 @@
           "output": "30.00",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Azure's Retail Prices API quotes this meter per 1K tokens; converted to per-million-tokens by shifting the decimal point 3 places as exact string manipulation (never float multiplication).",
-            "retailPrice confirmed identical across all 23 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "No Batch API meter was found for this model/SKU in the Retail Prices API response; batchMultiplier is intentionally omitted rather than assumed.",
-            "No comparable first-party entry exists in openai.json's 2026-08-05 snapshot for \"gpt-4-turbo\" (it is either a legacy/superseded model no longer on OpenAI's current pricing page, or a variant OpenAI does not sell directly) — Azure's own resale rate is recorded as observed with no parity claim possible or intended."
-          ]
+            "The Azure Retail Prices API quotes this meter per 1K tokens. Its per-million-token rate was calculated by shifting the decimal point three places in a string, without floating-point multiplication.",
+            "A programmatic check found the same retailPrice in all 23 Azure regions returned for this Global SKU, with no regional variation.",
+            "batchMultiplier 0.5 added 2026-10-03 from this model's own Global Batch meters (\"gpt-4-Turbo-Batch-128K Inp-glbl\" 0.005 per 1K, \"gpt-4-Turbo-Batch-128K Outp-glbl\" 0.015 per 1K), both exactly 0.5x the standard Global rate. The 2026-08-05 pass reported no Batch meter for this model; given the meter's start date it was most likely missed then rather than added since. The earliest effectiveStartDate among this meter's regional rows is 2024-08-01, two months after this period's effectiveFrom (2024-06-01), so a Batch lookup dated June or July 2024 applies a discount the API does not show as available yet.",
+            "No comparable first-party entry exists in openai.json's 2026-08-05 snapshot for \"gpt-4-turbo\" (it is either a legacy/superseded model no longer on OpenAI's current pricing page, or a variant OpenAI does not sell directly) — Azure's own resale rate is recorded as observed with no parity claim possible or intended.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"gpt-4-turbo128K Inp-glbl\" 0.01 per 1K, \"gpt-4-turbo128K Outp-glbl\" 0.03 per 1K. Per-1K values converted by shifting the decimal point 3 places. Global Batch meters \"gpt-4-Turbo-Batch-128K Inp-glbl\" 0.005 per 1K and \"gpt-4-Turbo-Batch-128K Outp-glbl\" 0.015 per 1K are exactly 0.5x the standard rates. The rates were unchanged."
+          ],
+          "batchMultiplier": "0.5"
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -648,18 +765,20 @@
           "output": "60.00",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Azure's Retail Prices API quotes this meter per 1K tokens; converted to per-million-tokens by shifting the decimal point 3 places as exact string manipulation (never float multiplication).",
+            "The Azure Retail Prices API quotes this meter per 1K tokens. Its per-million-token rate was calculated by shifting the decimal point three places in a string, without floating-point multiplication.",
             "The Retail Prices API returned exactly one row for this legacy SKU (a single primary-meter-region price, no per-region breakdown) rather than the ~24-28 region-duplicated rows seen for actively-priced SKUs — a single global list price, which is consistent with (not contradictory to) Global-deployment region-independence, but could not be cross-region spot-checked the way other entries were.",
-            "No Batch API meter was found for this model/SKU in the Retail Prices API response; batchMultiplier is intentionally omitted rather than assumed.",
-            "No comparable first-party entry exists in openai.json's 2026-08-05 snapshot for \"gpt-4\" (it is either a legacy/superseded model no longer on OpenAI's current pricing page, or a variant OpenAI does not sell directly) — Azure's own resale rate is recorded as observed with no parity claim possible or intended."
-          ]
+            "batchMultiplier 0.5 added 2026-10-03 from this model's own Global Batch meters (\"gpt-4-8K-Batch-Inp-glbl\" 0.015 per 1K, \"gpt-4-8K-Batch-Outp-glbl\" 0.03 per 1K), both exactly 0.5x the standard Global rate. The 2026-08-05 pass reported no Batch meter for this model; given the meter's start date it was most likely missed then rather than added since. The earliest effectiveStartDate among this meter's regional rows is 2024-08-01, before this period's effectiveFrom (2025-03-01), so the discount covers the whole period.",
+            "No comparable first-party entry exists in openai.json's 2026-08-05 snapshot for \"gpt-4\" (it is either a legacy/superseded model no longer on OpenAI's current pricing page, or a variant OpenAI does not sell directly) — Azure's own resale rate is recorded as observed with no parity claim possible or intended.",
+            "Re-observed 2026-10-03 via a Retail Prices API query filtered to this model's meters (spaincentral (the only region returned)): \"gpt-4-8K-Inp-glbl\" 0.03 per 1K, \"gpt-4-8K-Outp-glbl\" 0.06 per 1K. Per-1K values converted by shifting the decimal point 3 places. Global Batch meters \"gpt-4-8K-Batch-Inp-glbl\" 0.015 per 1K and \"gpt-4-8K-Batch-Outp-glbl\" 0.03 per 1K are exactly 0.5x the standard rates. Unchanged."
+          ],
+          "batchMultiplier": "0.5"
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -676,18 +795,19 @@
           "output": "120.00",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Azure's Retail Prices API quotes this meter per 1K tokens; converted to per-million-tokens by shifting the decimal point 3 places as exact string manipulation (never float multiplication).",
+            "The Azure Retail Prices API quotes this meter per 1K tokens. Its per-million-token rate was calculated by shifting the decimal point three places in a string, without floating-point multiplication.",
             "The Retail Prices API returned exactly one row for this legacy SKU (a single primary-meter-region price, no per-region breakdown) rather than the ~24-28 region-duplicated rows seen for actively-priced SKUs — a single global list price, which is consistent with (not contradictory to) Global-deployment region-independence, but could not be cross-region spot-checked the way other entries were.",
-            "No Batch API meter was found for this model/SKU in the Retail Prices API response; batchMultiplier is intentionally omitted rather than assumed.",
-            "No comparable first-party entry exists in openai.json's 2026-08-05 snapshot for \"gpt-4-32k\" (it is either a legacy/superseded model no longer on OpenAI's current pricing page, or a variant OpenAI does not sell directly) — Azure's own resale rate is recorded as observed with no parity claim possible or intended."
+            "The Retail Prices API response had no Batch API meter for this model/SKU, so batchMultiplier is omitted.",
+            "No comparable first-party entry exists in openai.json's 2026-08-05 snapshot for \"gpt-4-32k\" (it is either a legacy/superseded model no longer on OpenAI's current pricing page, or a variant OpenAI does not sell directly) — Azure's own resale rate is recorded as observed with no parity claim possible or intended.",
+            "Re-observed 2026-10-03 via a Retail Prices API query filtered to this model's meters (spaincentral (the only region returned)): \"gpt-4-32K-Inp-glbl\" 0.06 per 1K, \"gpt-4-32K-Outp-glbl\" 0.12 per 1K. Per-1K values converted by shifting the decimal point 3 places. No Global Batch meter was returned for this model. Unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -706,19 +826,20 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Azure's Retail Prices API quotes this meter per 1K tokens; converted to per-million-tokens by shifting the decimal point 3 places as exact string manipulation (never float multiplication).",
-            "retailPrice confirmed identical across all 26 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"o1\" in openai.json exactly as observed ($15.00/$60.00/$7.50 cached) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"o1\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "The Azure Retail Prices API quotes this meter per 1K tokens. Its per-million-token rate was calculated by shifting the decimal point three places in a string, without floating-point multiplication.",
+            "A programmatic check found the same retailPrice in all 26 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"o1\" in openai.json ($15.00/$60.00/$7.50 cached); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"o1\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"o1 1217 Inp glbl\" 0.015 per 1K, \"o1 1217 Outp glbl\" 0.06 per 1K, \"o1 1217 cached Inp glbl\" 0.0075 per 1K. Per-1K values converted by shifting the decimal point 3 places. Global Batch meters \"o1 1217 Batch Inp glbl\" 0.0075 per 1K and \"o1 1217 Batch Outp glbl\" 0.03 per 1K are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -737,18 +858,19 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Azure's Retail Prices API quotes this meter per 1K tokens; converted to per-million-tokens by shifting the decimal point 3 places as exact string manipulation (never float multiplication).",
-            "retailPrice confirmed identical across all 25 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "No comparable first-party entry exists in openai.json's 2026-08-05 snapshot for \"o1-mini\" (it is either a legacy/superseded model no longer on OpenAI's current pricing page, or a variant OpenAI does not sell directly) — Azure's own resale rate is recorded as observed with no parity claim possible or intended."
+            "The Azure Retail Prices API quotes this meter per 1K tokens. Its per-million-token rate was calculated by shifting the decimal point three places in a string, without floating-point multiplication.",
+            "A programmatic check found the same retailPrice in all 25 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "No comparable first-party entry exists in openai.json's 2026-08-05 snapshot for \"o1-mini\" (it is either a legacy/superseded model no longer on OpenAI's current pricing page, or a variant OpenAI does not sell directly) — Azure's own resale rate is recorded as observed with no parity claim possible or intended.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"o1 mini input glbl\" 0.0011 per 1K, \"o1 mini output glbl\" 0.0044 per 1K, \"o1 mini cached input glbl\" 0.00055 per 1K. Per-1K values converted by shifting the decimal point 3 places. Global Batch meters \"o1 mini Batch Inp glbl\" 0.00055 per 1K and \"o1 mini Batch Outp glbl\" 0.0022 per 1K are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -766,18 +888,19 @@
           "cachedInput": "7.50",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Azure's Retail Prices API quotes this meter per 1K tokens; converted to per-million-tokens by shifting the decimal point 3 places as exact string manipulation (never float multiplication).",
-            "retailPrice confirmed identical across all 3 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "No Batch API meter was found for this model/SKU in the Retail Prices API response; batchMultiplier is intentionally omitted rather than assumed.",
-            "No comparable first-party entry exists in openai.json's 2026-08-05 snapshot for \"o1-preview\" (it is either a legacy/superseded model no longer on OpenAI's current pricing page, or a variant OpenAI does not sell directly) — Azure's own resale rate is recorded as observed with no parity claim possible or intended."
+            "The Azure Retail Prices API quotes this meter per 1K tokens. Its per-million-token rate was calculated by shifting the decimal point three places in a string, without floating-point multiplication.",
+            "A programmatic check found the same retailPrice in all 3 Azure regions returned for this Global SKU, with no regional variation.",
+            "The Retail Prices API response had no Batch API meter for this model/SKU, so batchMultiplier is omitted.",
+            "No comparable first-party entry exists in openai.json's 2026-08-05 snapshot for \"o1-preview\" (it is either a legacy/superseded model no longer on OpenAI's current pricing page, or a variant OpenAI does not sell directly) — Azure's own resale rate is recorded as observed with no parity claim possible or intended.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"o1 preview input glbl\" 0.015 per 1K, \"o1 preview output glbl\" 0.06 per 1K, \"o1 preview cached input glbl\" 0.0075 per 1K. Per-1K values converted by shifting the decimal point 3 places. No Global Batch meter was returned for this model. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -796,19 +919,20 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Azure's Retail Prices API quotes this meter per 1K tokens; converted to per-million-tokens by shifting the decimal point 3 places as exact string manipulation (never float multiplication).",
-            "retailPrice confirmed identical across all 25 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"o1-pro\" in openai.json exactly as observed ($150.00/$600.00) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"o1-pro\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "The Azure Retail Prices API quotes this meter per 1K tokens. Its per-million-token rate was calculated by shifting the decimal point three places in a string, without floating-point multiplication.",
+            "A programmatic check found the same retailPrice in all 25 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"o1-pro\" in openai.json ($150.00/$600.00); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"o1-pro\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "Re-observed 2026-10-03 via a Retail Prices API query filtered to this model's meters (all Global regions returned (the cached-input meter appeared only in westus2 and northeurope)): \"o1-pro Inp glbl\" 0.15 per 1K, \"o1-pro Outp glbl\" 0.6 per 1K, \"o1-pro cached Inp glbl\" 0.075 per 1K. Per-1K values converted by shifting the decimal point 3 places. Global Batch meters \"o1-pro Batch Inp glbl\" 0.075 per 1K and \"o1-pro Batch Outp glbl\" 0.3 per 1K are exactly 0.5x the standard rates. Unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -827,19 +951,20 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Azure's Retail Prices API quotes this meter per 1K tokens; converted to per-million-tokens by shifting the decimal point 3 places as exact string manipulation (never float multiplication).",
-            "retailPrice confirmed identical across all 24 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"o3\" in openai.json exactly as observed ($2.00/$8.00/$0.50 cached) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"o3\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "The Azure Retail Prices API quotes this meter per 1K tokens. Its per-million-token rate was calculated by shifting the decimal point three places in a string, without floating-point multiplication.",
+            "A programmatic check found the same retailPrice in all 24 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"o3\" in openai.json ($2.00/$8.00/$0.50 cached); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"o3\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"o3 0416 Inp glbl\" 0.002 per 1K, \"o3 0416 Outp glbl\" 0.008 per 1K, \"o3 0416 cached Inp glbl\" 0.0005 per 1K. Per-1K values converted by shifting the decimal point 3 places. Global Batch meters \"o3 0416 Batch Inp glbl\" 0.001 per 1K and \"o3 0416 Batch Outp glbl\" 0.004 per 1K are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -858,19 +983,20 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Azure's Retail Prices API quotes this meter per 1K tokens; converted to per-million-tokens by shifting the decimal point 3 places as exact string manipulation (never float multiplication).",
-            "retailPrice confirmed identical across all 27 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"o3-mini\" in openai.json exactly as observed ($1.10/$4.40/$0.55 cached) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"o3-mini\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "The Azure Retail Prices API quotes this meter per 1K tokens. Its per-million-token rate was calculated by shifting the decimal point three places in a string, without floating-point multiplication.",
+            "A programmatic check found the same retailPrice in all 27 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"o3-mini\" in openai.json ($1.10/$4.40/$0.55 cached); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"o3-mini\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"o3 mini 0131 input glbl\" 0.0011 per 1K, \"o3 mini 0131 output glbl\" 0.0044 per 1K, \"o3 mini 0131 cached input glbl\" 0.00055 per 1K. Per-1K values converted by shifting the decimal point 3 places. Global Batch meters \"o3 mini 0131 Batch Inp glbl\" 0.00055 per 1K and \"o3 mini 0131 Batch Outp glbl\" 0.0022 per 1K are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -888,19 +1014,20 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Azure's Retail Prices API quotes this meter per 1K tokens; converted to per-million-tokens by shifting the decimal point 3 places as exact string manipulation (never float multiplication).",
-            "retailPrice confirmed identical across all 24 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"o3-pro\" in openai.json exactly as observed ($20.00/$80.00) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"o3-pro\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "The Azure Retail Prices API quotes this meter per 1K tokens. Its per-million-token rate was calculated by shifting the decimal point three places in a string, without floating-point multiplication.",
+            "A programmatic check found the same retailPrice in all 24 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"o3-pro\" in openai.json ($20.00/$80.00); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"o3-pro\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"o3-pro Inp glbl\" 0.02 per 1K, \"o3-pro Outp glbl\" 0.08 per 1K. Per-1K values converted by shifting the decimal point 3 places. Global Batch meters \"o3-pro Batch Inp glbl\" 0.01 per 1K and \"o3-pro Batch Outp glbl\" 0.04 per 1K are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -919,19 +1046,20 @@
           "batchMultiplier": "0.5",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Azure's Retail Prices API quotes this meter per 1K tokens; converted to per-million-tokens by shifting the decimal point 3 places as exact string manipulation (never float multiplication).",
-            "retailPrice confirmed identical across all 26 Azure regions returned for this Global-deployment SKU (spot-checked programmatically, not just a couple of regions) — no regional price variation observed for the Global tier.",
-            "batchMultiplier 0.5 independently confirmed from this model's own Batch-API meter on Azure (batch input and output rows both computed to exactly 0.5x the standard Global rate), not assumed from a blanket policy statement.",
-            "Matches OpenAI's own first-party rate for \"o4-mini\" in openai.json exactly as observed ($1.10/$4.40/$0.275 cached) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"o4-mini\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "The Azure Retail Prices API quotes this meter per 1K tokens. Its per-million-token rate was calculated by shifting the decimal point three places in a string, without floating-point multiplication.",
+            "A programmatic check found the same retailPrice in all 26 Azure regions returned for this Global SKU, with no regional variation.",
+            "This model's Azure Batch API input and output meters are each half its standard Global rate, confirming batchMultiplier 0.5.",
+            "Azure Global matches the observed OpenAI rate for \"o4-mini\" in openai.json ($1.10/$4.40/$0.275 cached); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"o4-mini\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "The Retail Prices API returned these meters for this model in eastus2 on 2026-10-03: \"o4-mini 0416 Inp glbl\" 0.0011 per 1K, \"o4-mini 0416 Outp glbl\" 0.0044 per 1K, \"o4-mini 0416 cached Inp glbl\" 0.000275 per 1K. Per-1K values converted by shifting the decimal point 3 places. Global Batch meters \"o4-mini 0416 Batch Inp glbl\" 0.00055 per 1K and \"o4-mini 0416 Batch Outp glbl\" 0.0022 per 1K are exactly 0.5x the standard rates. The rates were unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -948,19 +1076,20 @@
           "output": "1.50",
           "cheapestTier": true,
           "sourceUrl": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Azure's Retail Prices API quotes this meter per 1K tokens; converted to per-million-tokens by shifting the decimal point 3 places as exact string manipulation (never float multiplication).",
+            "The Azure Retail Prices API quotes this meter per 1K tokens. Its per-million-token rate was calculated by shifting the decimal point three places in a string, without floating-point multiplication.",
             "The Retail Prices API returned exactly one row for this legacy SKU (a single primary-meter-region price, no per-region breakdown) rather than the ~24-28 region-duplicated rows seen for actively-priced SKUs — a single global list price, which is consistent with (not contradictory to) Global-deployment region-independence, but could not be cross-region spot-checked the way other entries were.",
-            "No Batch API meter was found for this model/SKU in the Retail Prices API response; batchMultiplier is intentionally omitted rather than assumed.",
-            "Matches OpenAI's own first-party rate for \"gpt-3.5-turbo\" in openai.json exactly as observed ($0.50/$1.50) — no markup detected for this model on Azure's Global deployment tier.",
-            "canonicalId \"gpt-3.5-turbo\" is deliberately identical to the same model's entry in openai.json — Azure genuinely resells the identical first-party OpenAI model, unlike AWS Bedrock's or OpenRouter's differently-branded catalogues. Following the aws-bedrock.json precedent (e.g. its \"mistral-large-3\" and \"gemma-4-31b\" entries) rather than OpenRouter's provider-prefixed-slug convention: this is an intentional cross-provider canonicalId collision, not an error. A bare lookup of this id without a provider qualifier is ambiguous by design and must fail, exactly as already documented for the aws-bedrock.json collisions, since a lookup with a duplicated canonicalId requires a provider qualifier to resolve unambiguously. Per this task's ownership boundary, openai.json itself was not modified to cross-reference this note; a follow-up pass should add a mirroring note there."
+            "The Retail Prices API response had no Batch API meter for this model/SKU, so batchMultiplier is omitted.",
+            "Azure Global matches the observed OpenAI rate for \"gpt-3.5-turbo\" in openai.json ($0.50/$1.50); no markup was found.",
+            "Azure resells the OpenAI model under the same canonicalId, \"gpt-3.5-turbo\". This follows the shared-ID convention used for \"mistral-large-3\" and \"gemma-4-31b\" in aws-bedrock.json; OpenRouter uses provider-prefixed slugs. A lookup without a provider qualifier is ambiguous and fails. openai.json has no matching cross-reference; a follow-up should add one.",
+            "Re-observed 2026-10-03 via a Retail Prices API query filtered to this model's meters (spaincentral (the only region returned)): \"gpt-35-turbo16K-0125 Inp-glbl\" 0.0005 per 1K, \"gpt-35-turbo16K-0125 Outp-glbl\" 0.0015 per 1K. Per-1K values converted by shifting the decimal point 3 places. No Global Batch meter was returned for this model. Unchanged."
           ]
         }
       ],
       "source": {
         "url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=contains(productName,%20%27OpenAI%27)",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     }
   ],
@@ -969,14 +1098,17 @@
     "All fine-tuning SKUs are excluded per the task's scope: every '...FT...'/'...ft...'/'...dev-ft...'/'RFT...' meter (hosting, training, fine-tuned input/output, model-grader variants) across gpt-4, gpt-4o, gpt-4.1, gpt-4o-mini, o1, o3-mini, o4-mini, babbage-002, davinci-002, and the dedicated 'Azure OpenAI PP FT GPT4s' product — none of these are base-model per-token rates.",
     "Data Zone and Regional deployment rows exist for every model included below (Data Zone observed at a consistent ~10% premium over Global, e.g. gpt-5.4: Global $2.50/$15.00 vs Data Zone $2.75/$16.50 input/output) and Regional at a further premium in most families; neither is recorded as a separate model — only the Global, standard (non-batch, non-Priority-Processing) rate is recorded as each model's canonical price. A caller needing Data Zone/Regional/Priority-Processing pricing is not served by this file.",
     "'Priority Processing' (PP) tier rows (e.g. '5.5 ShortCo PP', '5 pp', '5 mini pp') are a separate, higher-priced service tier orthogonal to Global/Data Zone/Regional deployment (confirmed: gpt-5.5 ShortCo PP is $12.50/$75.00/$1.25 vs Standard $5.00/$30.00/$0.50) — not modeled by this schema's single-price-per-period shape, and intentionally not recorded as the canonical rate.",
-    "'LongCo' (long-context) tier rows for gpt-5.5 and gpt-5.6-sol/terra/luna are a second, higher-priced context-length tier (confirmed: gpt-5.6-sol LongCo Std Gl is $10.00/$45.00/$1.00 vs the ShortCo Std Gl rate of $5.00/$30.00/$0.50 recorded below) — analogous to google.json's >200k-token tier, and likewise not modeled by this schema's single-price-per-period shape. 'ShortCo' was confirmed (see per-model notes) to be the tier matching OpenAI's own published first-party rate, so ShortCo Std was used as the canonical rate, not LongCo.",
-    "gpt-5.3 (both 'chat' and 'codex' SKU variants), the Codex-branded model family (gpt-5-codex, 5.1 codex/codex max/codex mini, 5.2 codex, 5.3 codex/codex pp, 'codex mini' under Azure OpenAI Reasoning), the dated 'chat-latest 05052026'/'chat-latest 05282026' SKUs, and 'o3-deep research 0626' were all left out: each is a plausible real OpenAI model, but none has a first-party entry in openai.json to cross-check against, and Azure's naming alone (e.g. is a bare 'gpt-5.3 chat' SKU actually the canonical 'gpt-5.3', or a chat-tool-specific variant distinct from a prospective base 'gpt-5.3'?) was not confident enough to map to a specific canonical model id without guessing. Left out, since under-claiming is correct, rather than guessed.",
+    "'LongCo' (long-context) tier rows for gpt-5.5, gpt-5.6-sol/terra/luna and gpt-6-astra are a second, higher-priced context-length tier (confirmed on 2026-10-03: gpt-5.6-sol LongCo Std Gl is $8.00/$30.00/$0.80 vs the ShortCo Std Gl rate of $4.00/$20.00/$0.40 recorded below; on 2026-08-05 it was $10.00/$45.00/$1.00 vs $5.00/$30.00/$0.50) — analogous to google.json's >200k-token tier, and likewise not modeled by this schema's single-price-per-period shape. 'ShortCo' was confirmed (see per-model notes) to be the tier matching OpenAI's own published first-party rate, so ShortCo Std was used as the canonical rate, not LongCo.",
+    "Excluded from the Azure data: gpt-5.3 chat/codex SKUs; Codex-branded SKUs (gpt-5-codex, 5.1 codex/codex max/codex mini, 5.2 codex, 5.3 codex/codex pp, and 'codex mini' under Azure OpenAI Reasoning); dated 'chat-latest 05052026' and 'chat-latest 05282026' SKUs; and 'o3-deep research 0626'. These may be real OpenAI models, but openai.json has no first-party entries to cross-check, and Azure's names do not establish unambiguous canonical IDs. For example, 'gpt-5.3 chat' could be a chat-specific variant rather than a base 'gpt-5.3' model.",
     "'computer-use-inpt'/'computer-use-outp' (the computer-use-preview agentic tool-use model) was left out: it is token-priced and plausibly maps to a real OpenAI model id, but is a specialized agentic/tool-calling model outside this pass's confidence and cross-check ability (no first-party comparison available), so it was not added rather than guessed at a canonicalId.",
     "Az-Babbage-002 and Az-Davinci-002 (base and fine-tuned) were left out: these legacy completion-style models are priced as a single undifferentiated meter on Azure's page rather than Azure's usual separate input/output meters, which did not map cleanly onto this schema's required distinct input/output fields without guessing a split.",
     "gpt-35-turbo-Instruct (the completion-style, non-chat instruct variant) and the older gpt-35-turbo '16K'/'16K-1106' and gpt-4-turbo-Vision-128K SKUs were left out in favor of the single current gpt-3.5-turbo (16K-0125) and gpt-4-turbo (128K, non-vision) entries recorded below, to avoid multiplying near-duplicate legacy snapshots of uncertain current relevance.",
     "gpt-4.5 (Azure SKU '4.5 0227') was left out: it is not on OpenAI's current pricing page (not in openai.json) and its preview/deprecation status as of 2026-08-05 was not independently confirmed, so a price was not recorded rather than guessed at its current availability.",
     "Provisioned Throughput / Provisioned Managed (Global/Data Zone/Regional) SKUs are a reserved-capacity billing model (priced per PTU-hour, not per token) and are out of scope for this per-token schema.",
     "2026-09-07 pass: only gpt-5.6-sol was re-observed, via a Retail Prices API query filtered to its own meters (504 rows across regions and tiers). The other 31 models keep their 2026-08-05 observedAt because they were not re-fetched - re-paging the full ~20,000-row result set is a separate exercise, and stamping a fresh observation date on a rate nobody looked at would be the exact failure this file's provenance fields exist to prevent.",
-    "No Azure OpenAI GPT6 product exists as of 2026-09-07: a Retail Prices API query for productName containing \"GPT6\" returned zero rows, so OpenAI's new first-party gpt-6-astra has no Azure entry. Confirmed absence, not an unchecked gap."
+    "No Azure OpenAI GPT6 product exists as of 2026-09-07: a Retail Prices API query for productName containing \"GPT6\" returned zero rows, so OpenAI's new first-party gpt-6-astra has no Azure entry. Confirmed absence, not an unchecked gap. Superseded on 2026-10-03, see below.",
+    "2026-10-03 pass: all 32 existing models were re-observed with narrow Retail Prices API queries (one per model family, filtered by meterName and mostly restricted to the eastus2 region) instead of re-paging the full result set. 29 were unchanged; gpt-5.6-sol, gpt-5.6-terra and gpt-5.6-luna dropped to OpenAI's first-party rates (see their closed periods). gpt-4-turbo and gpt-4 gained batchMultiplier 0.5 from Batch meters the 2026-08-05 pass did not find.",
+    "An \"Azure OpenAI GPT6\" product now exists (meters effective 2026-09-01) with 6-astra, 6-sol and 6-luna meters. 6-astra maps to openai.json's gpt-6-astra and is recorded. 6-sol and 6-luna are left out: openai.json has no gpt-6-sol or gpt-6-luna entry to cross-check against, so a canonical id would be a guess.",
+    "gpt-5.5-pro (in openai.json) has no Azure entry: Retail Prices API queries on 2026-10-03 for meterName containing \"5.5\" together with \"pro\", \"Pro\" or \"PRO\" returned zero rows. Confirmed absence, not an unchecked gap."
   ]
 }

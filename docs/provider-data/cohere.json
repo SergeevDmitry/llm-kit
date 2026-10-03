@@ -14,17 +14,18 @@
           "input": "1.00",
           "output": "2.00",
           "sourceUrl": "https://cohere.com/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
             "Cohere's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
             "This rate appears in the pricing page's FAQ/legacy-rates section, not a headline pricing table; it is nonetheless the only per-token price Cohere currently publishes for this model.",
-            "Re-confirmed unchanged on 2026-09-07 against the same page."
+            "The same page showed no rate change on 2026-09-07 or 2026-10-03.",
+            "https://docs.cohere.com/docs/models (fetched 2026-10-03) marks command \"Deprecated Sept 15, 2025\". The pricing page still prints this rate under \"Where do I find pricing for our legacy models? For existing customers:\", so the period is kept open as published."
           ]
         }
       ],
       "source": {
         "url": "https://cohere.com/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -40,17 +41,18 @@
           "input": "0.30",
           "output": "0.60",
           "sourceUrl": "https://cohere.com/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
             "Cohere's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
             "FAQ/legacy-rates section pricing, per the same caveat as \"command\".",
-            "Re-confirmed unchanged on 2026-09-07 against the same page."
+            "The same page showed no rate change on 2026-09-07 or 2026-10-03.",
+            "https://docs.cohere.com/docs/models (fetched 2026-10-03) marks command-light \"Deprecated Sept 15, 2025\". The pricing page still prints this rate under \"Where do I find pricing for our legacy models? For existing customers:\", so the period is kept open as published."
           ]
         }
       ],
       "source": {
         "url": "https://cohere.com/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -66,17 +68,18 @@
           "input": "0.50",
           "output": "1.50",
           "sourceUrl": "https://cohere.com/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
             "\"03-2024\" is Cohere's own dated-snapshot naming for this model, not a confirmed price-effective date; effectiveFrom is set conservatively to 2026-01-01 per this repository's convention (a too-early effectiveFrom is safe; the price could have applied earlier than 2026 but was not independently confirmed).",
             "FAQ/legacy-rates section pricing.",
-            "Re-confirmed unchanged on 2026-09-07 against the same page."
+            "The same page showed no rate change on 2026-09-07 or 2026-10-03.",
+            "https://docs.cohere.com/docs/models (fetched 2026-10-03) marks command-r-03-2024 \"Deprecated Sept 15, 2025\". The pricing page still prints this rate under \"Where do I find pricing for our legacy models? For existing customers:\", so the period is kept open as published."
           ]
         }
       ],
       "source": {
         "url": "https://cohere.com/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -92,17 +95,18 @@
           "input": "3.00",
           "output": "15.00",
           "sourceUrl": "https://cohere.com/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
             "\"04-2024\" is Cohere's own dated-snapshot naming for this model, not a confirmed price-effective date; effectiveFrom is set conservatively to 2026-01-01.",
             "FAQ/legacy-rates section pricing. Superseded in Cohere's catalogue by \"Command R+ 08-2024\" (below), a distinct dated snapshot with its own price — the two are not the same PricingPeriod for one model, they are two different canonicalIds, matching how Cohere itself lists them.",
-            "Re-confirmed unchanged on 2026-09-07 against the same page."
+            "The same page showed no rate change on 2026-09-07 or 2026-10-03.",
+            "https://docs.cohere.com/docs/models (fetched 2026-10-03) marks command-r-plus-04-2024 \"Deprecated Sept 15, 2025\". The pricing page still prints this rate under \"Where do I find pricing for our legacy models? For existing customers:\", so the period is kept open as published."
           ]
         }
       ],
       "source": {
         "url": "https://cohere.com/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -118,43 +122,69 @@
           "input": "2.50",
           "output": "10.00",
           "sourceUrl": "https://cohere.com/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
             "\"08-2024\" is Cohere's own dated-snapshot naming for this model, not a confirmed price-effective date; effectiveFrom is set conservatively to 2026-01-01.",
             "FAQ/legacy-rates section pricing.",
-            "Re-confirmed unchanged on 2026-09-07 against the same page."
+            "The same page showed no rate change on 2026-09-07 or 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://cohere.com/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
-      "canonicalId": "aya-expanse-8b",
+      "canonicalId": "command-r-08-2024",
       "provider": "cohere",
       "aliases": [],
-      "family": "aya-expanse",
+      "family": "command-r",
       "pricing": [
         {
-          "effectiveFrom": "2026-01-01",
+          "effectiveFrom": "2026-10-03",
           "currency": "USD",
           "unit": "per-million-tokens",
-          "input": "0.50",
-          "output": "1.50",
+          "input": "0.15",
+          "output": "0.60",
           "sourceUrl": "https://cohere.com/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Cohere's pricing page publishes an identical $0.50/$1.50 rate for both the 8B and 32B Aya Expanse sizes (confirmed by two independent re-fetches of the same page); this was double-checked rather than assumed to be an extraction error.",
-            "effectiveFrom set conservatively to 2026-01-01; exact rate-effective date not published.",
-            "Re-confirmed unchanged on 2026-09-07 against the same page."
+            "New in this file on 2026-10-03: the pricing page's \"Generative models\" tab prints \"Command R\" at \"Input $0.15 / 1M tokens\" and \"Output $0.60 / 1M tokens\". That tab is not part of the page's default view, which may be why earlier fetches reported no per-token price for Cohere's current Command models. The page publishes no effective date, so effectiveFrom is the observation date rather than a guess at when the rate was first published.",
+            "ID mapping, review before relying on it: the pricing page names the model only \"Command R\". https://docs.cohere.com/docs/models lists command-r-08-2024 as the only \"Live\" Command R model (128k context, 4k maximum output, matching the page's \"128K token context window\" and \"4K maximum output tokens\"). The bare \"command-r\" API name is documented there as \"Alias for command-r-03-2024\" (Deprecated Sept 15, 2025), a different model whose legacy rate is 0.50 / 1.50, so \"command-r\" is deliberately not an alias of this entry.",
+            "No cached-input rate or batch discount is published for this model, so both fields are omitted."
           ]
         }
       ],
       "source": {
         "url": "https://cohere.com/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "command-r7b-12-2024",
+      "provider": "cohere",
+      "aliases": [],
+      "family": "command-r7b",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.0375",
+          "output": "0.15",
+          "sourceUrl": "https://cohere.com/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "New in this file on 2026-10-03: the pricing page's \"Generative models\" tab prints \"Command R7B\" at \"Input $0.0375 / 1M tokens\" and \"Output $0.15 / 1M tokens\". That tab is not part of the page's default view, which may be why earlier fetches reported no per-token price for Cohere's current Command models. The page publishes no effective date, so effectiveFrom is the observation date rather than a guess at when the rate was first published.",
+            "The pricing page names the model only \"Command R7B\". command-r7b-12-2024 is the only Command R7B model in https://docs.cohere.com/docs/models (status \"Live\", 128k context, 4k maximum output), matching the page's \"128K token context window\" and \"4K maximum output tokens\".",
+            "No cached-input rate or batch discount is published for this model, so both fields are omitted."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://cohere.com/pricing",
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -170,24 +200,25 @@
           "input": "0.50",
           "output": "1.50",
           "sourceUrl": "https://cohere.com/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
             "Cohere's pricing page publishes an identical $0.50/$1.50 rate for both the 8B and 32B Aya Expanse sizes (confirmed by two independent re-fetches of the same page); this was double-checked rather than assumed to be an extraction error.",
             "effectiveFrom set conservatively to 2026-01-01; exact rate-effective date not published.",
-            "Re-confirmed unchanged on 2026-09-07 against the same page."
+            "The same page showed no rate change on 2026-09-07 or 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://cohere.com/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     }
   ],
   "omitted": [
-    "IMPORTANT GAP: Cohere's current model catalogue (confirmed via https://docs.cohere.com/docs/models, observed 2026-08-05) includes newer flagship models — Command A+ (command-a-plus-05-2026), Command A (command-a-03-2025), Command R7B (command-r7b-12-2024), Command A Translate, Command A Reasoning, Command A Vision — none of which have a published per-token price on https://cohere.com/pricing as fetched. Per the never-guess rule, none of these newer models are included in this snapshot even though they are clearly Cohere's current lineup; only the older Command/Command R/Command R+/Aya Expanse models that do have a published price on the pricing page are included. A follow-up reviewer should check whether Cohere prices its newer models on a different page (e.g. a usage-based console page not reachable via a static fetch) before adding them.",
-    "Embed and Rerank models are excluded: they are priced per-hour/per-month as \"Model Vault\" dedicated instances, not per-million-tokens, which this schema does not model.",
+    "The Cohere catalogue (https://docs.cohere.com/docs/models, fetched 2026-10-03) lists Command A+ (command-a-plus-05-2026), Command A (command-a-03-2025), Command A Translate (command-a-translate-08-2025), Command A Reasoning (command-a-reasoning-08-2025), and Command A Vision (command-a-vision-07-2025) as \"Live\". The pricing page (https://cohere.com/pricing, fetched the same day) has no per-token rate for them. Command A+ shows \"API key $0 / Free\" and \"Model download $0 / Free\" under Apache 2.0, which are not metered token rates; the other four are absent. Command R and Command R7B have printed per-token prices and are included.",
+    "Embed, Rerank and Parse models are excluded. As of 2026-10-03 the pricing page prints Embed 5 Pro at \"$0.12 / 1M tokens\" and Embed 5 Fast at \"$0.08 / 1M tokens\" (embedding rates, no output side), Rerank per 1K searches, Parse per 1K pages, and per-instance hourly/monthly \"Model Vault\" rates. This registry covers chat/completion models priced per input and output token, so none of these fits.",
     "\"North\" and \"Compass\" (Cohere's workplace/agent products) show \"contact us for custom enterprise pricing\" with no published rate and are excluded.",
-    "Re-checked 2026-09-07: Cohere's current Command models (Command A, Command A+, Command R7B and the Translate/Reasoning/Vision variants) still have no published per-token price - the page directs to sales or to Model Vault's instance-based pricing. The gap is unchanged from 2026-08-05, so none is added."
+    "Also excluded as of 2026-10-03: Transcribe (\"From $3.75 / hour / instance (via Model Vault)\", not a per-token rate) and North Mini Code (\"API key $0 / Free\", same reasoning as Command A+).",
+    "aya-expanse-8b was removed on 2026-10-03: https://docs.cohere.com/docs/models marks c4ai-aya-expanse-8b \"Retired Apr 4, 2026\", so it is no longer callable, although the pricing page still prints the shared Aya Expanse rate. A lookup for it now throws UNKNOWN_MODEL at any date."
   ]
 }

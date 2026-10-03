@@ -10,8 +10,8 @@ Turn provider usage objects into a reproducible cost breakdown, from committed p
 
 Providers report token usage in incompatible shapes and price input, output,
 cached, and batch tokens differently — and the same model name can mean two
-different prices depending on who resells it. Pricing `"gpt-5.6-luna"`
-without saying which provider you mean is not a rounding error: it is a 5x
+different prices depending on who hosts it. Pricing `"gemma-4-31b"`
+without saying which provider you mean is not a rounding error: it is a 2.5x
 swing, and the obvious fix (just pick one) is exactly the bug this package
 exists to prevent.
 
@@ -22,19 +22,18 @@ import { calculateCost, AmbiguousAliasError } from 'usage-tab';
 
 const usage = { inputTokens: 1_000_000, outputTokens: 1_000_000 };
 
-// Azure genuinely resells this OpenAI model at a different price — not a
-// typo, independently confirmed against Microsoft's live Retail Prices API.
-const onAzure = calculateCost({ model: 'gpt-5.6-luna', provider: 'azure-openai', usage });
-const onOpenAI = calculateCost({ model: 'gpt-5.6-luna', provider: 'openai', usage });
+// Two providers host the same open-weight model, each at its own price
+const onTogether = calculateCost({ model: 'gemma-4-31b', provider: 'together', usage });
+const onBedrock = calculateCost({ model: 'gemma-4-31b', provider: 'aws-bedrock', usage });
 
-console.log(onAzure.totalUsdExact); // "7.00"  ($1.00/$6.00 per million tokens)
-console.log(onOpenAI.totalUsdExact); // "1.40"  ($0.20/$1.20 per million tokens)
-// Azure is 5x OpenAI's first-party rate for the identical model name.
+console.log(onTogether.totalUsdExact); // "1.36"  ($0.39/$0.97 per million tokens)
+console.log(onBedrock.totalUsdExact); // "0.54"  ($0.14/$0.40 per million tokens)
+// Together is 2.5x Bedrock's rate for the identical model name.
 
-// The naive fix — price "gpt-5.6-luna" without saying which provider —
+// The naive fix - price "gemma-4-31b" without saying which provider -
 // doesn't silently pick one. It throws.
 try {
-  calculateCost({ model: 'gpt-5.6-luna', usage });
+  calculateCost({ model: 'gemma-4-31b', usage });
 } catch (error) {
   console.log(error instanceof AmbiguousAliasError); // true
   console.log((error as AmbiguousAliasError).code); // "AMBIGUOUS_ALIAS"

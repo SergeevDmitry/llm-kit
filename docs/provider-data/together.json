@@ -17,8 +17,9 @@
           "sourceUrl": "https://www.together.ai/pricing",
           "observedAt": "2026-08-05",
           "notes": [
-            "Together's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "Not re-confirmed on 2026-09-07: that fetch listed \"DeepSeek V4 Pro 0813\" at $1.32 / $3.96 and no undated \"DeepSeek V4 Pro\" row. Whether the dated build is this same model repriced or a separate snapshot is not stated on the page, so this entry keeps its 2026-08-05 rate and the dated build is recorded separately as deepseek-v4-pro-0813 rather than silently overwriting this one."
+            "Together does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
+            "Not re-confirmed on 2026-09-07: that fetch listed \"DeepSeek V4 Pro 0813\" at $1.32 / $3.96 and no undated \"DeepSeek V4 Pro\" row. Whether the dated build is this same model repriced or a separate snapshot is not stated on the page, so this entry keeps its 2026-08-05 rate and the dated build is recorded separately as deepseek-v4-pro-0813 rather than silently overwriting this one.",
+            "Not shown by the 2026-10-03 fetch of the same page either. Rate and observedAt left unchanged."
           ]
         }
       ],
@@ -41,16 +42,17 @@
           "output": "15.00",
           "cachedInput": "0.30",
           "sourceUrl": "https://www.together.ai/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Together's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "Re-confirmed unchanged on 2026-09-07 against the same page."
+            "Together does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
+            "The same page showed no rate change on 2026-09-07.",
+            "The same page showed no rate change on 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://www.together.ai/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -69,14 +71,30 @@
           "sourceUrl": "https://www.together.ai/pricing",
           "observedAt": "2026-09-07",
           "notes": [
-            "Together's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "Re-confirmed unchanged on 2026-09-07 against the same page."
+            "Together does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
+            "The same page showed no rate change on 2026-09-07.",
+            "Closed on 2026-10-03: the pricing page published a higher rate (1.50 input / 4.50 output / 0.30 cached input) on that date. The old rate was last confirmed 2026-09-07, so the true change date lies in (2026-09-07, 2026-10-03]; effectiveTo is the observation date, which keeps every confirmed observation correct and approximates only the unobserved gap, toward the last confirmed value."
+          ],
+          "effectiveTo": "2026-10-03"
+        },
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.50",
+          "output": "4.50",
+          "cachedInput": "0.30",
+          "sourceUrl": "https://www.together.ai/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "Together's pricing page does not publish an effective date for this change; effectiveFrom is the 2026-10-03 observation date, which closed the previous period.",
+            "Previous rate: 1.25 input / 3.75 output / 0.13 cached input."
           ]
         }
       ],
       "source": {
         "url": "https://www.together.ai/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -93,16 +111,17 @@
           "output": "4.40",
           "cachedInput": "0.26",
           "sourceUrl": "https://www.together.ai/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Together's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "Re-confirmed unchanged on 2026-09-07 against the same page."
+            "Together does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
+            "The same page showed no rate change on 2026-09-07.",
+            "The same page showed no rate change on 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://www.together.ai/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -118,17 +137,18 @@
           "input": "1.04",
           "output": "1.04",
           "sourceUrl": "https://www.together.ai/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Together's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "Also hosted by Groq (groq.json: llama-3.3-70b-versatile, $0.59/$0.79) and resold by AWS Bedrock — each host prices this same open-weight model independently; do not assume parity across providers.",
-            "Re-confirmed unchanged on 2026-09-07 against the same page."
+            "Together does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
+            "Also hosted by Groq until its 2026-08-16 shutdown there (removed from groq.json on 2026-10-03) and resold by AWS Bedrock - each host prices this same open-weight model independently; do not assume parity across providers.",
+            "The same page showed no rate change on 2026-09-07.",
+            "The same page showed no rate change on 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://www.together.ai/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -144,17 +164,18 @@
           "input": "0.15",
           "output": "0.60",
           "sourceUrl": "https://www.together.ai/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Together's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "Cross-provider alias/canonicalId collision (allowed, not an error): Groq also publishes a model with canonicalId \"gpt-oss-120b\" (groq.json), independently priced at the same $0.15/$0.60 figure as observed. The identical string \"gpt-oss-120b\" is used as the canonicalId on both providers because that is the actual model name each provider publishes; resolving \"gpt-oss-120b\" without a provider qualifier is ambiguous across providers by design and the resolver requires a provider qualifier to disambiguate it.",
-            "Re-confirmed unchanged on 2026-09-07 against the same page."
+            "Together does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
+            "This canonicalId is shared across providers: Groq also publishes a model with canonicalId \"gpt-oss-120b\" (groq.json), independently priced at the same $0.15/$0.60 figure as observed. The identical string \"gpt-oss-120b\" is used as the canonicalId on both providers because that is the actual model name each provider publishes; resolving \"gpt-oss-120b\" without a provider qualifier is ambiguous across providers by design and the resolver requires a provider qualifier to disambiguate it.",
+            "The same page showed no rate change on 2026-09-07.",
+            "The same page showed no rate change on 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://www.together.ai/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -172,9 +193,10 @@
           "sourceUrl": "https://www.together.ai/pricing",
           "observedAt": "2026-08-05",
           "notes": [
-            "Together's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "Cross-provider alias/canonicalId collision (allowed, not an error): Groq also publishes \"gpt-oss-20b\" (groq.json) at a different rate ($0.075/$0.30 as observed) — same model name, independently priced by each host; do not assume parity.",
-            "Not surfaced by the 2026-09-07 fetch of the same page. observedAt is deliberately left at 2026-08-05: the rate was not re-observed, and an absence in one page fetch is not evidence of a withdrawal."
+            "Together does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
+            "This canonicalId is shared across providers: Groq also publishes \"gpt-oss-20b\" (groq.json) at a different rate ($0.075/$0.30 as observed) — same model name, independently priced by each host; do not assume parity.",
+            "The 2026-09-07 page fetch did not show this model. The rate was not re-observed, so observedAt remains 2026-08-05; one missing listing does not establish a withdrawal.",
+            "Not shown by the 2026-10-03 fetch of the same page either. Rate and observedAt left unchanged."
           ]
         }
       ],
@@ -197,16 +219,17 @@
           "output": "1.20",
           "cachedInput": "0.06",
           "sourceUrl": "https://www.together.ai/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Together's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "Re-confirmed unchanged on 2026-09-07 against the same page."
+            "Together does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
+            "The same page showed no rate change on 2026-09-07.",
+            "The same page showed no rate change on 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://www.together.ai/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -222,17 +245,18 @@
           "input": "0.39",
           "output": "0.97",
           "sourceUrl": "https://www.together.ai/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Together's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "Cross-provider alias/canonicalId collision (allowed, not an error): AWS Bedrock also lists \"Gemma 4 31B\" (aws-bedrock.json: gemma-4-31b) at a different, lower rate ($0.14/$0.40 as observed on Bedrock) — same underlying Google open-weight model, independently priced by each reseller; do not assume parity.",
-            "Re-confirmed unchanged on 2026-09-07 against the same page."
+            "Together does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
+            "This canonicalId is shared across providers: AWS Bedrock also lists \"Gemma 4 31B\" (aws-bedrock.json: gemma-4-31b) at a different, lower rate ($0.14/$0.40 as observed on Bedrock) — same underlying Google open-weight model, independently priced by each reseller; do not assume parity.",
+            "The same page showed no rate change on 2026-09-07.",
+            "The same page showed no rate change on 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://www.together.ai/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -249,16 +273,17 @@
           "output": "3.60",
           "cachedInput": "0.35",
           "sourceUrl": "https://www.together.ai/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Together's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "Re-confirmed unchanged on 2026-09-07 against the same page."
+            "Together does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
+            "The same page showed no rate change on 2026-09-07.",
+            "The same page showed no rate change on 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://www.together.ai/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -274,17 +299,19 @@
           "input": "1.32",
           "output": "3.96",
           "sourceUrl": "https://www.together.ai/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
             "Dated build listed on the page on 2026-09-07; see deepseek-v4-pro's notes for why it is a separate entry rather than a reprice of that one.",
-            "Added from the 2026-09-07 fetch. effectiveFrom is the observation date rather than this file's conservative 2026-01-01, since the 2026-08-05 fetch of the same page did not list it.",
-            "Together publishes no cached-input rate or batch discount for serverless models; both fields are omitted rather than guessed."
-          ]
+            "First recorded in the 2026-09-07 page fetch; the 2026-08-05 fetch did not list it. effectiveFrom uses the observation date instead of the usual 2026-01-01 placeholder.",
+            "Together publishes no cached-input rate or batch discount for serverless models, so cachedInput and batchMultiplier are omitted.",
+            "Re-confirmed unchanged on 2026-10-03 against the same page for input and output. cachedInput added on 2026-10-03: the page now prints a cached input rate of 0.13 per million tokens for this model. The 2026-09-07 entry recorded none (see the note above), so whether this rate applied before 2026-10-03 is not established; it is recorded on the existing period, as the 2026-09-07 refresh did for newly printed cache rates elsewhere."
+          ],
+          "cachedInput": "0.13"
         }
       ],
       "source": {
         "url": "https://www.together.ai/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -300,16 +327,18 @@
           "input": "0.14",
           "output": "0.28",
           "sourceUrl": "https://www.together.ai/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Added from the 2026-09-07 fetch. effectiveFrom is the observation date rather than this file's conservative 2026-01-01, since the 2026-08-05 fetch of the same page did not list it.",
-            "Together publishes no cached-input rate or batch discount for serverless models; both fields are omitted rather than guessed."
-          ]
+            "First recorded in the 2026-09-07 page fetch; the 2026-08-05 fetch did not list it. effectiveFrom uses the observation date instead of the usual 2026-01-01 placeholder.",
+            "Together publishes no cached-input rate or batch discount for serverless models, so cachedInput and batchMultiplier are omitted.",
+            "Re-confirmed unchanged on 2026-10-03 against the same page for input and output. cachedInput added on 2026-10-03: the page now prints a cached input rate of 0.03 per million tokens for this model. The 2026-09-07 entry recorded none (see the note above), so whether this rate applied before 2026-10-03 is not established; it is recorded on the existing period, as the 2026-09-07 refresh did for newly printed cache rates elsewhere."
+          ],
+          "cachedInput": "0.03"
         }
       ],
       "source": {
         "url": "https://www.together.ai/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -325,16 +354,18 @@
           "input": "1.40",
           "output": "4.40",
           "sourceUrl": "https://www.together.ai/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Added from the 2026-09-07 fetch. effectiveFrom is the observation date rather than this file's conservative 2026-01-01, since the 2026-08-05 fetch of the same page did not list it.",
-            "Together publishes no cached-input rate or batch discount for serverless models; both fields are omitted rather than guessed."
-          ]
+            "First recorded in the 2026-09-07 page fetch; the 2026-08-05 fetch did not list it. effectiveFrom uses the observation date instead of the usual 2026-01-01 placeholder.",
+            "Together publishes no cached-input rate or batch discount for serverless models, so cachedInput and batchMultiplier are omitted.",
+            "Re-confirmed unchanged on 2026-10-03 against the same page for input and output. cachedInput added on 2026-10-03: the page now prints a cached input rate of 0.26 per million tokens for this model. The 2026-09-07 entry recorded none (see the note above), so whether this rate applied before 2026-10-03 is not established; it is recorded on the existing period, as the 2026-09-07 refresh did for newly printed cache rates elsewhere."
+          ],
+          "cachedInput": "0.26"
         }
       ],
       "source": {
         "url": "https://www.together.ai/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -350,16 +381,18 @@
           "input": "0.15",
           "output": "0.50",
           "sourceUrl": "https://www.together.ai/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Added from the 2026-09-07 fetch. effectiveFrom is the observation date rather than this file's conservative 2026-01-01, since the 2026-08-05 fetch of the same page did not list it.",
-            "Together publishes no cached-input rate or batch discount for serverless models; both fields are omitted rather than guessed."
-          ]
+            "First recorded in the 2026-09-07 page fetch; the 2026-08-05 fetch did not list it. effectiveFrom uses the observation date instead of the usual 2026-01-01 placeholder.",
+            "Together publishes no cached-input rate or batch discount for serverless models, so cachedInput and batchMultiplier are omitted.",
+            "Re-confirmed unchanged on 2026-10-03 against the same page for input and output. cachedInput added on 2026-10-03: the page now prints a cached input rate of 0.03 per million tokens for this model. The 2026-09-07 entry recorded none (see the note above), so whether this rate applied before 2026-10-03 is not established; it is recorded on the existing period, as the 2026-09-07 refresh did for newly printed cache rates elsewhere."
+          ],
+          "cachedInput": "0.03"
         }
       ],
       "source": {
         "url": "https://www.together.ai/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -375,16 +408,18 @@
           "input": "2.00",
           "output": "6.00",
           "sourceUrl": "https://www.together.ai/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Added from the 2026-09-07 fetch. effectiveFrom is the observation date rather than this file's conservative 2026-01-01, since the 2026-08-05 fetch of the same page did not list it.",
-            "Together publishes no cached-input rate or batch discount for serverless models; both fields are omitted rather than guessed."
-          ]
+            "First recorded in the 2026-09-07 page fetch; the 2026-08-05 fetch did not list it. effectiveFrom uses the observation date instead of the usual 2026-01-01 placeholder.",
+            "Together publishes no cached-input rate or batch discount for serverless models, so cachedInput and batchMultiplier are omitted.",
+            "Re-confirmed unchanged on 2026-10-03 against the same page for input and output. cachedInput added on 2026-10-03: the page now prints a cached input rate of 0.25 per million tokens for this model. The 2026-09-07 entry recorded none (see the note above), so whether this rate applied before 2026-10-03 is not established; it is recorded on the existing period, as the 2026-09-07 refresh did for newly printed cache rates elsewhere."
+          ],
+          "cachedInput": "0.25"
         }
       ],
       "source": {
         "url": "https://www.together.ai/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -402,14 +437,30 @@
           "sourceUrl": "https://www.together.ai/pricing",
           "observedAt": "2026-09-07",
           "notes": [
-            "Added from the 2026-09-07 fetch. effectiveFrom is the observation date rather than this file's conservative 2026-01-01, since the 2026-08-05 fetch of the same page did not list it.",
-            "Together publishes no cached-input rate or batch discount for serverless models; both fields are omitted rather than guessed."
+            "First recorded in the 2026-09-07 page fetch; the 2026-08-05 fetch did not list it. effectiveFrom uses the observation date instead of the usual 2026-01-01 placeholder.",
+            "Together publishes no cached-input rate or batch discount for serverless models, so cachedInput and batchMultiplier are omitted.",
+            "Closed on 2026-10-03: the pricing page published a lower rate (0.09 input / 0.28 output) on that date. The old rate was last confirmed 2026-09-07, so the true change date lies in (2026-09-07, 2026-10-03]; effectiveTo is the observation date, which keeps every confirmed observation correct and approximates only the unobserved gap, toward the last confirmed value."
+          ],
+          "effectiveTo": "2026-10-03"
+        },
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.09",
+          "output": "0.28",
+          "sourceUrl": "https://www.together.ai/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "Together's pricing page does not publish an effective date for this change; effectiveFrom is the 2026-10-03 observation date, which closed the previous period.",
+            "Previous rate: 0.15 input / 0.47 output.",
+            "Together prints no cached-input rate for this model and no batch discount percentage for serverless models; both fields are omitted rather than guessed."
           ]
         }
       ],
       "source": {
         "url": "https://www.together.ai/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -425,16 +476,17 @@
           "input": "0.32",
           "output": "1.28",
           "sourceUrl": "https://www.together.ai/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Added from the 2026-09-07 fetch. effectiveFrom is the observation date rather than this file's conservative 2026-01-01, since the 2026-08-05 fetch of the same page did not list it.",
-            "Together publishes no cached-input rate or batch discount for serverless models; both fields are omitted rather than guessed."
+            "First recorded in the 2026-09-07 page fetch; the 2026-08-05 fetch did not list it. effectiveFrom uses the observation date instead of the usual 2026-01-01 placeholder.",
+            "Together publishes no cached-input rate or batch discount for serverless models, so cachedInput and batchMultiplier are omitted.",
+            "The same page showed no rate change on 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://www.together.ai/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -450,16 +502,17 @@
           "input": "0.50",
           "output": "3.00",
           "sourceUrl": "https://www.together.ai/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Added from the 2026-09-07 fetch. effectiveFrom is the observation date rather than this file's conservative 2026-01-01, since the 2026-08-05 fetch of the same page did not list it.",
-            "Together publishes no cached-input rate or batch discount for serverless models; both fields are omitted rather than guessed."
+            "First recorded in the 2026-09-07 page fetch; the 2026-08-05 fetch did not list it. effectiveFrom uses the observation date instead of the usual 2026-01-01 placeholder.",
+            "Together publishes no cached-input rate or batch discount for serverless models, so cachedInput and batchMultiplier are omitted.",
+            "The same page showed no rate change on 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://www.together.ai/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -475,16 +528,17 @@
           "input": "0.17",
           "output": "0.25",
           "sourceUrl": "https://www.together.ai/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Added from the 2026-09-07 fetch. effectiveFrom is the observation date rather than this file's conservative 2026-01-01, since the 2026-08-05 fetch of the same page did not list it.",
-            "Together publishes no cached-input rate or batch discount for serverless models; both fields are omitted rather than guessed."
+            "First recorded in the 2026-09-07 page fetch; the 2026-08-05 fetch did not list it. effectiveFrom uses the observation date instead of the usual 2026-01-01 placeholder.",
+            "Together publishes no cached-input rate or batch discount for serverless models, so cachedInput and batchMultiplier are omitted.",
+            "The same page showed no rate change on 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://www.together.ai/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -500,16 +554,17 @@
           "input": "0.30",
           "output": "0.30",
           "sourceUrl": "https://www.together.ai/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Added from the 2026-09-07 fetch. effectiveFrom is the observation date rather than this file's conservative 2026-01-01, since the 2026-08-05 fetch of the same page did not list it.",
-            "Together publishes no cached-input rate or batch discount for serverless models; both fields are omitted rather than guessed."
+            "First recorded in the 2026-09-07 page fetch; the 2026-08-05 fetch did not list it. effectiveFrom uses the observation date instead of the usual 2026-01-01 placeholder.",
+            "Together publishes no cached-input rate or batch discount for serverless models, so cachedInput and batchMultiplier are omitted.",
+            "The same page showed no rate change on 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://www.together.ai/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -525,23 +580,205 @@
           "input": "0.14",
           "output": "0.14",
           "sourceUrl": "https://www.together.ai/pricing",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Added from the 2026-09-07 fetch. effectiveFrom is the observation date rather than this file's conservative 2026-01-01, since the 2026-08-05 fetch of the same page did not list it.",
-            "Together publishes no cached-input rate or batch discount for serverless models; both fields are omitted rather than guessed."
+            "First recorded in the 2026-09-07 page fetch; the 2026-08-05 fetch did not list it. effectiveFrom uses the observation date instead of the usual 2026-01-01 placeholder.",
+            "Together publishes no cached-input rate or batch discount for serverless models, so cachedInput and batchMultiplier are omitted.",
+            "The same page showed no rate change on 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://www.together.ai/pricing",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "deepseek-v4.1-flash",
+      "provider": "together",
+      "aliases": [],
+      "family": "deepseek",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.30",
+          "output": "1.20",
+          "cachedInput": "0.006",
+          "sourceUrl": "https://www.together.ai/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "First recorded in the 2026-10-03 page fetch; earlier fetches did not record it. effectiveFrom uses the observation date instead of the usual 2026-01-01 placeholder.",
+            "Together publishes no serverless batch discount percentage, so batchMultiplier is omitted."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://www.together.ai/pricing",
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "minimax-m2.7",
+      "provider": "together",
+      "aliases": [],
+      "family": "minimax",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.30",
+          "output": "1.20",
+          "cachedInput": "0.06",
+          "sourceUrl": "https://www.together.ai/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "First recorded in the 2026-10-03 page fetch; earlier fetches did not record it. effectiveFrom uses the observation date instead of the usual 2026-01-01 placeholder.",
+            "Groq lists MiniMax M2.7 without a price (groq.json omitted notes), so there is no cross-provider canonicalId collision.",
+            "Together publishes no serverless batch discount percentage, so batchMultiplier is omitted."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://www.together.ai/pricing",
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "qwen3-235b-a22b-instruct-2507-fp8",
+      "provider": "together",
+      "aliases": [],
+      "family": "qwen",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.20",
+          "output": "0.60",
+          "sourceUrl": "https://www.together.ai/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "First recorded in the 2026-10-03 page fetch; earlier fetches did not record it. effectiveFrom uses the observation date instead of the usual 2026-01-01 placeholder.",
+            "Listed on the page as \"Qwen3 235B A22B Instruct 2507 FP8\".",
+            "Together publishes no cached-input rate for this model, so cachedInput is omitted. Together publishes no serverless batch discount percentage, so batchMultiplier is omitted."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://www.together.ai/pricing",
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "muse-glimmer-30b",
+      "provider": "together",
+      "aliases": [],
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.35",
+          "output": "1.50",
+          "cachedInput": "0.04",
+          "sourceUrl": "https://www.together.ai/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "First recorded in the 2026-10-03 page fetch; earlier fetches did not record it. effectiveFrom uses the observation date instead of the usual 2026-01-01 placeholder.",
+            "Listed on the page as \"Muse Glimmer 30B\".",
+            "Together publishes no serverless batch discount percentage, so batchMultiplier is omitted."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://www.together.ai/pricing",
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "inkling",
+      "provider": "together",
+      "aliases": [],
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.00",
+          "output": "4.05",
+          "cachedInput": "0.17",
+          "sourceUrl": "https://www.together.ai/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "First recorded in the 2026-10-03 page fetch; earlier fetches did not record it. effectiveFrom uses the observation date instead of the usual 2026-01-01 placeholder.",
+            "Listed on the page as \"Inkling\", with no size or version suffix.",
+            "Together publishes no serverless batch discount percentage, so batchMultiplier is omitted."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://www.together.ai/pricing",
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "cogito-v2.1-671b",
+      "provider": "together",
+      "aliases": [],
+      "family": "cogito",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.25",
+          "output": "1.25",
+          "sourceUrl": "https://www.together.ai/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "First recorded in the 2026-10-03 page fetch; earlier fetches did not record it. effectiveFrom uses the observation date instead of the usual 2026-01-01 placeholder.",
+            "Together publishes no cached-input rate for this model, so cachedInput is omitted. Together publishes no serverless batch discount percentage, so batchMultiplier is omitted."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://www.together.ai/pricing",
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "rnj-1-instruct",
+      "provider": "together",
+      "aliases": [],
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.15",
+          "output": "0.15",
+          "sourceUrl": "https://www.together.ai/pricing",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "First recorded in the 2026-10-03 page fetch; earlier fetches did not record it. effectiveFrom uses the observation date instead of the usual 2026-01-01 placeholder.",
+            "Listed on the page as \"Rnj-1 Instruct\".",
+            "Together publishes no cached-input rate for this model, so cachedInput is omitted. Together publishes no serverless batch discount percentage, so batchMultiplier is omitted."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://www.together.ai/pricing",
+        "observedAt": "2026-10-03"
       }
     }
   ],
   "omitted": [
-    "Models shown with a $0.00 or otherwise incomplete price on the fetched page (e.g. \"PrismML Ternary Bonsai 27B\") are excluded rather than recorded with a placeholder.",
+    "Models shown with a $0.00, \"Free\" or otherwise incomplete price on the fetched page (e.g. \"PrismML Ternary Bonsai 27B\", and on 2026-10-03 \"Tev1 4B Experimental\" at $0.04 input / \"Free\" output) are excluded rather than recorded with a placeholder.",
     "Embedding, image, audio, and reranking models on Together's catalogue are out of scope for this per-million-tokens text-completion schema and were not reviewed.",
-    "Still not exhaustive: this file records the chat/language models the page fetch surfaced with a complete price on 2026-08-05 and 2026-09-07 (21 as of this pass), not Together's full catalogue. Confirm against the live page before adding more.",
+    "Still not exhaustive: this file records the chat/language models the page fetches surfaced with a complete price on 2026-08-05, 2026-09-07 and 2026-10-03 (28 as of the 2026-10-03 pass), not Together's full catalogue. Confirm against the live page before adding more.",
     "glm-5.2 here and zai-glm-5-2 in mistral.json are the same Z.ai model resold by two providers at coincidentally identical rates ($1.40 / $4.40), each fetched independently from that provider's own page. The ids differ, so the resolver sees no ambiguity between them."
   ]
 }

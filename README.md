@@ -26,10 +26,10 @@ telemetry. Packages are independent by design: none of them imports another.
 
 A few of the problems are sharper than they first look.
 
-**Pricing the same model differently depending on who sells it.** Azure resells
-OpenAI's models — and not always at OpenAI's price. `gpt-5.6-luna` is
-`$0.20/$1.20` per million tokens on OpenAI and `$1.00/$6.00` on Azure. Anyone
-assuming parity under-reports their bill by 80%. `usage-tab` keys prices by
+**Pricing the same model differently depending on who sells it.** Open-weight
+models are hosted by several providers, each at its own price. `gemma-4-31b` is
+`$0.14/$0.40` per million tokens on AWS Bedrock and `$0.39/$0.97` on Together
+AI. Anyone assuming parity is off by a factor of 2.5. `usage-tab` keys prices by
 `(provider, model)` and **refuses to guess** when a model name is ambiguous:
 
 ```ts
@@ -37,12 +37,12 @@ import { calculateCost } from 'usage-tab';
 
 const usage = { inputTokens: 1_000_000, outputTokens: 1_000_000 };
 
-calculateCost({ model: 'gpt-5.6-luna', provider: 'openai', usage }).totalUsdExact;
-// → "1.40"
-calculateCost({ model: 'gpt-5.6-luna', provider: 'azure-openai', usage }).totalUsdExact;
-// → "7.00"
-calculateCost({ model: 'gpt-5.6-luna', usage });
-// → throws AMBIGUOUS_ALIAS — it will not pick one for you
+calculateCost({ model: 'gemma-4-31b', provider: 'aws-bedrock', usage }).totalUsdExact;
+// → "0.54"
+calculateCost({ model: 'gemma-4-31b', provider: 'together', usage }).totalUsdExact;
+// → "1.36"
+calculateCost({ model: 'gemma-4-31b', usage });
+// → throws AMBIGUOUS_ALIAS - it will not pick one for you
 ```
 
 **Money is never computed in floating point.** `0.1 * 3` is

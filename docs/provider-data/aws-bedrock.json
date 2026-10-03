@@ -15,18 +15,19 @@
           "output": "30.00",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
             "AWS Bedrock's own rate card for this Anthropic model, explicitly labeled \"Effective 1 Dec 2025\" on the pricing page — a real, confirmed effective date, not the conservative default used elsewhere in this file.",
             "Batch: $3.00/$15.00 (confirmed 0.5x standard) as observed on the same page.",
             "This is Bedrock's own price for an older Claude generation (3.5 Sonnet), not the current claude-sonnet-5 model in anthropic.json — no comparable first-party entry exists in this registry for the same model, so no direct parity claim is possible or intended. Bedrock and Azure resell other vendors' models under their own rate cards, so a first-party price is never a safe proxy for theirs.",
-            "Re-confirmed unchanged on 2026-09-07 against the same page."
+            "The same page showed no rate change on 2026-09-07.",
+            "The same page showed no rate change on 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://aws.amazon.com/bedrock/pricing/",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -45,18 +46,19 @@
           "cacheWrite": "7.50",
           "batchMultiplier": "0.5",
           "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
             "AWS Bedrock's own rate card, explicitly labeled \"Effective 1 Dec 2025\" on the pricing page.",
             "Batch: $3.00/$15.00 (confirmed 0.5x standard) as observed on the same page.",
             "Bedrock's own price for an older Claude generation; not comparable to any first-party entry currently in anthropic.json (which covers 4.x/5.x models only).",
-            "Re-confirmed unchanged on 2026-09-07 against the same page."
+            "The same page showed no rate change on 2026-09-07.",
+            "The same page showed no rate change on 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://aws.amazon.com/bedrock/pricing/",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -77,7 +79,8 @@
             "AWS's own first-party model (Amazon publishes both Bedrock and Nova), so \"aws-bedrock\" is effectively first-party pricing here, unlike the resold third-party models in this file.",
             "No explicit effective date published for this specific rate (unlike the Claude 3.5 Sonnet rows above, which do carry a stated Dec 2025 date); effectiveFrom is set conservatively to 2026-01-01.",
             "Bedrock's pricing page also distinguishes \"Global cross-region\" vs \"in-region\" inference pricing for Nova; this rate was not confirmed to be specifically the in-region (vs cross-region) figure — treat as the headline on-demand rate observed.",
-            "Not surfaced by the 2026-09-07 fetch of the same page, whose accessible sections did not include this model. observedAt is deliberately left at 2026-08-05: the rate was not re-observed, and an absence in one page fetch is not evidence of a withdrawal."
+            "The accessible sections of the 2026-09-07 page fetch did not show this model. The rate was not re-observed, so observedAt remains 2026-08-05; one missing listing does not establish a withdrawal.",
+            "Also not surfaced by the 2026-10-03 fetch of the same page, which showed the Amazon Nova section headers but no Nova price rows. observedAt stays at 2026-08-05 for the same reason."
           ]
         }
       ],
@@ -101,9 +104,10 @@
           "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
           "observedAt": "2026-08-05",
           "notes": [
-            "No explicit effective date published for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "No effective date is published for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
             "Same cross-region/in-region caveat as amazon-nova-micro.",
-            "Not surfaced by the 2026-09-07 fetch of the same page, whose accessible sections did not include this model. observedAt is deliberately left at 2026-08-05: the rate was not re-observed, and an absence in one page fetch is not evidence of a withdrawal."
+            "The accessible sections of the 2026-09-07 page fetch did not show this model. The rate was not re-observed, so observedAt remains 2026-08-05; one missing listing does not establish a withdrawal.",
+            "Also not surfaced by the 2026-10-03 fetch of the same page, which showed the Amazon Nova section headers but no Nova price rows. observedAt stays at 2026-08-05 for the same reason."
           ]
         }
       ],
@@ -127,9 +131,10 @@
           "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
           "observedAt": "2026-08-05",
           "notes": [
-            "No explicit effective date published for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "No effective date is published for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
             "Same cross-region/in-region caveat as amazon-nova-micro.",
-            "Not surfaced by the 2026-09-07 fetch of the same page, whose accessible sections did not include this model. observedAt is deliberately left at 2026-08-05: the rate was not re-observed, and an absence in one page fetch is not evidence of a withdrawal."
+            "The accessible sections of the 2026-09-07 page fetch did not show this model. The rate was not re-observed, so observedAt remains 2026-08-05; one missing listing does not establish a withdrawal.",
+            "Also not surfaced by the 2026-10-03 fetch of the same page, which showed the Amazon Nova section headers but no Nova price rows. observedAt stays at 2026-08-05 for the same reason."
           ]
         }
       ],
@@ -151,17 +156,18 @@
           "input": "0.14",
           "output": "0.40",
           "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "No explicit effective date published for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "Cross-provider alias/canonicalId collision (allowed, not an error): Together AI also lists \"Gemma 4 31B\" (together.json: gemma-4-31b) at a different, higher rate ($0.39/$0.97 as observed) — same underlying Google open-weight model, independently priced by each reseller; do not assume parity.",
-            "Re-confirmed unchanged on 2026-09-07 against the same page."
+            "No effective date is published for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
+            "This canonicalId is shared across providers: Together AI also lists \"Gemma 4 31B\" (together.json: gemma-4-31b) at a different, higher rate ($0.39/$0.97 as observed) — same underlying Google open-weight model, independently priced by each reseller; do not assume parity.",
+            "The same page showed no rate change on 2026-09-07.",
+            "The same page showed no rate change on 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://aws.amazon.com/bedrock/pricing/",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -177,17 +183,18 @@
           "input": "0.50",
           "output": "1.50",
           "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "No explicit effective date published for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "Cross-provider alias/canonicalId collision (allowed, not an error): Mistral's own first-party pricing (mistral.json: mistral-large-3) shows the identical $0.50/$1.50 figure as independently observed — coincidental agreement between the two independently fetched sources, not assumed; both were confirmed directly.",
-            "Re-confirmed unchanged on 2026-09-07 against the same page."
+            "No effective date is published for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
+            "This canonicalId is shared across providers: Mistral's own first-party pricing (mistral.json: mistral-large-3) shows the identical $0.50/$1.50 figure as independently observed — coincidental agreement between the two independently fetched sources, not assumed; both were confirmed directly.",
+            "The same page showed no rate change on 2026-09-07.",
+            "The same page showed no rate change on 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://aws.amazon.com/bedrock/pricing/",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -203,16 +210,17 @@
           "input": "0.06",
           "output": "0.23",
           "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
-          "observedAt": "2026-08-05",
+          "observedAt": "2026-10-03",
           "notes": [
-            "No explicit effective date published for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "Not surfaced by the 2026-09-07 fetch of the same page, whose accessible sections did not include this model. observedAt is deliberately left at 2026-08-05: the rate was not re-observed, and an absence in one page fetch is not evidence of a withdrawal."
+            "No effective date is published for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
+            "The accessible sections of the 2026-09-07 page fetch did not show this model. The rate was not re-observed, so observedAt remains 2026-08-05; one missing listing does not establish a withdrawal.",
+            "The same page showed no rate change on 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://aws.amazon.com/bedrock/pricing/",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -228,17 +236,18 @@
           "input": "0.23",
           "output": "0.38",
           "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Bedrock's own resale rate for this google model, read from Bedrock's pricing page - never copied from that vendor's first-party file.",
+            "This google model's resale rate comes from Bedrock's pricing page, independently of the vendor's first-party file.",
             "Added from the 2026-09-07 fetch; effectiveFrom is the observation date, since the 2026-08-05 fetch of the same page did not surface it.",
-            "US East on-demand rate as printed; Bedrock prices some models per region and this schema has no region dimension."
+            "This is the published US East on-demand rate. Bedrock prices some models by region, but this schema has no region dimension.",
+            "The same page showed no rate change on 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://aws.amazon.com/bedrock/pricing/",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -254,17 +263,18 @@
           "input": "0.09",
           "output": "0.29",
           "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Bedrock's own resale rate for this google model, read from Bedrock's pricing page - never copied from that vendor's first-party file.",
+            "This google model's resale rate comes from Bedrock's pricing page, independently of the vendor's first-party file.",
             "Added from the 2026-09-07 fetch; effectiveFrom is the observation date, since the 2026-08-05 fetch of the same page did not surface it.",
-            "US East on-demand rate as printed; Bedrock prices some models per region and this schema has no region dimension."
+            "This is the published US East on-demand rate. Bedrock prices some models by region, but this schema has no region dimension.",
+            "The same page showed no rate change on 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://aws.amazon.com/bedrock/pricing/",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -280,17 +290,122 @@
           "input": "0.15",
           "output": "0.65",
           "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Bedrock's own resale rate for this nvidia model, read from Bedrock's pricing page - never copied from that vendor's first-party file.",
+            "This nvidia model's resale rate comes from Bedrock's pricing page, independently of the vendor's first-party file.",
             "Added from the 2026-09-07 fetch; effectiveFrom is the observation date, since the 2026-08-05 fetch of the same page did not surface it.",
-            "US East on-demand rate as printed; Bedrock prices some models per region and this schema has no region dimension."
+            "This is the published US East on-demand rate. Bedrock prices some models by region, but this schema has no region dimension.",
+            "The same page showed no rate change on 2026-10-03."
           ]
         }
       ],
       "source": {
         "url": "https://aws.amazon.com/bedrock/pricing/",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "gemma-4-26b-a4b",
+      "provider": "aws-bedrock",
+      "aliases": [],
+      "family": "gemma",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.13",
+          "output": "0.40",
+          "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "This google model's resale rate comes from Bedrock's pricing page, independently of the vendor's first-party file.",
+            "Added from the 2026-10-03 fetch, which printed the row \"Gemma 4 26B A4B | $0.13 | $ 0.40\" under US East (N. Virginia), US East (Ohio) and US West (Oregon), per 1M tokens. The page gives no effective date, so effectiveFrom is the observation date.",
+            "This is the published US East on-demand rate. Bedrock prices some models by region, but this schema has no region dimension."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://aws.amazon.com/bedrock/pricing/",
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "gemma-4-e2b",
+      "provider": "aws-bedrock",
+      "aliases": [],
+      "family": "gemma",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.04",
+          "output": "0.08",
+          "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "This google model's resale rate comes from Bedrock's pricing page, independently of the vendor's first-party file.",
+            "Added from the 2026-10-03 fetch, which printed the row \"Gemma 4 E2B | $0.04 | $ 0.08\" under US East (N. Virginia), US East (Ohio) and US West (Oregon), per 1M tokens. The page gives no effective date, so effectiveFrom is the observation date.",
+            "This is the published US East on-demand rate. Bedrock prices some models by region, but this schema has no region dimension."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://aws.amazon.com/bedrock/pricing/",
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "gemma-3-4b",
+      "provider": "aws-bedrock",
+      "aliases": [],
+      "family": "gemma",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.04",
+          "output": "0.08",
+          "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "This google model's resale rate comes from Bedrock's pricing page, independently of the vendor's first-party file.",
+            "Added from the 2026-10-03 fetch, which printed the row \"Gemma 3 4B | $ 0.04 | $ 0.08\" under US East (N. Virginia), US East (Ohio) and US West (Oregon), per 1M tokens. The page gives no effective date, so effectiveFrom is the observation date.",
+            "This is the published US East on-demand rate. Bedrock prices some models by region, but this schema has no region dimension."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://aws.amazon.com/bedrock/pricing/",
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "nemotron-3-nano-30b",
+      "provider": "aws-bedrock",
+      "aliases": [],
+      "family": "nemotron",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "0.06",
+          "output": "0.24",
+          "sourceUrl": "https://aws.amazon.com/bedrock/pricing/",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "This nvidia model's resale rate comes from Bedrock's pricing page, independently of the vendor's first-party file.",
+            "Added from the 2026-10-03 fetch, which printed the row \"NVIDIA Nemotron 3 Nano 30B A3B | $ 0.06 | $ 0.24\" under US East (N. Virginia), US East (Ohio) and US West (Oregon), per 1M tokens. The page gives no effective date, so effectiveFrom is the observation date.",
+            "This is the published US East on-demand rate. Bedrock prices some models by region, but this schema has no region dimension."
+          ]
+        }
+      ],
+      "source": {
+        "url": "https://aws.amazon.com/bedrock/pricing/",
+        "observedAt": "2026-10-03"
       }
     }
   ],
@@ -298,8 +413,9 @@
     "AWS Bedrock's catalogue spans many more model families (Meta Llama, additional Anthropic Claude generations, DeepSeek, Cohere, AI21, Writer, and Amazon's own Titan line) than are represented here; this is a representative sample of the families that produced a clear, unambiguous price during fetching, not an exhaustive list. Meta Llama 2 (13B/70B) pricing was found on the page but deliberately excluded: Llama 2 is a superseded generation and its inclusion risked implying it is Bedrock's current Llama offering, which was not confirmed.",
     "Amazon Nova Premier's price was not found in the fetched content (the page excerpt was truncated before reaching it); Nova Micro/Lite/Pro are included, Nova Premier is not.",
     "Regional and deployment-mode pricing variation (Global cross-region vs. in-region inference, Provisioned Throughput) is not modeled by this schema; entries record the on-demand rate as observed without confirming which region/routing tier it applies to.",
-    "Every model in this file is AWS Bedrock's own resale rate, independently sourced from https://aws.amazon.com/bedrock/pricing/ and never copied from another provider's file, per the ownership boundary in docs/provider-data/README.md (\"do not assume parity with the first-party provider\").",
-    "The 2026-09-07 fetch surfaced no Claude 4.x or Claude 5 rates on Bedrock, although Anthropic's own pricing page says those models are available there. Rather than derive them from Anthropic's first-party rates - which the cross-provider rule forbids - none is added; a future pass should re-fetch the Anthropic section directly.",
-    "Amazon Nova Premier was requested in the 2026-09-07 fetch and returned no price; it is not added."
+    "Each rate in this file comes independently from AWS Bedrock's pricing page (https://aws.amazon.com/bedrock/pricing/), not from another provider's file.",
+    "The 2026-09-07 and 2026-10-03 fetches surfaced no Claude 4.x or Claude 5 rates on Bedrock (the 2026-10-03 Anthropic section showed only Claude 3.5 Sonnet and 3.5 Sonnet v2), although Anthropic's own pricing page says those models are available there. Rather than derive them from Anthropic's first-party rates - which the cross-provider rule forbids - none is added; a future pass should re-fetch the Anthropic section directly.",
+    "Amazon Nova Premier was requested in the 2026-09-07 and 2026-10-03 fetches and returned no price; it is not added. The 2026-10-03 fetch returned no Nova price rows at all.",
+    "Seen on the 2026-10-03 fetch but not added: NVIDIA Nemotron Nano 2 VL (vision-language; image-input pricing is not modelled here), Mistral's Devstral 2 123B, Magistral Small 1.2, Ministral 3B/8B/14B 3.0 and Voxtral rows (mapping the Ministral rows to mistral.json's ministral-3-* ids was not confirmed, Mistral has retired Devstral 2 and Magistral Small from its own API, and the Voxtral models are audio models), and the DeepSeek, Z AI, Writer, Qwen, OpenAI gpt-oss and Cohere sections, which are families outside this file's sample."
   ]
 }

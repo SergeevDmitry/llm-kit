@@ -14,12 +14,13 @@
           "input": "1.50",
           "output": "7.50",
           "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "Mistral does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
             "No cachedInput or batchMultiplier is documented on the fetched page for this model; omitted rather than assumed.",
             "Re-confirmed unchanged on 2026-09-07 against the same page, which prints the API id as 'mistral-medium-latest' (recorded as an alias).",
-            "cachedInput and batchMultiplier added on 2026-09-07: the page publishes \"Cached input: 90% discount\" and \"Batch: 50% discount\" for this model, so cachedInput is 0.1x this model's own input rate (1.50 -> 0.15), computed as an exact decimal, and batchMultiplier is 0.5. Both come from this model's own row, not from a sibling's rate."
+            "cachedInput and batchMultiplier added on 2026-09-07: the page publishes \"Cached input: 90% discount\" and \"Batch: 50% discount\" for this model, so cachedInput is 0.1x this model's own input rate (1.50 -> 0.15), computed as an exact decimal, and batchMultiplier is 0.5. Both come from this model's own row, not from a sibling's rate.",
+            "On 2026-10-03, the same page still listed: the \"Mistral Medium 3.5\" card prints Input (/M tokens) $1.5 and Output (/M tokens) $7.5; with the page's \"Cached input tokens\" option applied it prints $0.15 cached input, and the Batch tab prints $0.75 / $3.75, exactly half of both standard rates."
           ],
           "cachedInput": "0.15",
           "batchMultiplier": "0.5"
@@ -27,7 +28,7 @@
       ],
       "source": {
         "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -43,11 +44,12 @@
           "input": "0.15",
           "output": "0.60",
           "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "Mistral does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
             "Re-confirmed unchanged on 2026-09-07 against the same page, which prints the API id as 'mistral-small-latest' (recorded as an alias).",
-            "cachedInput and batchMultiplier added on 2026-09-07: the page publishes \"Cached input: 90% discount\" and \"Batch: 50% discount\" for this model, so cachedInput is 0.1x this model's own input rate (0.15 -> 0.015), computed as an exact decimal, and batchMultiplier is 0.5. Both come from this model's own row, not from a sibling's rate."
+            "cachedInput and batchMultiplier added on 2026-09-07: the page publishes \"Cached input: 90% discount\" and \"Batch: 50% discount\" for this model, so cachedInput is 0.1x this model's own input rate (0.15 -> 0.015), computed as an exact decimal, and batchMultiplier is 0.5. Both come from this model's own row, not from a sibling's rate.",
+            "On 2026-10-03, the same page still listed: the \"Mistral Small 4\" card prints Input (/M tokens) $0.15 and Output (/M tokens) $0.6; with the page's \"Cached input tokens\" option applied it prints $0.015 cached input, and the Batch tab prints $0.075 / $0.3, exactly half of both standard rates."
           ],
           "cachedInput": "0.015",
           "batchMultiplier": "0.5"
@@ -55,7 +57,7 @@
       ],
       "source": {
         "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -71,12 +73,13 @@
           "input": "0.50",
           "output": "1.50",
           "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "Mistral does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
             "This is Mistral's own first-party rate. AWS Bedrock also resells \"Mistral Large 3\" under its own rate card at the same $0.50/$1.50 figure as independently observed on Bedrock's pricing page — coincidental agreement between the two sources, not assumed; see aws-bedrock.json.",
             "Re-confirmed unchanged on 2026-09-07 against the same page, which prints the API id as 'mistral-large-latest' (recorded as an alias).",
-            "cachedInput and batchMultiplier added on 2026-09-07: the page publishes \"Cached input: 90% discount\" and \"Batch: 50% discount\" for this model, so cachedInput is 0.1x this model's own input rate (0.50 -> 0.05), computed as an exact decimal, and batchMultiplier is 0.5. Both come from this model's own row, not from a sibling's rate."
+            "cachedInput and batchMultiplier added on 2026-09-07: the page publishes \"Cached input: 90% discount\" and \"Batch: 50% discount\" for this model, so cachedInput is 0.1x this model's own input rate (0.50 -> 0.05), computed as an exact decimal, and batchMultiplier is 0.5. Both come from this model's own row, not from a sibling's rate.",
+            "On 2026-10-03, the same page still listed: the \"Mistral Large 3\" card prints Input (/M tokens) $0.5 and Output (/M tokens) $1.5; with the page's \"Cached input tokens\" option applied it prints $0.05 cached input, and the Batch tab prints $0.25 / $0.75, exactly half of both standard rates."
           ],
           "cachedInput": "0.05",
           "batchMultiplier": "0.5"
@@ -84,57 +87,7 @@
       ],
       "source": {
         "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-09-07"
-      }
-    },
-    {
-      "canonicalId": "devstral-2",
-      "provider": "mistral",
-      "aliases": [],
-      "family": "devstral",
-      "pricing": [
-        {
-          "effectiveFrom": "2026-01-01",
-          "currency": "USD",
-          "unit": "per-million-tokens",
-          "input": "0.40",
-          "output": "2.00",
-          "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-08-05",
-          "notes": [
-            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "Not surfaced by the 2026-09-07 fetch of the same page, which listed only the Medium/Small/Large, Ministral, Codestral, embedding and third-party GLM entries. observedAt is deliberately left at 2026-08-05: the rate was not re-observed, and an absence in one page fetch is not evidence of a withdrawal. Re-check before relying on this entry."
-          ]
-        }
-      ],
-      "source": {
-        "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-08-05"
-      }
-    },
-    {
-      "canonicalId": "devstral-small-2",
-      "provider": "mistral",
-      "aliases": [],
-      "family": "devstral",
-      "pricing": [
-        {
-          "effectiveFrom": "2026-01-01",
-          "currency": "USD",
-          "unit": "per-million-tokens",
-          "input": "0.10",
-          "output": "0.30",
-          "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-08-05",
-          "notes": [
-            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "Not surfaced by the 2026-09-07 fetch of the same page, which listed only the Medium/Small/Large, Ministral, Codestral, embedding and third-party GLM entries. observedAt is deliberately left at 2026-08-05: the rate was not re-observed, and an absence in one page fetch is not evidence of a withdrawal. Re-check before relying on this entry."
-          ]
-        }
-      ],
-      "source": {
-        "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -150,67 +103,19 @@
           "input": "0.30",
           "output": "0.90",
           "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "Re-confirmed unchanged on 2026-09-07 against the same page, which prints the API id as 'codestral-latest' (recorded as an alias)."
-          ]
+            "Mistral does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
+            "Re-confirmed unchanged on 2026-09-07 against the same page, which prints the API id as 'codestral-latest' (recorded as an alias).",
+            "On 2026-10-03, the same page still listed: the \"Codestral\" card prints Input (/M tokens) $0.3 and Output (/M tokens) $0.9; with the page's \"Cached input tokens\" option applied it prints $0.03 cached input, and the Batch tab prints $0.15 / $0.45, exactly half of both standard rates. cachedInput and batchMultiplier added on 2026-10-03 from those printed per-model figures (cachedInput is the page's own $0.03, not computed; batchMultiplier 0.5 is the ratio the Batch tab prints for both fields)."
+          ],
+          "cachedInput": "0.03",
+          "batchMultiplier": "0.5"
         }
       ],
       "source": {
         "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-09-07"
-      }
-    },
-    {
-      "canonicalId": "magistral-medium",
-      "provider": "mistral",
-      "aliases": [],
-      "family": "magistral",
-      "pricing": [
-        {
-          "effectiveFrom": "2026-01-01",
-          "currency": "USD",
-          "unit": "per-million-tokens",
-          "input": "2.00",
-          "output": "5.00",
-          "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-08-05",
-          "notes": [
-            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "Listed as a reasoning model on the pricing page; no separate \"reasoning\" surcharge is published, so the reasoning field is omitted.",
-            "Not surfaced by the 2026-09-07 fetch of the same page, which listed only the Medium/Small/Large, Ministral, Codestral, embedding and third-party GLM entries. observedAt is deliberately left at 2026-08-05: the rate was not re-observed, and an absence in one page fetch is not evidence of a withdrawal. Re-check before relying on this entry."
-          ]
-        }
-      ],
-      "source": {
-        "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-08-05"
-      }
-    },
-    {
-      "canonicalId": "magistral-small",
-      "provider": "mistral",
-      "aliases": [],
-      "family": "magistral",
-      "pricing": [
-        {
-          "effectiveFrom": "2026-01-01",
-          "currency": "USD",
-          "unit": "per-million-tokens",
-          "input": "0.50",
-          "output": "1.50",
-          "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-08-05",
-          "notes": [
-            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "Not surfaced by the 2026-09-07 fetch of the same page, which listed only the Medium/Small/Large, Ministral, Codestral, embedding and third-party GLM entries. observedAt is deliberately left at 2026-08-05: the rate was not re-observed, and an absence in one page fetch is not evidence of a withdrawal. Re-check before relying on this entry."
-          ]
-        }
-      ],
-      "source": {
-        "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -226,16 +131,19 @@
           "input": "0.10",
           "output": "0.10",
           "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "Re-confirmed unchanged on 2026-09-07 against the same page, which prints the API id as 'ministral-3b-latest' (recorded as an alias)."
-          ]
+            "Mistral does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
+            "Re-confirmed unchanged on 2026-09-07 against the same page, which prints the API id as 'ministral-3b-latest' (recorded as an alias).",
+            "On 2026-10-03, the same page still listed: the \"Ministral 3 (3B)\" card prints Input (/M tokens) $0.1 and Output (/M tokens) $0.1; with the page's \"Cached input tokens\" option applied it prints $0.01 cached input, and the Batch tab prints $0.05 / $0.05, exactly half of both standard rates. cachedInput and batchMultiplier added on 2026-10-03 from those printed per-model figures (cachedInput is the page's own $0.01, not computed; batchMultiplier 0.5 is the ratio the Batch tab prints for both fields)."
+          ],
+          "cachedInput": "0.01",
+          "batchMultiplier": "0.5"
         }
       ],
       "source": {
         "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -251,16 +159,19 @@
           "input": "0.15",
           "output": "0.15",
           "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "Re-confirmed unchanged on 2026-09-07 against the same page, which prints the API id as 'ministral-8b-latest' (recorded as an alias)."
-          ]
+            "Mistral does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
+            "Re-confirmed unchanged on 2026-09-07 against the same page, which prints the API id as 'ministral-8b-latest' (recorded as an alias).",
+            "On 2026-10-03, the same page still listed: the \"Ministral 3 (8B)\" card prints Input (/M tokens) $0.15 and Output (/M tokens) $0.15; with the page's \"Cached input tokens\" option applied it prints $0.015 cached input, and the Batch tab prints $0.075 / $0.075, exactly half of both standard rates. cachedInput and batchMultiplier added on 2026-10-03 from those printed per-model figures (cachedInput is the page's own $0.015, not computed; batchMultiplier 0.5 is the ratio the Batch tab prints for both fields)."
+          ],
+          "cachedInput": "0.015",
+          "batchMultiplier": "0.5"
         }
       ],
       "source": {
         "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -276,95 +187,20 @@
           "input": "0.20",
           "output": "0.20",
           "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
-            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
+            "Mistral does not publish an effective date for this rate. effectiveFrom uses 2026-01-01 as a conservative placeholder.",
             "AWS Bedrock resells a \"Ministral 14B 3.0\" at the same $0.20/$0.20 figure as independently observed on Bedrock's pricing page — likely the same model, coincidental agreement not assumed; Bedrock's variant was not added to aws-bedrock.json in this pass since the version suffix (\"3.0\") was not cross-checked against this \"ministral-3-14b\" naming.",
-            "Re-confirmed unchanged on 2026-09-07 against the same page, which prints the API id as 'ministral-14b-latest' (recorded as an alias)."
-          ]
+            "Re-confirmed unchanged on 2026-09-07 against the same page, which prints the API id as 'ministral-14b-latest' (recorded as an alias).",
+            "On 2026-10-03, the same page still listed: the \"Ministral 3 (14B)\" card prints Input (/M tokens) $0.2 and Output (/M tokens) $0.2; with the page's \"Cached input tokens\" option applied it prints $0.02 cached input, and the Batch tab prints $0.1 / $0.1, exactly half of both standard rates. cachedInput and batchMultiplier added on 2026-10-03 from those printed per-model figures (cachedInput is the page's own $0.02, not computed; batchMultiplier 0.5 is the ratio the Batch tab prints for both fields)."
+          ],
+          "cachedInput": "0.02",
+          "batchMultiplier": "0.5"
         }
       ],
       "source": {
         "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-09-07"
-      }
-    },
-    {
-      "canonicalId": "mistral-nemo",
-      "provider": "mistral",
-      "aliases": [],
-      "family": "mistral-nemo",
-      "pricing": [
-        {
-          "effectiveFrom": "2026-01-01",
-          "currency": "USD",
-          "unit": "per-million-tokens",
-          "input": "0.15",
-          "output": "0.15",
-          "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-08-05",
-          "notes": [
-            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "An older model generation still listed with a live price on the current pricing page as fetched; included because it is confidently sourced, not because it is a current flagship.",
-            "Not surfaced by the 2026-09-07 fetch of the same page, which listed only the Medium/Small/Large, Ministral, Codestral, embedding and third-party GLM entries. observedAt is deliberately left at 2026-08-05: the rate was not re-observed, and an absence in one page fetch is not evidence of a withdrawal. Re-check before relying on this entry."
-          ]
-        }
-      ],
-      "source": {
-        "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-08-05"
-      }
-    },
-    {
-      "canonicalId": "mixtral-8x7b",
-      "provider": "mistral",
-      "aliases": [],
-      "family": "mixtral",
-      "pricing": [
-        {
-          "effectiveFrom": "2026-01-01",
-          "currency": "USD",
-          "unit": "per-million-tokens",
-          "input": "0.70",
-          "output": "0.70",
-          "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-08-05",
-          "notes": [
-            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "An older model generation still listed with a live price on the current pricing page as fetched.",
-            "Not surfaced by the 2026-09-07 fetch of the same page, which listed only the Medium/Small/Large, Ministral, Codestral, embedding and third-party GLM entries. observedAt is deliberately left at 2026-08-05: the rate was not re-observed, and an absence in one page fetch is not evidence of a withdrawal. Re-check before relying on this entry."
-          ]
-        }
-      ],
-      "source": {
-        "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-08-05"
-      }
-    },
-    {
-      "canonicalId": "mixtral-8x22b",
-      "provider": "mistral",
-      "aliases": [],
-      "family": "mixtral",
-      "pricing": [
-        {
-          "effectiveFrom": "2026-01-01",
-          "currency": "USD",
-          "unit": "per-million-tokens",
-          "input": "2.00",
-          "output": "6.00",
-          "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-08-05",
-          "notes": [
-            "Mistral's pricing page does not publish an effective date for this rate; effectiveFrom is set conservatively to 2026-01-01.",
-            "An older model generation still listed with a live price on the current pricing page as fetched.",
-            "Not surfaced by the 2026-09-07 fetch of the same page, which listed only the Medium/Small/Large, Ministral, Codestral, embedding and third-party GLM entries. observedAt is deliberately left at 2026-08-05: the rate was not re-observed, and an absence in one page fetch is not evidence of a withdrawal. Re-check before relying on this entry."
-          ]
-        }
-      ],
-      "source": {
-        "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-08-05"
+        "observedAt": "2026-10-03"
       }
     },
     {
@@ -381,17 +217,50 @@
           "cachedInput": "0.14",
           "output": "4.40",
           "sourceUrl": "https://mistral.ai/pricing/api",
-          "observedAt": "2026-09-07",
+          "observedAt": "2026-10-03",
           "notes": [
             "New entry: absent from this page on 2026-08-05, present on 2026-09-07. effectiveFrom is the observation date rather than this file's conservative 2026-01-01.",
             "Listed under \"Third-Party Models\" on Mistral's own pricing page - a Z.ai GLM model resold through La Plateforme, so this is Mistral's resale rate, not Z.ai's first-party rate.",
-            "All three rates are printed per-model on the page. No batch discount is stated for the third-party section, so batchMultiplier is omitted rather than assumed from the first-party models' 50%."
+            "All three rates are printed per-model on the page. No batch discount is stated for the third-party section, so batchMultiplier is omitted rather than assumed from the first-party models' 50%.",
+            "On 2026-10-03, the same page still listed: the \"GLM 5.2\" card prints Input (/M tokens) $1.4 and Output (/M tokens) $4.4; with the page's \"Cached input tokens\" option applied it prints $0.14 cached input, and the Batch tab prints $0.7 / $2.2, exactly half of both standard rates. batchMultiplier added on 2026-10-03 from those printed per-model figures (cachedInput is the page's own $0.14, not computed; batchMultiplier 0.5 is the ratio the Batch tab prints for both fields).",
+            "The earlier \"no batch discount is stated\" note is superseded: the 2026-10-03 page has a Batch tab that prints this model at $0.7 / $2.2.",
+            "Mistral's model catalogue (https://docs.mistral.ai/getting-started/models) lists \"Z.ai GLM 5.2\" (zai-glm-5-2) as deprecated: \"Deprecation 9/29/2026, Retirement 10/31/2026\", replaced by Z.ai GLM 5.3. The pricing page still prints its rate on 2026-10-03, so the period stays open; close it if the page drops the model after retirement."
+          ],
+          "batchMultiplier": "0.5"
+        }
+      ],
+      "source": {
+        "url": "https://mistral.ai/pricing/api",
+        "observedAt": "2026-10-03"
+      }
+    },
+    {
+      "canonicalId": "zai-glm-5-3",
+      "provider": "mistral",
+      "aliases": [],
+      "family": "glm",
+      "pricing": [
+        {
+          "effectiveFrom": "2026-10-03",
+          "currency": "USD",
+          "unit": "per-million-tokens",
+          "input": "1.40",
+          "cachedInput": "0.14",
+          "output": "4.40",
+          "batchMultiplier": "0.5",
+          "sourceUrl": "https://mistral.ai/pricing/api",
+          "observedAt": "2026-10-03",
+          "notes": [
+            "New entry: absent from this page on 2026-09-07, present on 2026-10-03 as \"GLM 5.3\" (marked New). effectiveFrom is the observation date: the pricing page states no effective date. The model's docs page (https://docs.mistral.ai/models/zai-glm-5-3) gives a release date of September 15, 2026, but no price was observed before 2026-10-03, so lookups dated earlier are left unpriced rather than assumed.",
+            "Listed as \"Third-party\" on Mistral's own pricing page - a Z.ai GLM model resold through Mistral, so this is Mistral's resale rate, not Z.ai's first-party rate. API id zai-glm-5-3 per Mistral's model catalogue.",
+            "The card prints Input (/M tokens) $1.4 and Output (/M tokens) $4.4; with the page's \"Cached input tokens\" option applied it prints $0.14 cached input (the docs page also states \"$0.14 Cached input/M Tokens\"), and the Batch tab prints $0.7 / $2.2, exactly half of both standard rates, hence batchMultiplier 0.5.",
+            "together.json carries the same Z.ai model as glm-5.3. The ids differ, so the resolver sees no ambiguity between them; rates there were fetched independently from Together's own page."
           ]
         }
       ],
       "source": {
         "url": "https://mistral.ai/pricing/api",
-        "observedAt": "2026-09-07"
+        "observedAt": "2026-10-03"
       }
     }
   ],
@@ -400,6 +269,7 @@
     "OCR (per-1,000-pages) and Voxtral audio models (per-1,000-characters for TTS, per-minute for transcription) are excluded: priced in units this per-million-tokens schema does not model.",
     "Only models with an explicit per-million-tokens input/output price on https://mistral.ai/pricing/api as fetched are included; the top-level https://mistral.ai/pricing overview page and https://mistral.ai/products/la-plateforme page do not render a usable table via automated fetch and were not used as the source of record.",
     "Mistral Embed ($0.1/M) and Codestral Embed ($0.15/M) are embedding models: input-only pricing with no output rate, which this schema's required input+output shape does not represent.",
-    "As of 2026-09-07 the Devstral, Magistral, Mistral NeMo and Mixtral entries in this file were not surfaced by the page fetch - see their per-period notes; they are kept at their 2026-08-05 observation rather than deleted."
+    "Removed on 2026-10-03 after retirement: devstral-2, devstral-small-2, magistral-medium, magistral-small, mistral-nemo, mixtral-8x7b, and mixtral-8x22b. Mistral's catalogue (https://docs.mistral.ai/getting-started/models) gives past retirement dates for each: 2025-03-30 for Mixtral, 2026-03-31 for Devstral Small 2, and 2026-07-31 for the rest. None appeared on the pricing page on 2026-09-07 or 2026-10-03. With no override or fallback, registry lookups return UNKNOWN_MODEL for any date; use an override for historical usage.",
+    "Not modelled from the 2026-10-03 page: Voxtral Small (priced per audio minute alongside per-token text rates), Leanstral 1.5 and Mistral Moderation 2 (listed as free), the Classifier API models (training and storage fees), the Priority tier and the \"+10%\" Regional inference option (account/deployment surcharges, not per-model list rates), and Enterprise APIs (\"75% above list pricing on select APIs\")."
   ]
 }
