@@ -20,6 +20,7 @@ describe('pending: the leaf currently being scanned', () => {
     ['a root string', '"hel', [], 'string'],
     ['a root literal', 'tru', [], 'literal'],
     ['an array element', '[1,2,[3,"ab', [2, 1], 'string'],
+    ['an array element after completed strings', '["a","b","c', [2], 'string'],
     [
       'a deep tool-call argument',
       '{"tool_calls":[{"arguments":{"query":"weath',

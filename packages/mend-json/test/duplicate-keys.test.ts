@@ -48,6 +48,20 @@ describe('duplicateKeyPolicy', () => {
     expect(r.value).toEqual({ outer: { a: 1 }, other: { a: 2 } });
   });
 
+  it('"first" keeps the first value for a string duplicate', () => {
+    const r = mendJson('{"path":"/safe","path":"/etc/passwd"}', { duplicateKeyPolicy: 'first' });
+    expect(r.value).toEqual({ path: '/safe' });
+    expect(JSON.parse(r.repairedJson as string)).toEqual({ path: '/safe' });
+    expect(r.diagnostics.map((d) => d.code)).toContain('duplicate-key-skipped');
+    expect(r.complete).toBe(false); // dropping a duplicate counts as a repair
+  });
+
+  it('"first" preserves members after a string duplicate', () => {
+    const r = mendJson('{"a":1,"a":"x","b":2}', { duplicateKeyPolicy: 'first' });
+    expect(r.value).toEqual({ a: 1, b: 2 });
+    expect(JSON.parse(r.repairedJson as string)).toEqual({ a: 1, b: 2 });
+  });
+
   it('"error" throws JsonMendDuplicateKeyError as soon as the duplicate key is confirmed', () => {
     expect(() => mendJson('{"a":1,"a":2}', { duplicateKeyPolicy: 'error' })).toThrow(
       JsonMendDuplicateKeyError,

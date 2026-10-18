@@ -372,8 +372,12 @@ function advanceString(state: ScannerState, ch: string, isKey: boolean): void {
     if (isKey) {
       const frame = state.stack[state.stack.length - 1];
       if (frame !== undefined) frame.currentKey = state.keyText;
+      state.role = 'object-after-key';
+    } else {
+      // Count the string and apply any "first" duplicate exclusion to reject
+      // trailing commas and preserve later members
+      completeValue(state);
     }
-    state.role = isKey ? 'object-after-key' : 'after-value';
     return;
   }
   if (ch === '\\') {

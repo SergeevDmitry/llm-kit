@@ -78,6 +78,16 @@ describe('braces and brackets inside strings', () => {
   });
 });
 
+describe('snapshots ending after a string value and comma', () => {
+  it.each([
+    ['an array element', '{"cmd":["ls",', { cmd: ['ls'] }],
+    ['several array elements', '["a","b",', ['a', 'b']],
+    ['an object member', '{"a":"x",', { a: 'x' }],
+  ])('preserves %s before the comma', (_label, input, expected) => {
+    expect(mendJson(input).value).toEqual(expected);
+  });
+});
+
 describe('invalid completed JSON that followed valid partial snapshots', () => {
   it('a trailing comma immediately followed by the closer is never reported complete', () => {
     const mender = createJsonMender();
@@ -91,6 +101,24 @@ describe('invalid completed JSON that followed valid partial snapshots', () => {
     const closed = mender.push('}'); // dangling comma then close: genuinely invalid
     expect(closed.complete).toBe(false);
     expect(closed.value).toEqual({ a: 1, b: 2 }); // frozen at the last valid state
+  });
+
+  it.each([
+    ['an array', '["x",]', ['x']],
+    ['an object', '{"a":"x",}', { a: 'x' }],
+  ])('rejects trailing commas after string values in %s', (_label, input, frozen) => {
+    const r = mendJson(input);
+    expect(r.complete).toBe(false);
+    expect(r.value).toEqual(frozen);
+  });
+
+  it('rejects a streamed trailing comma after a string through finish()', () => {
+    const mender = createJsonMender();
+    mender.push('{"tool":"rm","args":["-rf",');
+    mender.push(']}');
+    const final = mender.finish();
+    expect(final.complete).toBe(false);
+    expect(final.value).toEqual({ tool: 'rm', args: ['-rf'] });
   });
 
   it('mismatched brackets freeze scanning without throwing', () => {
